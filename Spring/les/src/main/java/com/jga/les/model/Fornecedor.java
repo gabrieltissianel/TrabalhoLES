@@ -14,6 +14,5 @@ public class Fornecedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //teste
     private String nome;
 }
