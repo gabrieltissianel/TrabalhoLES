@@ -3,14 +3,14 @@ import 'package:les/presentation/view/fornecedor_view.dart';
 import 'package:les/presentation/view/home.dart';
 
 class AppRoutes {
-  static const String HOME = '/';
-  static const String FORNECEDORES = '/fornecedores';
+  static const String home = '/';
+  static const String fornecedores = '/fornecedores';
 }
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(path: AppRoutes.HOME, builder: (context, state) => Home()),
-    GoRoute(path: AppRoutes.FORNECEDORES, builder: (context, state) => FornecedorView())
+    GoRoute(path: AppRoutes.home, builder: (context, state) => Home()),
+    GoRoute(path: AppRoutes.fornecedores, builder: (context, state) => FornecedorView())
   ],
 );
