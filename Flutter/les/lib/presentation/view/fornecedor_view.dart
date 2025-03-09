@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:les/model/fornecedor.dart';
 import 'package:les/presentation/viewModel/fornecedor_view_model.dart';
-import 'package:les/presentation/widgets/side_menu.dart';
 import 'package:provider/provider.dart';
 
 class FornecedorView extends StatefulWidget{
@@ -25,18 +24,15 @@ class _FornecedorViewState extends State<FornecedorView>{
     return Scaffold(
       body: Row(
         children: [
-            SideMenu(),
-            Consumer<FornecedorViewModel>(
-                builder: (context, fornecedorViewModel, child) {
-                return Column(
-                  children:[
-                    _table(fornecedorViewModel),
-                    _buttons(fornecedorViewModel, context),
-                  ]
-                );
-            }),
-          ],
-        ),
+          Expanded(child: Consumer<FornecedorViewModel>(
+              builder: (context, fornecedorViewModel, child) {
+            return Column(children: [
+              _table(fornecedorViewModel),
+              _buttons(fornecedorViewModel, context),
+            ]);
+          })),
+        ],
+      ),
     );
   }
 
@@ -61,7 +57,7 @@ class _FornecedorViewState extends State<FornecedorView>{
                   );
                 })),
             DataCell(IconButton(
-                icon: Icon(Icons.remove),
+                icon: Icon(Icons.delete),
                 onPressed: () {
                   fornecedorViewModel.deleteFornecedor(fornecedor.id!);
                 })),

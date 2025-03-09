@@ -2,23 +2,23 @@
 import 'package:flutter/material.dart';
 import 'package:les/presentation/widgets/side_menu.dart';
 
-class Home extends StatefulWidget{
-  const Home({super.key});
+class AppLayout extends StatelessWidget {
+  const AppLayout({required this.child, super.key});
 
-  @override
-  State<StatefulWidget> createState() => _HomeState();
+  final Widget child;
 
-}
-
-class _HomeState extends State<Home>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          SideMenu()
+          SideMenu(),
+          Expanded(
+            child: child,
+          ),
         ],
       ),
     );
   }
+
 }
