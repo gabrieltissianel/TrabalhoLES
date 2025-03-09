@@ -3,34 +3,52 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:les/core/app_routes.dart';
 
-class SideMenu extends StatelessWidget{
+class SideMenu extends StatefulWidget{
+  const SideMenu({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
+
+  void _onDestinationSelected(int index) {
+    switch (index) {
+      case 0:
+        context.go(AppRoutes.home);
+        break;
+      case 1:
+        context.go(AppRoutes.fornecedores);
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 80, // Largura do menu lateral
-      decoration: BoxDecoration(
-        color: Colors.blue.shade900,
-        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildMenuItem(context, Icons.home, 'Home', AppRoutes.HOME),
-          _buildMenuItem(context, Icons.account_balance, 'Fornecedores', AppRoutes.FORNECEDORES)
-        ],
-      ),
+    String currentRoute = GoRouterState.of(context).uri.toString();
+
+    int selectedIndex = 0;
+    if (currentRoute.startsWith(AppRoutes.fornecedores)) {
+      selectedIndex = 1;
+    }
+
+    return NavigationRail(
+      selectedIndex: selectedIndex,
+      onDestinationSelected: _onDestinationSelected,
+      labelType: NavigationRailLabelType.all,
+      groupAlignment: 0,
+      destinations: [
+        NavigationRailDestination(
+          icon: Icon(Icons.home_outlined),
+          selectedIcon: Icon(Icons.home),
+          label: Text('Home'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.account_balance_outlined),
+          selectedIcon: Icon(Icons.account_balance),
+          label: Text('Fornecedores'),
+        ),
+      ],
     );
   }
-
-  Widget _buildMenuItem(BuildContext context, IconData icon, String label, String route) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      child: IconButton(
-        icon: Icon(icon, color: Colors.white, size: 30),
-        tooltip: label, // Mostra o nome ao passar o mouse
-        onPressed: () => context.go(route), // Navegação com GoRouter
-      ),
-    );
-  }
-
 }
