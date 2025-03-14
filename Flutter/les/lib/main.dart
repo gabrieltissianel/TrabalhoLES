@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:les/core/app_routes.dart';
-import 'package:les/presentation/viewModel/fornecedor_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:les/core/injector.dart';
 
 void main() {
-  runApp( MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => FornecedorViewModel()),
-    ],
-    child: MyApp()),
-  );
+  setupDependencies();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:les/presentation/view/fornecedor_view.dart';
-import 'package:les/presentation/view/home_view.dart';
-import 'package:les/presentation/widgets/app_layout.dart';
+import 'package:les/view/fornecedor/fornecedor_view.dart';
+import 'package:les/view/home/home_view.dart';
+import 'package:les/view/widgets/app_layout.dart';
 
 class AppRoutes {
   static const String home = '/';

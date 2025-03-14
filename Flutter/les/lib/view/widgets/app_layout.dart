@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:les/presentation/widgets/side_menu.dart';
+import 'package:les/view/widgets/side_menu.dart';
 
 class AppLayout extends StatelessWidget {
   const AppLayout({required this.child, super.key});
