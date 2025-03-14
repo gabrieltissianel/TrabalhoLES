@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/fornecedor.dart';
 import 'package:les/view/fornecedor/fornecedor_form_dialog.dart';
+import 'package:les/view/fornecedor/pagamento_form_dialog.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
 import 'package:result_command/result_command.dart';
 
@@ -61,9 +64,9 @@ class _FornecedorViewState extends State<FornecedorView> {
   Widget _table(List<Fornecedor> fornecedores){
     return DataTable(
         columns: [
-          DataColumn(label: Text("ID")),
-          DataColumn(label: Text("Nome")),
-          DataColumn(label: Text("Açoes")),
+          DataColumn(label: Text("ID", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
+          DataColumn(label: Text("Nome", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
+          DataColumn(label: Text("Açoes", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
         ],
         rows: fornecedores.map((fornecedor) {
           return DataRow(cells: [
@@ -71,6 +74,15 @@ class _FornecedorViewState extends State<FornecedorView> {
             DataCell(Text(fornecedor.nome)),
             DataCell(Row(
               children: [
+                IconButton(
+                    icon: Icon(Icons.shopping_bag),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) =>
+                            PagamentoFormDialog(fornecedor: fornecedor),
+                      );
+                    }),
                 IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
@@ -106,6 +118,13 @@ class _FornecedorViewState extends State<FornecedorView> {
             );
           },
           child: Icon(Icons.add),
+        ),
+        SizedBox(height: 16),
+        FloatingActionButton(
+          onPressed: () {
+            context.go(AppRoutes.pagamentos);
+          },
+          child: Icon(Icons.shopping_cart),
         ),
       ]
     );

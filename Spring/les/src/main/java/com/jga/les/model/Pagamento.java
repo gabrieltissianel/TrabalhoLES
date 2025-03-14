@@ -14,7 +14,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@AllArgsConstructor
 public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
