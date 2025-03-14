@@ -3,6 +3,8 @@ package com.jga.les.service;
 import java.util.List;
 
 import com.jga.les.exceptions.NotFoundException;
+
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ public class GenericService<E> {
         return ResponseEntity.ok().body(objRepository.findAll());
     }
 
-    public ResponseEntity<E> add(E obj) {
+    public ResponseEntity<E> add(E obj) throws IllegalArgumentException, OptimisticLockingFailureException{
         objRepository.save(obj);
         return ResponseEntity.status(HttpStatus.CREATED).body(obj);
     }
