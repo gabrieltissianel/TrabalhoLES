@@ -25,8 +25,6 @@ public class Pagamento {
     @DateTimeFormat
     private Date dt_vencimento;
 
-    private String nome;
-
     @DateTimeFormat
     private Date dt_pagamento;
 
