@@ -2,8 +2,6 @@ package com.jga.les.model;
 
 import java.util.List;
 
-import javax.persistence.JoinColumns;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
