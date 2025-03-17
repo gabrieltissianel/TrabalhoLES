@@ -8,24 +8,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 @Entity
-public class Pagamento {
+public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+    
+    @NotNull
+    private String nome;
 
-    private double valor;
+    private Double limite;
+
+    private Double saldo;
+
+    @DateTimeFormat
+    private Date ultimo_dia_negativado;
     
     @DateTimeFormat
-    private Date dt_vencimento;
-
-    @DateTimeFormat
-    private Date dt_pagamento;
-
-    @ManyToOne
-    private Fornecedor fornecedor;
+    private Date dt_nascimento;
 }

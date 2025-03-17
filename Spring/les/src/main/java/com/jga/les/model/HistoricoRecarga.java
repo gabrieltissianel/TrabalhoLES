@@ -13,19 +13,16 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Pagamento {
+public class HistoricoRecarga {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    private double valor;
+    private Long id;
     
     @DateTimeFormat
-    private Date dt_vencimento;
-
-    @DateTimeFormat
-    private Date dt_pagamento;
+    private Date data;
+    
+    private Double valor;
 
     @ManyToOne
-    private Fornecedor fornecedor;
+    private Cliente cliente;
 }

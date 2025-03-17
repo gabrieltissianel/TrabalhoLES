@@ -1,31 +1,32 @@
 package com.jga.les.model;
 
 import java.util.Date;
+import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Data
 @Entity
-public class Pagamento {
+public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private double valor;
-    
-    @DateTimeFormat
-    private Date dt_vencimento;
+    @NonNull
+    private Date entrada;
 
-    @DateTimeFormat
-    private Date dt_pagamento;
+    private Date saida;
 
     @ManyToOne
-    private Fornecedor fornecedor;
+    private Cliente cliente;
+
+    @OneToMany(mappedBy = "compra")
+    private List<CompraProduto> compraProdutos;
 }
