@@ -1,35 +1,32 @@
 package com.jga.les.model;
 
+import java.util.Date;
 import java.util.List;
 
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 @Entity
-public class Produto {
+public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @NotNull
-    private String nome;
+    @NonNull
+    private Date entrada;
 
-    private String codigo;
+    private Date saida;
 
-    private boolean unitario;
+    @ManyToOne
+    private Cliente cliente;
 
-    @NotNull
-    private Double preco;
-
-    @NotNull
-    private Double custo;
-
-    @OneToMany(mappedBy = "produto")
+    @OneToMany(mappedBy = "compra")
     private List<CompraProduto> compraProdutos;
 }
