@@ -34,4 +34,8 @@ public class GenericController<E> {
         return genericService.update(obj, id);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<E> findById(@PathVariable long id) {
+        return genericService.findById(id);
+    }
 }

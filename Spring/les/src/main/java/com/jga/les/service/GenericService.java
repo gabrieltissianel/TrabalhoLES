@@ -38,4 +38,8 @@ public class GenericService<E> {
         objRepository.save(obj);
         return ResponseEntity.ok().body(obj);
     }
+
+    public ResponseEntity<E> findById(long id) {
+        return ResponseEntity.ok().body(objRepository.findById(id).orElse(null));
+    }
 }
