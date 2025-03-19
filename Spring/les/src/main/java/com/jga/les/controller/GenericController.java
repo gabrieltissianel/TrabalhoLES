@@ -12,26 +12,26 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GenericController<E> {
 
-    protected final GenericService<E> genericApplication;
+    protected final GenericService<E> genericService;
 
     @GetMapping("/list")
     public ResponseEntity<List<E>> list() {
-        return genericApplication.list();
+        return genericService.list();
     }
 
     @PostMapping("/add")
     public ResponseEntity<E> add(@Valid @RequestBody E obj) {
-        return genericApplication.add(obj);
+        return genericService.add(obj);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> remove(@PathVariable long id) {
-        return genericApplication.remove(id);
+        return genericService.remove(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<E> edit(@PathVariable long id, @Valid @RequestBody E obj) {
-        return genericApplication.update(obj, id);
+        return genericService.update(obj, id);
     }
 
 }
