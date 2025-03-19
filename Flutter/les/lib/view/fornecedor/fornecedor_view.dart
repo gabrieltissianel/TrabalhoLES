@@ -5,7 +5,6 @@ import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/fornecedor.dart';
 import 'package:les/view/fornecedor/fornecedor_form_dialog.dart';
-import 'package:les/view/fornecedor/pagamento_form_dialog.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
 import 'package:result_command/result_command.dart';
 
@@ -77,11 +76,7 @@ class _FornecedorViewState extends State<FornecedorView> {
                 IconButton(
                     icon: Icon(Icons.shopping_bag),
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) =>
-                            PagamentoFormDialog(fornecedor: fornecedor),
-                      );
+                      context.go('${AppRoutes.pagamentos}/${fornecedor.id}');
                     }),
                 IconButton(
                     icon: Icon(Icons.edit),
@@ -118,14 +113,7 @@ class _FornecedorViewState extends State<FornecedorView> {
             );
           },
           child: Icon(Icons.add),
-        ),
-        SizedBox(height: 16),
-        FloatingActionButton(
-          onPressed: () {
-            context.go(AppRoutes.pagamentos);
-          },
-          child: Icon(Icons.shopping_cart),
-        ),
+        )
       ]
     );
   }

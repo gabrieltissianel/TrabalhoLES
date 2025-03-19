@@ -2,12 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:les/core/injector.dart';
+import 'package:les/model/fornecedor.dart';
 import 'package:les/model/pagamento.dart';
+import 'package:les/view/fornecedor/pagamento_form_dialog.dart';
+import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
 import 'package:les/view/fornecedor/view_model/pagamento_view_model.dart';
 import 'package:result_command/result_command.dart';
 
 class PagamentoView extends StatefulWidget{
-  const PagamentoView({super.key});
+  final int fornecedorId;
+
+  const PagamentoView({required this.fornecedorId, super.key});
 
   @override
   State<StatefulWidget> createState() => _PagamentoViewState();
@@ -15,11 +20,13 @@ class PagamentoView extends StatefulWidget{
 
 class _PagamentoViewState extends State<PagamentoView> {
   final PagamentoViewModel _pagamentoViewModel = injector.get<PagamentoViewModel>();
+  final FornecedorViewModel _fornecedorViewModel = injector.get<FornecedorViewModel>();
 
   @override
   void initState() {
     super.initState();
-    _pagamentoViewModel.getPagamentos.execute();
+    _pagamentoViewModel.getPagamentoByFornecedorId.execute(widget.fornecedorId);
+    _fornecedorViewModel.getFornecedorById.execute(widget.fornecedorId);
   }
 
   @override
@@ -30,16 +37,16 @@ class _PagamentoViewState extends State<PagamentoView> {
           Expanded(
               child: Center(
                   child: ListenableBuilder(
-                      listenable: _pagamentoViewModel.getPagamentos,
+                      listenable: _pagamentoViewModel.getPagamentoByFornecedorId,
                       builder: (context, child) {
-                        if (_pagamentoViewModel.getPagamentos.isRunning) {
+                        if (_pagamentoViewModel.getPagamentoByFornecedorId.isRunning) {
                           return CircularProgressIndicator();
-                        } else if (_pagamentoViewModel.getPagamentos.isFailure) {
-                          final error = _pagamentoViewModel.getPagamentos
+                        } else if (_pagamentoViewModel.getPagamentoByFornecedorId.isFailure) {
+                          final error = _pagamentoViewModel.getPagamentoByFornecedorId
                               .value as FailureCommand;
                           return Text(error.error.toString());
                         } else {
-                          final success = _pagamentoViewModel.getPagamentos
+                          final success = _pagamentoViewModel.getPagamentoByFornecedorId
                               .value as SuccessCommand;
                           final pagamentos = success.value as List<Pagamento>;
                           return SizedBox.expand(
@@ -54,9 +61,31 @@ class _PagamentoViewState extends State<PagamentoView> {
           ),
         ],
       ),
+      floatingActionButton: _buttons(context),
     );
   }
 
+  Widget _buttons(BuildContext context){
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () async {
+              if(_fornecedorViewModel.getFornecedorById.isSuccess){
+                final success = _fornecedorViewModel.getFornecedorById
+                    .value as SuccessCommand;
+                final fornecedor = success.value as Fornecedor;
+                showDialog(
+                    context: context,
+                    builder: (context) => PagamentoFormDialog(fornecedor: fornecedor)
+                );
+              }
+            },
+            child: Icon(Icons.add),
+          ),
+        ]);
+  }
   Widget _table(List<Pagamento> pagamentos){
     return DataTable(
         columns: [
@@ -93,14 +122,27 @@ class _PagamentoViewState extends State<PagamentoView> {
                     icon: Icon(Icons.check),
                     tooltip: 'Pagar',
                     onPressed: () async {
-                      pagamento.dt_pagamento = DateTime.now();
-                      await _pagamentoViewModel.updatePagamento
-                          .execute(pagamento);
-                      _pagamentoViewModel.getPagamentos.execute();
+                      _selecionarData(context, pagamento);
                     }),
               ],
             )),
           ]);
         }).toList());
   }
+
+  Future<void> _selecionarData(BuildContext context, Pagamento pagamento) async {
+    DateTime? dataSelecionada = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+
+    if (dataSelecionada != null) {
+      pagamento.dt_pagamento = dataSelecionada;
+      await _pagamentoViewModel.updatePagamento.execute(pagamento);
+      _pagamentoViewModel.getPagamentos.execute();
+    }
+  }
+
 }

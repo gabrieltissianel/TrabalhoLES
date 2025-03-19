@@ -31,8 +31,13 @@ final GoRouter router = GoRouter(
             path: AppRoutes.fornecedores,
             builder: (context, state) => const FornecedorView()),
         GoRoute(
-            path: AppRoutes.pagamentos,
-            builder: (context, state) => const PagamentoView()),
+            path: '${AppRoutes.pagamentos}/:fornecedorId',
+            builder: (context, state) {
+              // Captura o parâmetro fornecedorId da URL
+              final fornecedorId = state.pathParameters['fornecedorId'];
+              return PagamentoView(fornecedorId: int.parse(fornecedorId!));
+            },
+        )
       ]
     )
   ]

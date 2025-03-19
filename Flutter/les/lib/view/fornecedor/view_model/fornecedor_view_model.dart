@@ -13,6 +13,7 @@ class FornecedorViewModel extends ChangeNotifier{
   late final addFornecedor = Command1(_addFornecedor);
   late final updateFornecedor = Command1(_updateFornecedor);
   late final deleteFornecedor = Command1(_deleteFornecedor);
+  late final getFornecedorById = Command1(_getFornecedorById);
 
   AsyncResult<List<Fornecedor>> _getFornecedores() async {
     return _fornecedorService.getAll();
@@ -30,4 +31,7 @@ class FornecedorViewModel extends ChangeNotifier{
     return _fornecedorService.delete(id);
   }
 
+  AsyncResult<Fornecedor> _getFornecedorById(int id) async {
+    return _fornecedorService.getById(id);
+  }
 }

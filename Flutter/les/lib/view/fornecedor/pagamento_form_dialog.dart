@@ -47,7 +47,7 @@ class _UserFormDialogState extends State<PagamentoFormDialog> {
     DateTime? dataSelecionada = await showDatePicker(
       context: context,
       initialDate: _dataSelecionada ?? DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
 

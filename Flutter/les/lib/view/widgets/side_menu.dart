@@ -28,7 +28,7 @@ class _SideMenuState extends State<SideMenu> {
     String currentRoute = GoRouterState.of(context).uri.toString();
 
     int selectedIndex = 0;
-    if (currentRoute.startsWith(AppRoutes.fornecedores)) {
+    if (currentRoute.startsWith(AppRoutes.fornecedores) || currentRoute.startsWith(AppRoutes.pagamentos)) {
       selectedIndex = 1;
     }
 

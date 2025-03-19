@@ -5,16 +5,16 @@ import 'package:les/core/endpoints.dart';
 import 'package:result_dart/result_dart.dart';
 
 class GenericService <T extends Object> {
-  final Dio _dio ;
-  final String _endpoint;
+  final Dio dio ;
+  final String endpoint;
   final T Function(Map<String, dynamic>) fromJson;
 
-  GenericService(this._dio, this._endpoint, this.fromJson);
+  GenericService(this.dio, this.endpoint, this.fromJson);
 
   // 📌 GET - Buscar todos os registros
   AsyncResult<List<T>> getAll() async {
     try {
-      final response = await _dio.get('${Endpoints.baseUrl}/$_endpoint/list');
+      final response = await dio.get('${Endpoints.baseUrl}/$endpoint/list');
       return Success((response.data as List).map((e) => fromJson(e)).toList());
     } catch (e) {
       return Failure(Exception(e.toString()));
@@ -24,7 +24,7 @@ class GenericService <T extends Object> {
   // 📌 GET - Buscar por ID
   AsyncResult<T> getById(int id) async {
     try {
-      final response = await _dio.get('${Endpoints.baseUrl}/$_endpoint/$id');
+      final response = await dio.get('${Endpoints.baseUrl}/$endpoint/$id');
       return Success(fromJson(response.data));
     } catch (e) {
       return Failure(Exception(e.toString()));
@@ -34,7 +34,7 @@ class GenericService <T extends Object> {
   // 📌 POST - Criar novo item
   AsyncResult<T> create(Map<String, dynamic> data) async {
     try {
-      final response = await _dio.post('${Endpoints.baseUrl}/$_endpoint/add', data: data);
+      final response = await dio.post('${Endpoints.baseUrl}/$endpoint/add', data: data);
       return Success(fromJson(response.data));
     } catch (e) {
       return Failure(Exception(e.toString()));
@@ -44,7 +44,7 @@ class GenericService <T extends Object> {
   // 📌 PUT - Atualizar item
   AsyncResult<T> update(int id, Map<String, dynamic> data) async {
     try {
-      final response = await _dio.put('${Endpoints.baseUrl}/$_endpoint/$id', data: data);
+      final response = await dio.put('${Endpoints.baseUrl}/$endpoint/$id', data: data);
       return Success(fromJson(response.data));
     } catch (e) {
       return Failure(Exception(e.toString()));
@@ -54,7 +54,7 @@ class GenericService <T extends Object> {
   // 📌 DELETE - Excluir item
   AsyncResult<String> delete(int id) async {
     try {
-      await _dio.delete('${Endpoints.baseUrl}/$_endpoint/$id');
+      await dio.delete('${Endpoints.baseUrl}/$endpoint/$id');
       return Success("Item excluído com sucesso!");
     } catch (e) {
       return Failure(Exception(e.toString()));

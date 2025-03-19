@@ -14,6 +14,8 @@ class PagamentoViewModel extends ChangeNotifier{
   late final addPagamento = Command1(_addPagamento);
   late final updatePagamento = Command1(_updatePagamento);
   late final deletePagamento = Command1(_deletePagamento);
+  late final getPagamentoByFornecedorId = Command1(_getPagamentosByFornecedorId);
+
 
   AsyncResult<List<Pagamento>> _getPagamentos() async {
     return _pagamentoService.getAll();
@@ -30,4 +32,9 @@ class PagamentoViewModel extends ChangeNotifier{
   AsyncResult<String> _deletePagamento(int id) async {
     return _pagamentoService.delete(id);
   }
+
+  AsyncResult<List<Pagamento>> _getPagamentosByFornecedorId(int id) async {
+    return _pagamentoService.getPagamentoByFornecedorId(id);
+  }
+
 }
