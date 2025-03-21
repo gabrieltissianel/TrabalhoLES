@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.jga.les.dtos.LoginDto;
 
@@ -19,7 +16,8 @@ public class LoginController {
     
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public String autenticacao(LoginDto loginDto){
+    public String autenticacao(@RequestBody LoginDto loginDto){
+        System.out.println(loginDto.login()+" "+loginDto.senha());
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginDto.login(), loginDto.senha()));    
         return "Acesso autorizado.";
