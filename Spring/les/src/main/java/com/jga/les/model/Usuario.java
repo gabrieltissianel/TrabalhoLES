@@ -19,7 +19,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Usuario implements UserDetails{
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

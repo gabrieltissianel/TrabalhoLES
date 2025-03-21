@@ -3,12 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:les/view/fornecedor/fornecedor_view.dart';
 import 'package:les/view/fornecedor/pagamento_view.dart';
 import 'package:les/view/home/home_view.dart';
+import 'package:les/view/login/login_view.dart';
 import 'package:les/view/widgets/app_layout.dart';
 
 class AppRoutes {
   static const String home = '/';
   static const String fornecedores = '/fornecedores';
   static const String pagamentos = '/pagamentos';
+  static const String login = '/login';
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -16,7 +18,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: AppRoutes.login,
   routes: [
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
@@ -33,13 +35,16 @@ final GoRouter router = GoRouter(
         GoRoute(
             path: '${AppRoutes.pagamentos}/:fornecedorId',
             builder: (context, state) {
-              // Captura o parâmetro fornecedorId da URL
               final fornecedorId = state.pathParameters['fornecedorId'];
               return PagamentoView(fornecedorId: int.parse(fornecedorId!));
             },
-        )
+        ),
       ]
-    )
+    ),
+    GoRoute(
+      path: AppRoutes.login,
+      builder: (context, state) => const LoginView(),
+    ),
   ]
 
 );
