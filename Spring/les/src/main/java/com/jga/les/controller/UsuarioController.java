@@ -12,5 +12,5 @@ public class UsuarioController extends GenericController<Usuario> {
 
     public UsuarioController(GenericService<Usuario> genericApplication) {
         super(genericApplication);
-    }
+    }   
 }
