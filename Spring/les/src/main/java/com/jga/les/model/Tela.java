@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Data
@@ -18,6 +18,6 @@ public class Tela {
 
     private String nome;
 
-    @ManyToMany(mappedBy = "telas")
-    private List<Usuario> usuarios;
+    @OneToMany(mappedBy = "tela")
+    private List<Permissao> permissoes;
 }
