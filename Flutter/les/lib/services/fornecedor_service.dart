@@ -1,7 +1,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:les/core/generic_service.dart';
-import 'package:les/model/fornecedor.dart';
+import 'package:les/model/fornecedor/fornecedor.dart';
 
 class FornecedorService extends GenericService<Fornecedor> {
 

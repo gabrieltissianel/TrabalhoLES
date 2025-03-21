@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:les/model/fornecedor.dart';
+import 'package:les/model/fornecedor/fornecedor.dart';
 import 'package:les/services/fornecedor_service.dart';
 import 'package:result_command/result_command.dart';
 import 'package:result_dart/result_dart.dart';

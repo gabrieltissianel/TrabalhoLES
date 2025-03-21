@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:les/core/injector.dart';
-import 'package:les/model/fornecedor.dart';
-import 'package:les/model/pagamento.dart';
+import 'package:les/model/fornecedor/fornecedor.dart';
+import 'package:les/model/fornecedor/pagamento.dart';
 import 'package:les/view/fornecedor/pagamento_form_dialog.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
 import 'package:les/view/fornecedor/view_model/pagamento_view_model.dart';

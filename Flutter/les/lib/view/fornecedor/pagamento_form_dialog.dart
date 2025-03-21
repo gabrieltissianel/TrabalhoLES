@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 import 'package:les/core/injector.dart';
-import 'package:les/model/fornecedor.dart';
-import 'package:les/model/pagamento.dart';
+import 'package:les/model/fornecedor/fornecedor.dart';
+import 'package:les/model/fornecedor/pagamento.dart';
 import 'package:les/view/fornecedor/view_model/pagamento_view_model.dart';
 
 class PagamentoFormDialog extends StatefulWidget {

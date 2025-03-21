@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:les/core/injector.dart';
-import 'package:les/model/fornecedor.dart';
+import 'package:les/model/fornecedor/fornecedor.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
 
 class FornecedorFormDialog extends StatefulWidget {

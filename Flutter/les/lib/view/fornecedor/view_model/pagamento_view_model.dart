@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:les/model/pagamento.dart';
+import 'package:les/model/fornecedor/pagamento.dart';
 import 'package:les/services/pagamento_service.dart';
 import 'package:result_command/result_command.dart';
 import 'package:result_dart/result_dart.dart';

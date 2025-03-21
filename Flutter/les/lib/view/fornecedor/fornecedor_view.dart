@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
-import 'package:les/model/fornecedor.dart';
+import 'package:les/model/fornecedor/fornecedor.dart';
 import 'package:les/view/fornecedor/fornecedor_form_dialog.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
 import 'package:result_command/result_command.dart';
