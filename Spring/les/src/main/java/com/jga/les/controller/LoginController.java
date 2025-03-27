@@ -15,6 +15,7 @@ import com.jga.les.dtos.LoginDto;
 import com.jga.les.dtos.UsuarioDto;
 import com.jga.les.model.Usuario;
 import com.jga.les.repository.UsuarioRepository;
+import com.jga.les.service.AutenticacaoService;
 
 
 
@@ -25,6 +26,9 @@ public class LoginController {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private AuthenticationManager authenticationManager;    
+
+    @Autowired
+    private AutenticacaoService autenticacaoService;
     
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
@@ -33,7 +37,9 @@ public class LoginController {
             new UsernamePasswordAuthenticationToken(loginDto.login(), loginDto.senha()));    
 
         Usuario us = usuarioRepository.findByLogin(loginDto.login());
-        UsuarioDto usuarioDto = new UsuarioDto(us.getId(), us.getNome(), us.getLogin());
+        String token = autenticacaoService.getToken(loginDto);
+
+        UsuarioDto usuarioDto = new UsuarioDto(us.getId(), us.getNome(), us.getLogin(), token);
         return ResponseEntity.ok().body(usuarioDto);
     }
 }
