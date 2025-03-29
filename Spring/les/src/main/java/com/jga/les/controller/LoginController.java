@@ -39,7 +39,7 @@ public class LoginController {
         Usuario us = usuarioRepository.findByLogin(loginDto.login());
         String token = autenticacaoService.getToken(loginDto);
 
-        UsuarioDto usuarioDto = new UsuarioDto(us.getId(), us.getNome(), us.getLogin(), token);
+        UsuarioDto usuarioDto = new UsuarioDto(us.getId(), us.getNome(), us.getLogin(), token, us.getPermissoes());
         return ResponseEntity.ok().body(usuarioDto);
     }
 }

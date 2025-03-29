@@ -4,7 +4,6 @@ import 'package:les/core/injector.dart';
 
 void main() {
   setupDependencies();
-
   runApp(MyApp());
 }
 

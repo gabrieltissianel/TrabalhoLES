@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:les/core/endpoints.dart';
 import 'package:les/model/usuario/credentials.dart';
+import 'package:les/model/usuario/usuario.dart';
 import 'package:result_dart/result_dart.dart';
 
 class AuthService {
@@ -9,10 +10,10 @@ class AuthService {
 
   AuthService(this._dio);
 
-  AsyncResult<String> login(Credentials credentials) async{
+  AsyncResult<Usuario> login(Credentials credentials) async{
     try{
       final json = await _dio.post(Endpoints.login, data: credentials.toJson());
-      return Success(json.data.toString());
+      return Success(Usuario.fromJson(json.data));
     } catch (e) {
       return Failure(Exception(e.toString()));
     }
