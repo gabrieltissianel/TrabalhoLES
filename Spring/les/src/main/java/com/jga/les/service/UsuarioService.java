@@ -30,4 +30,11 @@ public class UsuarioService extends GenericService<Usuario> {
 
         return super.add(obj);
     }
+
+    @Override
+    public ResponseEntity<Usuario> update(Usuario obj, long id) {
+        String sen = passwordEncoder.encode(obj.getPassword());
+        obj.setSenha(sen);
+        return super.update(obj, id);
+    }
 }
