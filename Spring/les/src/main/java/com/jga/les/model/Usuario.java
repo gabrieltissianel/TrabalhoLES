@@ -1,19 +1,13 @@
 package com.jga.les.model;
 
+
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.jga.les.enums.RoleEnum;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -34,26 +28,14 @@ public class Usuario implements UserDetails {
     @NotNull
     private String senha;
 
-    @OneToMany(mappedBy = "usuario")
-    private List<Permissao> permissoes;
-
-    private RoleEnum role;
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "permissoes", joinColumns = @JoinColumn(name = "usuario_id"))
+    @Column(name = "permissao", nullable = false)
+    private List<String> permissoes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == RoleEnum.INSERIR){
-            if(this.role == RoleEnum.ALTERAR){
-                if(this.role == RoleEnum.EXCLUIR){
-                    return List.of();
-                }
-                return List.of();
-            }
-            List.of();
-        }else{
-            return List.of();
-        }
-        //throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
-        return null;
+        return List.of();
     }
 
     @Override

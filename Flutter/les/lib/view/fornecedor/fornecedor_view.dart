@@ -6,6 +6,7 @@ import 'package:les/core/injector.dart';
 import 'package:les/model/fornecedor/fornecedor.dart';
 import 'package:les/view/fornecedor/fornecedor_form_dialog.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
+import 'package:les/view/widgets/widget_com_permissao.dart';
 import 'package:result_command/result_command.dart';
 
 class FornecedorView extends StatefulWidget{
@@ -73,12 +74,17 @@ class _FornecedorViewState extends State<FornecedorView> {
             DataCell(Text(fornecedor.nome)),
             DataCell(Row(
               children: [
-                IconButton(
-                    icon: Icon(Icons.shopping_bag),
-                    onPressed: () {
-                      context.go('${AppRoutes.pagamentos}/${fornecedor.id}');
-                    }),
-                IconButton(
+                WidgetComPermissao(
+                    permission: "PAGAMENTO_VIEW",
+                    child: IconButton(
+                        icon: Icon(Icons.shopping_bag),
+                        onPressed: () {
+                          context
+                              .go('${AppRoutes.pagamentos}/${fornecedor.id}');
+                        })),
+                WidgetComPermissao(
+                  permission: "FORNECEDOR_EDIT",
+                  child: IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
                       showDialog(
@@ -86,14 +92,18 @@ class _FornecedorViewState extends State<FornecedorView> {
                         builder: (context) =>
                             FornecedorFormDialog(fornecedor: fornecedor),
                       );
-                    }),
-                IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () async {
-                      await _fornecedorViewModel.deleteFornecedor
-                          .execute(fornecedor.id!);
-                      _fornecedorViewModel.getFornecedores.execute();
                     })
+                ),
+                WidgetComPermissao(
+                    permission: "FORNECEDOR_DEL",
+                    child: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () async {
+                          await _fornecedorViewModel.deleteFornecedor
+                              .execute(fornecedor.id!);
+                          _fornecedorViewModel.getFornecedores.execute();
+                        })
+                )
               ],
             )),
           ]);
@@ -105,16 +115,19 @@ class _FornecedorViewState extends State<FornecedorView> {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        FloatingActionButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => FornecedorFormDialog(),
-            );
-          },
-          child: Icon(Icons.add),
+        WidgetComPermissao(
+              permission: "FORNECEDOR_ADD",
+              child: FloatingActionButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => FornecedorFormDialog(),
+                  );
+                },
+                child: Icon(Icons.add),
+              )
         )
-      ]
+        ]
     );
   }
 }
