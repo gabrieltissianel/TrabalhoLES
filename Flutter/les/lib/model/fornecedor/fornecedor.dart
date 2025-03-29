@@ -10,6 +10,7 @@ class Fornecedor extends Entity{
     return Fornecedor(id: json['id'], nome: json['nome']);
   }
 
+  @override
   Map<String, dynamic> toJson(){
     return {
       'id' : id,

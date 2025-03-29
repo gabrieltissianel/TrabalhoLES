@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
 import 'package:flutter/material.dart';
+import 'package:les/model/usuario/usuario.dart';
 import 'package:les/view/login/view_model/login_view_model.dart';
 import 'package:les/view/widgets/toast.dart';
 import 'package:result_command/result_command.dart';
@@ -26,10 +27,12 @@ class _LoginState extends State<LoginView>{
     if (_formKey.currentState!.validate()){
       await _loginViewModel.login.execute(Credentials(_loginController.text.trim(), _passwordController.text.trim()));
       if (_loginViewModel.login.isSuccess){
+        final sucess = _loginViewModel.login.value as SuccessCommand;
+        _loginViewModel.user = sucess.value as Usuario;
         context.go(AppRoutes.home);
       } else if (_loginViewModel.login.isFailure){
         final error = _loginViewModel.login.value as FailureCommand;
-        MensagemAlerta(context, "Usuario ou senha invalidos.");
+        MensagemAlerta(context, error.error.toString());
       }
     }
   }
