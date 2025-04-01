@@ -28,10 +28,8 @@ public class Usuario implements UserDetails {
     @NotNull
     private String senha;
 
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "permissoes", joinColumns = @JoinColumn(name = "usuario_id"))
-    @Column(name = "permissao", nullable = false)
-    private List<String> permissoes;
+    @OneToMany
+    private List<Permissao> permissoes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
