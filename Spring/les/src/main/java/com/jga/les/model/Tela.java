@@ -11,7 +11,16 @@ import lombok.Data;
 public class Tela{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private String nome;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tela tela = (Tela) o;
+        return id == tela.id && nome.equals(tela.nome);
+    }
+
 }

@@ -17,5 +17,13 @@ public class Permissao{
     private boolean add;
     private boolean edit;
     private boolean delete;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Permissao permissao = (Permissao) o;
+        return tela.equals(permissao.tela);
+    }
 }
 

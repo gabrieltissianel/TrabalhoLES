@@ -1,19 +1,15 @@
 package com.jga.les.model;
 
-
-import java.util.Collection;
-import java.util.List;
-
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Data
+import java.util.List;
+
 @Entity
-public class Usuario implements UserDetails {
+@Data
+public class Usuario{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -28,21 +24,6 @@ public class Usuario implements UserDetails {
     @NotNull
     private String senha;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Permissao> permissoes;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
-    @Override
-    public String getPassword() {
-        return this.senha;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.login;
-    }
 }
