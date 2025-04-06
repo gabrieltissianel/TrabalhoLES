@@ -1,6 +1,7 @@
 package com.jga.les.service;
 
 import com.jga.les.dtos.LoginDto;
+import com.jga.les.dtos.UsuarioDto;
 import com.jga.les.exceptions.NotFoundException;
 import com.jga.les.model.Permissao;
 import com.jga.les.model.UserDetailsImpl;
@@ -39,7 +40,7 @@ public class UsuarioService extends GenericService<Usuario> {
         super(objRepository, Usuario.class);
     }
 
-    public ResponseEntity<String> authenticateUser(LoginDto loginUserDto) {
+    public ResponseEntity<UsuarioDto> authenticateUser(LoginDto loginUserDto) {
         // Cria um objeto de autenticação com o email e a senha do usuário
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUserDto.login(), loginUserDto.senha());
@@ -51,7 +52,18 @@ public class UsuarioService extends GenericService<Usuario> {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         // Gera um token JWT para o usuário autenticado
-        return ResponseEntity.ok().body(jwtTokenService.generateToken(userDetails));
+        String token = jwtTokenService.generateToken(userDetails);
+
+        Usuario usuario = userDetails.getUsuario();
+
+        UsuarioDto usuarioDto = new UsuarioDto(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getLogin(),
+                token,
+                usuario.getPermissoes());
+
+        return ResponseEntity.ok().body(usuarioDto);
     }
 
     @Override

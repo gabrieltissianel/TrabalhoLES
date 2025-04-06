@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/usuario/usuario.dart';
 import 'package:les/view/usuario/usuario_form_dialog.dart';
@@ -100,6 +102,12 @@ class _UsuarioViewState extends State<UsuarioView> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          FloatingActionButton(
+            onPressed: () {
+              context.go(AppRoutes.tela);
+            },
+            child: Icon(Icons.screenshot_monitor),
+          ),
            FloatingActionButton(
                 onPressed: () {
                   showDialog(

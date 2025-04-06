@@ -18,7 +18,6 @@ public class FornecedorController extends GenericController<Fornecedor> {
         super(genericApplication);
     }
 
-
     @Override
     @PreAuthorize("hasAuthority('FORNECEDOR')")
     public ResponseEntity<List<Fornecedor>> list() {
@@ -32,7 +31,7 @@ public class FornecedorController extends GenericController<Fornecedor> {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('FORNECEDOR_ADD')")
+    @PreAuthorize("hasAuthority('FORNECEDOR_DELETE')")
     public ResponseEntity<String> remove(long id) {
         return super.remove(id);
     }

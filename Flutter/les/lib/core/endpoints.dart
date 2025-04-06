@@ -6,5 +6,5 @@ class Endpoints {
   static String fonecedorList = "$fornecedor/list";
   static String fonecedorAdd = "$fornecedor/add";
 
-  static String login = "$baseUrl/login";
+  static String login = "$baseUrl/usuario/login";
 }

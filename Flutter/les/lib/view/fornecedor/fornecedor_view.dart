@@ -75,15 +75,16 @@ class _FornecedorViewState extends State<FornecedorView> {
             DataCell(Row(
               children: [
                 WidgetComPermissao(
-                    permission: "PAGAMENTO_VIEW",
+                    permission: "PAGAMENTO",
                     child: IconButton(
                         icon: Icon(Icons.shopping_bag),
                         onPressed: () {
                           context
-                              .go('${AppRoutes.pagamentos}/${fornecedor.id}');
+                              .go('${AppRoutes.fornecedores}/${fornecedor.id}/${AppRoutes.pagamentos}');
                         })),
                 WidgetComPermissao(
-                  permission: "FORNECEDOR_EDIT",
+                  permission: "FORNECEDOR",
+                  edit: true,
                   child: IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
@@ -95,7 +96,8 @@ class _FornecedorViewState extends State<FornecedorView> {
                     })
                 ),
                 WidgetComPermissao(
-                    permission: "FORNECEDOR_DEL",
+                    permission: "FORNECEDOR",
+                    delete: true,
                     child: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () async {
@@ -116,7 +118,8 @@ class _FornecedorViewState extends State<FornecedorView> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         WidgetComPermissao(
-              permission: "FORNECEDOR_ADD",
+              permission: "FORNECEDOR",
+              add: true,
               child: FloatingActionButton(
                 onPressed: () {
                   showDialog(

@@ -6,10 +6,10 @@ import 'package:les/view/fornecedor/pagamento_view.dart';
 import 'package:les/view/home/home_view.dart';
 import 'package:les/view/login/login_view.dart';
 import 'package:les/view/login/view_model/login_view_model.dart';
+import 'package:les/view/usuario/tela_view.dart';
 import 'package:les/view/usuario/usuario_view.dart';
 import 'package:les/view/widgets/app_layout.dart';
 
-import '../view/usuario/view_model/usuario_view_model.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -17,6 +17,7 @@ class AppRoutes {
   static const String pagamentos = '/pagamentos';
   static const String login = '/login';
   static const String usuarios = '/usuarios';
+  static const String tela = '/tela';
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -41,7 +42,7 @@ final GoRouter router = GoRouter(
         break;
       case AppRoutes.fornecedores:
       case AppRoutes.pagamentos:
-        if (!userProvider.user!.hasPermission("FORNECEDOR_VIEW")) {
+        if (!userProvider.user!.hasPermission("FORNECEDOR")) {
           return AppRoutes.home;
         }
         break;
@@ -75,6 +76,9 @@ final GoRouter router = GoRouter(
               return PagamentoView(fornecedorId: int.parse(fornecedorId!));
             },
         ),
+        GoRoute(
+            path: AppRoutes.tela,
+            builder: (context, state) => const TelaView()),
       ]
     ),
     GoRoute(

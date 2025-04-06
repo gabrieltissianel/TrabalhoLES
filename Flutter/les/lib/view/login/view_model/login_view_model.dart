@@ -1,5 +1,7 @@
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:les/core/injector.dart';
 import 'package:les/model/usuario/credentials.dart';
 import 'package:les/model/usuario/usuario.dart';
 import 'package:les/services/auth_service.dart';
@@ -12,8 +14,6 @@ class LoginViewModel extends ChangeNotifier {
   Usuario? user;
   bool get isLoggedIn => user != null;
 
-  void logout() => user = null;
-
   LoginViewModel(this._authService);
 
   late final login = Command1(_login);
@@ -22,4 +22,5 @@ class LoginViewModel extends ChangeNotifier {
     return _authService.login(credentials);
   }
 
+  void logout() => user = null;
 }

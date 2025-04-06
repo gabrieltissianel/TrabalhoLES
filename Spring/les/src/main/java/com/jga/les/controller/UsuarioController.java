@@ -1,6 +1,7 @@
 package com.jga.les.controller;
 
 import com.jga.les.dtos.LoginDto;
+import com.jga.les.dtos.UsuarioDto;
 import com.jga.les.model.Usuario;
 import com.jga.les.service.GenericService;
 
@@ -20,7 +21,7 @@ public class UsuarioController extends GenericController<Usuario> {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginUserDto) {
+    public ResponseEntity<UsuarioDto> authenticateUser(@RequestBody LoginDto loginUserDto) {
         return ((UsuarioService) genericService).authenticateUser(loginUserDto);
     }
 }
