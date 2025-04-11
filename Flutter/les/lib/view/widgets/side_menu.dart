@@ -19,7 +19,7 @@ class _SideMenuState extends State<SideMenu> {
       selectedIcon: Icon(Icons.home),
       label: Text('Home'),
     ),
-    if (userProvider.user!.hasPermission("FORNECEDOR_VIEW"))
+    if (userProvider.user!.hasPermission("FORNECEDOR"))
     AppRoutes.fornecedores: NavigationRailDestination(
       icon: Icon(Icons.account_balance_outlined),
       selectedIcon: Icon(Icons.account_balance),

@@ -16,7 +16,7 @@ public class GenericService<E> {
 
     protected final JpaRepository<E, Long> objRepository;
 
-    private final Class<E> classe;
+    protected final Class<E> classe;
 
     public ResponseEntity<List<E>> list() {
         return ResponseEntity.ok().body(objRepository.findAll());
