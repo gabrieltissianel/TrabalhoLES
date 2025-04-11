@@ -21,7 +21,7 @@ public class ProdutoContoller extends GenericController<Produto> {
     HistoricoProdutos historicoProdutos;
 
     public ProdutoContoller(GenericService<Produto> genericApplication) {
-        super(genericApplication);
+        super("/produto", genericApplication);
     }
 
     @Override

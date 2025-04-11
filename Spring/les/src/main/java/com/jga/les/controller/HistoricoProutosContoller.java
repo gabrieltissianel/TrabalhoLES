@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HistoricoProutosContoller extends GenericController<HistoricoProdutos> {
 
     public HistoricoProutosContoller(GenericService<HistoricoProdutos> genericApplication) {
-        super(genericApplication);
+        super("/historico",genericApplication);
     }
 }

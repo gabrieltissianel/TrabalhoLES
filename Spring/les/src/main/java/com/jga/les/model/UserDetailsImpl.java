@@ -26,11 +26,11 @@ public class UserDetailsImpl implements UserDetails {
         return usuario.getPermissoes().stream()
                 .flatMap(permissao -> {
                     List<String> autoridades = new ArrayList<>();
-                    String nomeTela = permissao.getTela().getNome().toUpperCase();
+                    String nomeTela = permissao.getTela().getNome();
                     autoridades.add(nomeTela);
-                    if (permissao.isAdd()) autoridades.add(nomeTela + "_ADD");
-                    if (permissao.isEdit()) autoridades.add(nomeTela + "_EDIT");
-                    if (permissao.isDelete()) autoridades.add(nomeTela + "_DELETE");
+                    if (permissao.isAdd()) autoridades.add(nomeTela + "/add");
+                    if (permissao.isEdit()) autoridades.add(nomeTela + "/edit");
+                    if (permissao.isDelete()) autoridades.add(nomeTela + "/delete");
                     return autoridades.stream();
                 })
                 .map(SimpleGrantedAuthority::new)
