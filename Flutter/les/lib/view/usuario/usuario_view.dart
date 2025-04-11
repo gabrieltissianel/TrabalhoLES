@@ -6,6 +6,8 @@ import 'package:les/core/injector.dart';
 import 'package:les/model/usuario/usuario.dart';
 import 'package:les/view/usuario/usuario_form_dialog.dart';
 import 'package:les/view/usuario/view_model/usuario_view_model.dart';
+import 'package:les/view/widgets/custom_table.dart';
+import 'package:les/view/widgets/widget_com_permissao.dart';
 import 'package:result_command/result_command.dart';
 
 class UsuarioView extends StatefulWidget{
@@ -45,9 +47,43 @@ class _UsuarioViewState extends State<UsuarioView> {
                               .value as SuccessCommand;
                           final usuarios = success.value as List<Usuario>;
                           return SizedBox.expand(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: _table(usuarios),
+                            child: CustomTable<Usuario>(
+                              title: "Usuarios",
+                              data: usuarios,
+                              columnHeaders: ['id', 'nome', 'login'],
+                              getActions: (usuario) {
+                                return [
+                                  WidgetComPermissao(
+                                    permission: "/usuario",
+                                    edit: true,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      tooltip: 'Editar',
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              UsuarioFormDialog(
+                                                  usuario: usuario),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  WidgetComPermissao(
+                                    permission: '/usuario',
+                                    delete: true,
+                                    child: IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        tooltip: 'Excluir',
+                                        onPressed: () async {
+                                          await _usuarioViewModel.deleteUsuario
+                                              .execute(usuario.id!);
+                                          _usuarioViewModel.getUsuarios
+                                              .execute();
+                                        }),
+                                  )
+                                ];
+                              },
                             ),
                           );
                         }
@@ -58,43 +94,6 @@ class _UsuarioViewState extends State<UsuarioView> {
       ),
       floatingActionButton: _buttons(_usuarioViewModel, context),
     );
-  }
-
-  Widget _table(List<Usuario> usuarios){
-    return DataTable(
-        columns: [
-          DataColumn(label: Text("ID", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Nome", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Login", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Açoes", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-        ],
-        rows: usuarios.map((usuario) {
-          return DataRow(cells: [
-            DataCell(Text(usuario.id.toString())),
-            DataCell(Text(usuario.nome)),
-            DataCell(Text(usuario.login)),
-            DataCell(Row(
-              children: [
-                IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) =>
-                                UsuarioFormDialog(usuario: usuario),
-                          );
-                        }),
-                IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () async {
-                          await _usuarioViewModel.deleteUsuario
-                              .execute(usuario.id!);
-                          _usuarioViewModel.getUsuarios.execute();
-                        })
-              ],
-            )),
-          ]);
-        }).toList());
   }
 
   Widget _buttons(UsuarioViewModel usuarioViewModel, BuildContext context){

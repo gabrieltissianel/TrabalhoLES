@@ -6,6 +6,7 @@ import 'package:les/core/injector.dart';
 import 'package:les/model/fornecedor/fornecedor.dart';
 import 'package:les/view/fornecedor/fornecedor_form_dialog.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
+import 'package:les/view/widgets/custom_table.dart';
 import 'package:les/view/widgets/widget_com_permissao.dart';
 import 'package:result_command/result_command.dart';
 
@@ -46,10 +47,47 @@ class _FornecedorViewState extends State<FornecedorView> {
                           .value as SuccessCommand;
                       final fornecedores = success.value as List<Fornecedor>;
                       return SizedBox.expand(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: _table(fornecedores),
-                            ),
+                            child: CustomTable(title: "Fornecedores",
+                                data: fornecedores,
+                                columnHeaders: ["id", "nome"],
+                                getActions: (fornecedor) {
+                                  return [
+                                    WidgetComPermissao(
+                                        permission: "/pagamento",
+                                        child: IconButton(
+                                            icon: Icon(Icons.shopping_bag),
+                                            onPressed: () {
+                                              context
+                                                  .go('${AppRoutes.pagamentos}/${fornecedor.id}');
+                                            })),
+                                    WidgetComPermissao(
+                                        permission: "/fornecedor",
+                                        edit: true,
+                                        child: IconButton(
+                                            icon: Icon(Icons.edit),
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    FornecedorFormDialog(fornecedor: fornecedor),
+                                              );
+                                            })
+                                    ),
+                                    WidgetComPermissao(
+                                        permission: "/fornecedor",
+                                        delete: true,
+                                        child: IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () async {
+                                              await _fornecedorViewModel.deleteFornecedor
+                                                  .execute(fornecedor.id!);
+                                              _fornecedorViewModel.getFornecedores.execute();
+                                            })
+                                    )
+
+                                  ];
+                                })
+
                           );
                         }
                   })
@@ -61,64 +99,13 @@ class _FornecedorViewState extends State<FornecedorView> {
     );
   }
 
-  Widget _table(List<Fornecedor> fornecedores){
-    return DataTable(
-        columns: [
-          DataColumn(label: Text("ID", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Nome", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Açoes", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-        ],
-        rows: fornecedores.map((fornecedor) {
-          return DataRow(cells: [
-            DataCell(Text(fornecedor.id.toString())),
-            DataCell(Text(fornecedor.nome)),
-            DataCell(Row(
-              children: [
-                WidgetComPermissao(
-                    permission: "PAGAMENTO",
-                    child: IconButton(
-                        icon: Icon(Icons.shopping_bag),
-                        onPressed: () {
-                          context
-                              .go('${AppRoutes.fornecedores}/${fornecedor.id}/${AppRoutes.pagamentos}');
-                        })),
-                WidgetComPermissao(
-                  permission: "FORNECEDOR",
-                  edit: true,
-                  child: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) =>
-                            FornecedorFormDialog(fornecedor: fornecedor),
-                      );
-                    })
-                ),
-                WidgetComPermissao(
-                    permission: "FORNECEDOR",
-                    delete: true,
-                    child: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () async {
-                          await _fornecedorViewModel.deleteFornecedor
-                              .execute(fornecedor.id!);
-                          _fornecedorViewModel.getFornecedores.execute();
-                        })
-                )
-              ],
-            )),
-          ]);
-        }).toList());
-  }
-
   Widget _buttons(FornecedorViewModel fornecedorViewModel, BuildContext context){
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         WidgetComPermissao(
-              permission: "FORNECEDOR",
+              permission: "/fornecedor",
               add: true,
               child: FloatingActionButton(
                 onPressed: () {

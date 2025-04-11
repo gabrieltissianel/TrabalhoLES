@@ -7,6 +7,8 @@ import 'package:les/model/fornecedor/pagamento.dart';
 import 'package:les/view/fornecedor/pagamento_form_dialog.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
 import 'package:les/view/fornecedor/view_model/pagamento_view_model.dart';
+import 'package:les/view/widgets/custom_table.dart';
+import 'package:les/view/widgets/widget_com_permissao.dart';
 import 'package:result_command/result_command.dart';
 
 class PagamentoView extends StatefulWidget{
@@ -50,11 +52,46 @@ class _PagamentoViewState extends State<PagamentoView> {
                               .value as SuccessCommand;
                           final pagamentos = success.value as List<Pagamento>;
                           return SizedBox.expand(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: _table(pagamentos),
-                            ),
-                          );
+                              child: CustomTable(
+                            title: "Pagamentos",
+                            data: pagamentos,
+                            columnHeaders: [
+                              "id",
+                              "fornecedor",
+                              "valor",
+                              "dt_vencimento",
+                              "dt_pagamento"
+                            ],
+                            getActions: (pagamento) {
+                              return [
+                                WidgetComPermissao(
+                                  permission: "/pagamento",
+                                  delete: true,
+                                  child: IconButton(
+                                      icon: Icon(Icons.delete),
+                                      tooltip: 'Deletar',
+                                      onPressed: () async {
+                                        await _pagamentoViewModel
+                                            .deletePagamento
+                                            .execute(pagamento.id!);
+                                        _pagamentoViewModel.getPagamentos
+                                            .execute();
+                                      }),
+                                ),
+                                if (pagamento.dt_pagamento == null)
+                                  WidgetComPermissao(
+                                    permission: "/pagamento",
+                                    edit: true,
+                                    child: IconButton(
+                                        icon: Icon(Icons.check),
+                                        tooltip: 'Pagar',
+                                        onPressed: () async {
+                                          _selecionarData(context, pagamento);
+                                        }),
+                                  )
+                              ];
+                            },
+                          ));
                         }
                       })
               )
@@ -106,7 +143,7 @@ class _PagamentoViewState extends State<PagamentoView> {
               decimalDigits: 2,
             ).format(pagamento.valor))),
             DataCell(Text(DateFormat('dd/MM/yyyy').format(pagamento.dt_vencimento))),
-            DataCell(Text(pagamento.dt_pagamento != null ? DateFormat('dd/MM/yyyy').format(pagamento.dt_pagamento!): 'Nao Pago')),
+              DataCell(Text(pagamento.dt_pagamento != null ? DateFormat('dd/MM/yyyy').format(pagamento.dt_pagamento!): 'Nao Pago')),
             DataCell(Row(
               children: [
                 IconButton(
