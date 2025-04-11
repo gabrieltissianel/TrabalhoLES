@@ -35,7 +35,9 @@ public class SecurityConfiguration {
             "/tela/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/swagger-resources/**"
+            "/swagger-resources/**",
+            "/produto/**",
+            "/historicoprodutos/**"
     };
 
     @Bean
