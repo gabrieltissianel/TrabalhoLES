@@ -2,6 +2,7 @@ package com.jga.les.model;
 
 import java.util.Date;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;
@@ -19,6 +20,7 @@ public class HistoricoProdutos {
     private Long id;
 
     @DateTimeFormat
+    @CreationTimestamp
     private Date data;
 
     private Double preco_novo;
