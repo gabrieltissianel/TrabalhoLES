@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProdutoContoller extends GenericController<Produto> {
 
     public ProdutoContoller(GenericService<Produto> genericApplication) {
-        super(genericApplication);
+        super("/produto", genericApplication);
     }
 }

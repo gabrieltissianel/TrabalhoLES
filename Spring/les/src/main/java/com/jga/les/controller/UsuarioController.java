@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsuarioController extends GenericController<Usuario> {
 
     public UsuarioController(GenericService<Usuario> genericApplication) {
-        super(genericApplication);
+        super("/usuario",genericApplication);
     }
 
     @PostMapping("/login")

@@ -23,15 +23,16 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+//@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
     @Autowired
     private UserAuthenticationFilter userAuthenticationFilter;
 
     public static final String [] ENDPOINTS_PUBLICOS = {
-            "/usuario/login", // Url que usaremos para fazer login
             "/usuario/add",
+            "/usuario/login",
+            "/tela/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**"

@@ -2,6 +2,7 @@ package com.jga.les.controller;
 
 import com.jga.les.service.PagamentoService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +18,11 @@ import java.util.List;
 public class PagamentoController extends GenericController<Pagamento>{
     
     public PagamentoController(GenericService<Pagamento> genericApplication){
-        super(genericApplication);
+        super("/pagamento",genericApplication);
     }
 
     @GetMapping("/list/{id}")
+    @PreAuthorize("hasAuthority(#root.this.getPermissao(''))")
     public ResponseEntity<List<Pagamento>> list(@PathVariable Long id) {
         return ((PagamentoService) genericService).findByFornecedor(id);
     }

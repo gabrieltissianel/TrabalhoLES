@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClienteController extends GenericController<Cliente> {
 
     public ClienteController(GenericService<Cliente> genericApplication) {
-        super(genericApplication);
+        super("/cliente", genericApplication);
     }
 }

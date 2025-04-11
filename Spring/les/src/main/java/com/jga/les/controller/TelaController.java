@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TelaController extends GenericController<Tela> {
 
     public TelaController(GenericService<Tela> genericApplication) {
-        super(genericApplication);
+        super("/tela", genericApplication);
     }
 }
