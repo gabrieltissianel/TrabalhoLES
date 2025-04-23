@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class HistoricoProutosContoller extends GenericController<HistoricoProdutos> {
 
     public HistoricoProutosContoller(GenericService<HistoricoProdutos> genericApplication) {
-        super("/historico",genericApplication);
+        super("/historicoproduto",genericApplication);
     }
 
     @GetMapping("/list/{id}")
-    @PreAuthorize("hasAuthority(#root.this.getPermissao(''))")
-    public ResponseEntity<List<Produto>> list(@PathVariable Long id) {
+    public ResponseEntity<List<HistoricoProdutos>> list(@PathVariable Long id) {
         return ((HistoricoProdutosService) genericService).findByProduto(id);
     }
 }

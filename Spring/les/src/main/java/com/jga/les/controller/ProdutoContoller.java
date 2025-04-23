@@ -35,11 +35,10 @@ public class ProdutoContoller extends GenericController<Produto> {
 
     @Override
     public ResponseEntity<Produto> add(@Valid Produto obj) {
-        ResponseEntity<HistoricoProdutos> result = updateHistorico(obj);
-        if(result != null){
-            return super.add(obj);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(obj);
+        Produto prod = super.add(obj).getBody();
+        ResponseEntity<HistoricoProdutos> result = updateHistorico(prod);
+
+        return ResponseEntity.status(HttpStatus.OK).body(prod);
     }
 
     private ResponseEntity<HistoricoProdutos> updateHistorico(Produto obj){

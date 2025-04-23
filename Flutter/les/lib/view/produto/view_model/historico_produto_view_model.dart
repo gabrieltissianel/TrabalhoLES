@@ -15,6 +15,7 @@ class HistoricoProdutoViewModel extends ChangeNotifier{
   late final updateHistoricoProduto = Command1(_updateHistoricoProduto);
   late final deleteHistoricoProduto = Command1(_deleteHistoricoProduto);
   late final getHistoricoProdutoById = Command1(_getHistoricoProdutoById);
+  late final getByClienteId = Command1(_getByClienteId);
 
   AsyncResult<List<HistoricoProduto>> _getHistoricoProdutos() async {
     return _historicoProdutoService.getAll();
@@ -34,5 +35,9 @@ class HistoricoProdutoViewModel extends ChangeNotifier{
 
   AsyncResult<HistoricoProduto> _getHistoricoProdutoById(int id) async {
     return _historicoProdutoService.getById(id);
+  }
+
+  AsyncResult<List<HistoricoProduto>> _getByClienteId(int id) async {
+    return _historicoProdutoService.getByProdutoId(id);
   }
 }

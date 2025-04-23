@@ -8,6 +8,7 @@ import 'package:les/view/fornecedor/pagamento_view.dart';
 import 'package:les/view/home/home_view.dart';
 import 'package:les/view/login/login_view.dart';
 import 'package:les/view/login/view_model/login_view_model.dart';
+import 'package:les/view/produto/historico_produto_view.dart';
 import 'package:les/view/produto/produto_view.dart';
 import 'package:les/view/usuario/tela_view.dart';
 import 'package:les/view/usuario/usuario_view.dart';
@@ -23,7 +24,7 @@ class AppRoutes {
   static const String tela = '/tela';
   static const String produtos = '/produto';
   static const String clientes = '/cliente';
-  static const String historicoProduto = '/historico_produto';
+  static const String historicoProduto = '/historicoproduto';
 }
 
 const List<String> freeRoutes = [ AppRoutes.login, AppRoutes.home ];
@@ -86,6 +87,13 @@ final GoRouter router = GoRouter(
               final fornecedorId = state.pathParameters['fornecedorId'];
               return PagamentoView(fornecedorId: int.parse(fornecedorId!));
             },
+        ),
+        GoRoute(
+          path: '${AppRoutes.historicoProduto}/:produtoId',
+          builder: (context, state) {
+            final produtoId = state.pathParameters['produtoId'];
+            return HistoricoProdutoView(produtoId: int.parse(produtoId!));
+          },
         ),
         GoRoute(
             path: AppRoutes.tela,

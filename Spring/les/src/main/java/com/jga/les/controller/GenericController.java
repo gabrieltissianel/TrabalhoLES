@@ -5,6 +5,7 @@ import java.util.List;
 import com.jga.les.service.GenericService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;

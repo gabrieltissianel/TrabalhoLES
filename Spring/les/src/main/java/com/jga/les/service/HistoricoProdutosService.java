@@ -17,7 +17,7 @@ public class HistoricoProdutosService extends GenericService<HistoricoProdutos> 
         super(objRepository, HistoricoProdutos.class);
     }
 
-    public ResponseEntity<List<Produto>> findByProduto(Long produto_id) {
+    public ResponseEntity<List<HistoricoProdutos>> findByProduto(Long produto_id) {
         return ResponseEntity.ok(((HistoricoProdutosRepository) objRepository).findByProdutoId(produto_id));
     }
 }

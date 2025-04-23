@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/produto/produto.dart';
 import 'package:les/view/produto/produto_form_dialog.dart';
@@ -51,7 +53,7 @@ class _ProdutoViewState extends State<ProdutoView> {
                                   formatters: {
                                     "preco": (value) => "R\$ $value",
                                     "custo": (value) => "R\$ $value",
-                                    "unitario": (value) => value == 'true' ? "Sim" : "Nao"
+                                    "unitario": (value) => value.toString() == 'true' ? "Sim" : "Nao"
                                   },
                                   getActions: (produto) {
                                     return [
@@ -60,13 +62,10 @@ class _ProdutoViewState extends State<ProdutoView> {
                                           edit: true,
                                           child: IconButton(
                                               onPressed: () {
-                                                // showDialog(
-                                                //     context: context,
-                                                //     builder: (context) =>
-                                                //         RecargaDialog(produto: produto)
-                                                // );
+                                                context
+                                                    .go('${AppRoutes.historicoProduto}/${produto.id}');
                                               },
-                                              icon: Icon(Icons.add_card))
+                                              icon: Icon(Icons.history))
                                       ),
                                       WidgetComPermissao(
                                           permission: "/produto",

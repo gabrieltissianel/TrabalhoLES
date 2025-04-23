@@ -61,7 +61,13 @@ class _UserFormDialogState extends State<ProdutoFormDialog> {
         );
         await produtoViewModel.addProduto.execute(produto);
       } else {
-
+        Produto produto = widget.produto!;
+        produto.codigo = _codigoController.text;
+        produto.nome = _nomeController.text;
+        produto.preco = _precoController.numberValue;
+        produto.custo = _custoController.numberValue;
+        produto.unitario = _unitario;
+        await produtoViewModel.updateProduto.execute(produto);
       }
       await produtoViewModel.getProdutos.execute();
       Navigator.of(context).pop(); // Fecha o pop-up após o envio
@@ -134,7 +140,7 @@ class _UserFormDialogState extends State<ProdutoFormDialog> {
               groupValue: _unitario,
               onChanged: (bool? value) {
                 setState(() {
-                  _unitario = value!;
+                  _unitario = true;
                 });
               },
             ),
@@ -145,7 +151,7 @@ class _UserFormDialogState extends State<ProdutoFormDialog> {
               groupValue: _unitario,
               onChanged: (bool? value) {
                 setState(() {
-                  _unitario = value!;
+                  _unitario = false;
                 });
               },
             ),
