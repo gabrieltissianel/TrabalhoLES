@@ -53,15 +53,6 @@ public class CompraService extends GenericService<Compra> {
     @Override
     public ResponseEntity<Compra> update(Compra obj, long id) {
         objRepository.findById(id).ifPresent(compra -> {
-            List<CompraProduto> compraProdutos = obj.getCompraProdutos();
-            // Criamos uma cópia para evitar ConcurrentModificationException
-            List<CompraProduto> copiaProdutos = new ArrayList<>(compraProdutos);
-
-            for (CompraProduto compraProduto : copiaProdutos) {
-                if (compraProduto.getProduto().isUnitario()) {
-                    verificarProdutoRepetido(compraProdutos, compraProduto);
-                }
-            }
 
             for (CompraProduto compraProduto : compra.getCompraProdutos()) {
                 if (!obj.getCompraProdutos().contains(compraProduto)) {
@@ -69,51 +60,26 @@ public class CompraService extends GenericService<Compra> {
                 }
             }
 
-            for (CompraProduto compraProduto : compraProdutos) {
+            for (CompraProduto compraProduto : obj.getCompraProdutos()) {
                 if (compraProduto.getId() == null){
                     compraProduto.setId( compraProdutoRepository.save(compraProduto).getId() );
+                } else {
+                    compraProdutoRepository.save(compraProduto);
                 }
             }
+
+            List<CompraProduto> copia = new ArrayList<>(obj.getCompraProdutos());
+
+            obj.getCompraProdutos().removeIf(compraProduto -> compraProduto.getQntd() <= 0);
+
+            objRepository.save(obj);
+
+            copia.forEach(compraProduto -> {
+                if(compraProduto.getQntd() == 0){
+                    compraProdutoRepository.delete(compraProduto);
+                }
+            });
         });
         return super.update(obj, id);
     }
-
-    private void verificarProdutoRepetido(List<CompraProduto> produtos, CompraProduto produto) {
-        // Filtra produtos unitários com o mesmo ID
-        List<CompraProduto> repetidos = produtos.stream()
-                .filter(p -> p.getProduto().isUnitario())
-                .filter(p -> p.getProduto().getId().equals(produto.getId()))
-                .toList();
-
-        // Se houver mais de um item repetido
-        if (repetidos.size() > 1) {
-            // Mantém o primeiro e remove os demais
-            CompraProduto principal = repetidos.getFirst();
-
-            int qtde = 0;
-            for (CompraProduto repetido : repetidos) {
-                qtde += repetido.getQntd();
-            }
-
-            principal.setQntd((double)qtde);
-
-            // Remove todos os repetidos (incluindo o principal)
-            produtos.removeAll(repetidos);
-            // Adiciona o principal de volta com quantidade atualizada
-            produtos.add(principal);
-        }
-
-        // Remove itens com quantidade <= 0
-        produtos.removeIf(p -> {
-            if (p.getQntd() <= 0 ){
-                if (p.getId() != null){
-                    compraProdutoRepository.findById(p.getId()).ifPresent( produtoD ->
-                            compraProdutoRepository.deleteById(produtoD.getId()));
-                }
-                return true;
-            }
-            return false;
-        });
-    }
-
 }
