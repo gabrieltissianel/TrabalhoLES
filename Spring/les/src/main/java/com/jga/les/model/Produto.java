@@ -29,7 +29,4 @@ public class Produto {
 
     @NotNull
     private Double custo;
-
-    @OneToMany(mappedBy = "produto")
-    private List<CompraProduto> compraProdutos;
 }

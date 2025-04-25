@@ -27,6 +27,6 @@ public class Compra {
     @ManyToOne
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "compra")
+    @OneToMany
     private List<CompraProduto> compraProdutos;
 }
