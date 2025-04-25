@@ -28,6 +28,6 @@ public class Cliente {
     @DateTimeFormat
     private Date ultimo_dia_negativado;
     
-    @DateTimeFormat
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dt_nascimento;
 }

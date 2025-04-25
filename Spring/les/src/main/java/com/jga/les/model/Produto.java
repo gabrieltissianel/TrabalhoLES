@@ -2,6 +2,9 @@ package com.jga.les.model;
 
 import java.util.List;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,5 +34,6 @@ public class Produto {
     private Double custo;
 
     @OneToMany(mappedBy = "produto")
+    @Cascade(CascadeType.ALL)
     private List<CompraProduto> compraProdutos;
 }

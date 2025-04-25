@@ -3,6 +3,11 @@ package com.jga.les.model;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +25,8 @@ public class Compra {
     private long id;
 
     @NonNull
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @CreationTimestamp
     private Date entrada;
 
     private Date saida;
@@ -28,5 +35,6 @@ public class Compra {
     private Cliente cliente;
 
     @OneToMany(mappedBy = "compra")
+    @Cascade(CascadeType.ALL)
     private List<CompraProduto> compraProdutos;
 }

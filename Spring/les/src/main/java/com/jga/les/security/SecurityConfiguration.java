@@ -37,7 +37,8 @@ public class SecurityConfiguration {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/produto/**",
-            "/historicoprodutos/**"
+            "/historicoprodutos/**",
+            "/cliente/**"
     };
 
     @Bean
