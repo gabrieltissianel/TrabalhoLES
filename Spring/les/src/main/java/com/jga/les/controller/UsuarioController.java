@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/usuario")
-public class UsuarioController extends GenericController<Usuario> {
+public class UsuarioController extends GenericController<Usuario, Long> {
 
-    public UsuarioController(GenericService<Usuario> genericApplication) {
+    public UsuarioController(GenericService<Usuario, Long> genericApplication) {
         super("/usuario",genericApplication);
     }
 

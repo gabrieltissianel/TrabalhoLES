@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/produto")
-public class ProdutoContoller extends GenericController<Produto> {
+public class ProdutoContoller extends GenericController<Produto, Long> {
     @Autowired
     HistoricoProutosContoller historicoProutosContoller;
     
     HistoricoProdutos historicoProdutos;
 
-    public ProdutoContoller(GenericService<Produto> genericApplication) {
+    public ProdutoContoller(GenericService<Produto, Long> genericApplication) {
         super("/produto", genericApplication);
     }
 
     @Override
-    public ResponseEntity<Produto> edit(long id, @Valid Produto obj) {
+    public ResponseEntity<Produto> edit(Long id, @Valid Produto obj) {
         ResponseEntity<HistoricoProdutos> result = updateHistorico(obj);
         if(result != null){
             return super.edit(id, obj);
@@ -36,7 +36,7 @@ public class ProdutoContoller extends GenericController<Produto> {
     @Override
     public ResponseEntity<Produto> add(@Valid Produto obj) {
         Produto prod = super.add(obj).getBody();
-        ResponseEntity<HistoricoProdutos> result = updateHistorico(prod);
+        updateHistorico(prod);
 
         return ResponseEntity.status(HttpStatus.OK).body(prod);
     }

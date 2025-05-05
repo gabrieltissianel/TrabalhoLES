@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HistoricoProdutosService extends GenericService<HistoricoProdutos> {
+public class HistoricoProdutosService extends GenericService<HistoricoProdutos, Long> {
 
     public HistoricoProdutosService(JpaRepository<HistoricoProdutos, Long> objRepository) {
         super(objRepository, HistoricoProdutos.class);

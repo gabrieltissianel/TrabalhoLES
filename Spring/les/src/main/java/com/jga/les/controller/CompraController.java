@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/compra")
-public class CompraController extends GenericController<Compra> {
+public class CompraController extends GenericController<Compra, Long> {
 
-    public CompraController(GenericService<Compra> genericApplication) {
+    public CompraController(GenericService<Compra, Long> genericApplication) {
         super("/compra", genericApplication);
     }
 }

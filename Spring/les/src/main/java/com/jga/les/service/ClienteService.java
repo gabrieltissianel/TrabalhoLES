@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClienteService extends GenericService<Cliente> {
+public class ClienteService extends GenericService<Cliente, Long> {
 
     public ClienteService(JpaRepository<Cliente, Long> objRepository) {
         super(objRepository, Cliente.class);

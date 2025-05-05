@@ -15,9 +15,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pagamento")
-public class PagamentoController extends GenericController<Pagamento>{
+public class PagamentoController extends GenericController<Pagamento, Long>{
     
-    public PagamentoController(GenericService<Pagamento> genericApplication){
+    public PagamentoController(GenericService<Pagamento, Long> genericApplication){
         super("/pagamento",genericApplication);
     }
 

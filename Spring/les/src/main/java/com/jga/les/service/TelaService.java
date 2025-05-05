@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class TelaService extends GenericService<Tela> {
+public class TelaService extends GenericService<Tela, Long> {
 
     public TelaService(JpaRepository<Tela, Long> objRepository) {
         super(objRepository, Tela.class);

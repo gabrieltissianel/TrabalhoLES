@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class GenericController<E> {
+public class GenericController<E, T> {
 
     protected String nomeTela;
 
-    protected final GenericService<E> genericService;
+    protected final GenericService<E, T> genericService;
 
     public String getNomeTela(String tipo) {
         return nomeTela +tipo;
@@ -35,19 +35,19 @@ public class GenericController<E> {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority(#root.this.getNomeTela('/delete'))")
-    public ResponseEntity<String> remove(@PathVariable long id) {
+    public ResponseEntity<String> remove(@PathVariable T id) {
         return genericService.remove(id);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority(#root.this.getNomeTela('/edit'))")
-    public ResponseEntity<E> edit(@PathVariable long id, @Valid @RequestBody E obj) {
+    public ResponseEntity<E> edit(@PathVariable T id, @Valid @RequestBody E obj) {
         return genericService.update(obj, id);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority(#root.this.getNomeTela(''))")
-    public ResponseEntity<E> findById(@PathVariable long id) {
+    public ResponseEntity<E> findById(@PathVariable T id) {
         return genericService.findById(id);
     }
 }

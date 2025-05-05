@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/historicorecargas")
-public class HistoricoRecargasContoller extends GenericController<HistoricoRecarga> {
+public class HistoricoRecargasContoller extends GenericController<HistoricoRecarga, Long> {
 
-    public HistoricoRecargasContoller(GenericService<HistoricoRecarga> genericApplication) {
+    public HistoricoRecargasContoller(GenericService<HistoricoRecarga, Long> genericApplication) {
         super("/recargas", genericApplication);
     }
 }

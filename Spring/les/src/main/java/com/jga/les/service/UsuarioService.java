@@ -20,7 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsuarioService extends GenericService<Usuario> {
+public class UsuarioService extends GenericService<Usuario, Long> {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -85,7 +85,7 @@ public class UsuarioService extends GenericService<Usuario> {
     }
 
     @Override
-    public ResponseEntity<String> remove(long id) {
+    public ResponseEntity<String> remove(Long id) {
         Usuario usuario = objRepository.findById(id).orElseThrow(()-> new NotFoundException(this.classe.getSimpleName()));
 
         permissaoRepository.deleteAll(usuario.getPermissoes());
@@ -94,7 +94,7 @@ public class UsuarioService extends GenericService<Usuario> {
     }
 
     @Override
-    public ResponseEntity<Usuario> update(Usuario obj, long id) {
+    public ResponseEntity<Usuario> update(Usuario obj, Long id) {
         String sen = securityConfiguration.passwordEncoder().encode(obj.getSenha());
         obj.setSenha(sen);
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PagamentoService extends GenericService<Pagamento> {
+public class PagamentoService extends GenericService<Pagamento, Long> {
 
     public PagamentoService(JpaRepository<Pagamento, Long> objRepository) {
         super(objRepository, Pagamento.class);

@@ -16,9 +16,9 @@ import com.jga.les.service.GenericService;
 
 @RestController
 @RequestMapping("/cliente")
-public class ClienteController extends GenericController<Cliente> {
+public class ClienteController extends GenericController<Cliente, Long> {
 
-    public ClienteController(GenericService<Cliente> genericApplication) {
+    public ClienteController(GenericService<Cliente, Long> genericApplication) {
         super("/cliente", genericApplication);
     }
 

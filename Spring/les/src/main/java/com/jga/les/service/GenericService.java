@@ -12,9 +12,9 @@ import org.springframework.http.ResponseEntity;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class GenericService<E> {
+public class GenericService<E, T> {
 
-    protected final JpaRepository<E, Long> objRepository;
+    protected final JpaRepository<E, T> objRepository;
 
     protected final Class<E> classe;
 
@@ -27,19 +27,19 @@ public class GenericService<E> {
         return ResponseEntity.status(HttpStatus.CREATED).body(obj);
     }
 
-    public ResponseEntity<String> remove(long id) {
+    public ResponseEntity<String> remove(T id) {
         objRepository.findById(id).orElseThrow(()-> new NotFoundException(classe.getSimpleName()));
         objRepository.deleteById(id);
         return ResponseEntity.ok().body(classe.getSimpleName() + " excluido com sucesso");
     }
 
-    public ResponseEntity<E> update(E obj, long id) {
+    public ResponseEntity<E> update(E obj, T id) {
         objRepository.findById(id).orElseThrow(()-> new NotFoundException(classe.getSimpleName()));
         objRepository.save(obj);
         return ResponseEntity.ok().body(obj);
     }
 
-    public ResponseEntity<E> findById(long id) {
+    public ResponseEntity<E> findById(T id) {
         return ResponseEntity.ok().body(objRepository.findById(id).orElse(null));
     }
 }

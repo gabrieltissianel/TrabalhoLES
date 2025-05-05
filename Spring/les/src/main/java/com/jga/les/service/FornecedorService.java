@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FornecedorService extends GenericService<Fornecedor> {
+public class FornecedorService extends GenericService<Fornecedor, Long> {
 
     public FornecedorService(JpaRepository<Fornecedor, Long> objRepository) {
         super(objRepository, Fornecedor.class);

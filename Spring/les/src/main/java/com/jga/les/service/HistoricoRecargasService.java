@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HistoricoRecargasService extends GenericService<HistoricoRecarga> {
+public class HistoricoRecargasService extends GenericService<HistoricoRecarga, Long> {
 
     public HistoricoRecargasService(JpaRepository<HistoricoRecarga, Long> objRepository) {
         super(objRepository, HistoricoRecarga.class);

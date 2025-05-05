@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/fornecedor")
-public class FornecedorController extends GenericController<Fornecedor> {
+public class FornecedorController extends GenericController<Fornecedor, Long> {
 
-    public FornecedorController(GenericService<Fornecedor> genericApplication) {
+    public FornecedorController(GenericService<Fornecedor, Long> genericApplication) {
         super("/fornecedor", genericApplication);
     }
 }
