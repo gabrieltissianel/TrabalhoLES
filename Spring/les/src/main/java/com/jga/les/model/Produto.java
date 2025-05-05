@@ -33,7 +33,7 @@ public class Produto {
     @NotNull
     private Double custo;
 
-    @OneToMany(mappedBy = "produto")
+    @OneToMany(mappedBy = "produto", orphanRemoval = true)
     @Cascade(CascadeType.ALL)
     private List<CompraProduto> compraProdutos;
 }

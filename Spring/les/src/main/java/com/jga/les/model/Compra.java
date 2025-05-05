@@ -34,7 +34,7 @@ public class Compra {
     @ManyToOne
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "compra")
+    @OneToMany(mappedBy = "compra", orphanRemoval = true)
     @Cascade(CascadeType.ALL)
     private List<CompraProduto> compraProdutos;
 }

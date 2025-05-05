@@ -1,5 +1,6 @@
 package com.jga.les.service;
 
+import com.jga.les.dtos.ClienteDto;
 import com.jga.les.model.Cliente;
 import com.jga.les.repository.ClienteRepository;
 
@@ -16,7 +17,7 @@ public class ClienteService extends GenericService<Cliente> {
         super(objRepository, Cliente.class);
     }
 
-    public ResponseEntity<List<Cliente>> findByAniversario(){
+    public ResponseEntity<List<ClienteDto>> findByAniversario(){
         return ResponseEntity.ok(((ClienteRepository)objRepository).findByAniversario());
     }
 }

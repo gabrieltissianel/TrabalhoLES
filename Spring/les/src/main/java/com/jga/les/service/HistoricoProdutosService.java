@@ -1,7 +1,6 @@
 package com.jga.les.service;
 
 import com.jga.les.model.HistoricoProdutos;
-import com.jga.les.model.Produto;
 import com.jga.les.repository.HistoricoProdutosRepository;
 
 import java.util.List;

@@ -24,7 +24,7 @@ public class ClienteController extends GenericController<Cliente> {
 
     @GetMapping("/aniversario")
     @PreAuthorize("hasAuthority(#root.this.getNomeTela(''))")
-    public ResponseEntity<List<Cliente>> relatorioAniversarioEntity(@PathVariable long id) {
+    public ResponseEntity<List<ClienteDto>> relatorioAniversarioEntity(@PathVariable long id) {
         return ((ClienteService)genericService).findByAniversario();
     }
 }
