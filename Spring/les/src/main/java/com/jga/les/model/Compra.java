@@ -8,6 +8,8 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,5 +38,6 @@ public class Compra {
 
     @OneToMany(mappedBy = "compra", orphanRemoval = true)
     @Cascade(CascadeType.ALL)
+    @JsonBackReference
     private List<CompraProduto> compraProdutos;
 }
