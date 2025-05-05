@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CompraProdutoController extends GenericController<CompraProduto, CompraProdutoKey> {
 
     public CompraProdutoController(GenericService<CompraProduto, CompraProdutoKey> genericApplication) {
-        super("/compra", genericApplication);
+        super("/compraproduto", genericApplication);
     }
 }
