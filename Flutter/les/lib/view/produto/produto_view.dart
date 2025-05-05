@@ -50,7 +50,7 @@ class _ProdutoViewState extends State<ProdutoView> {
                               child: CustomTable(title: "Produtos",
                                   data: produtos,
                                   columnHeaders: ["id", "codigo", "nome", "preco", "custo", "unitario"],
-                                  formatters: {
+                                  formatters: (produto) => {
                                     "preco": (value) => "R\$ $value",
                                     "custo": (value) => "R\$ $value",
                                     "unitario": (value) => value.toString() == 'true' ? "Sim" : "Nao"

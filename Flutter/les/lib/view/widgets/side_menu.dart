@@ -19,6 +19,12 @@ class _SideMenuState extends State<SideMenu> {
       selectedIcon: Icon(Icons.home),
       label: Text('Home'),
     ),
+    if (userProvider.user!.hasPermission("/compra"))
+    AppRoutes.compras: NavigationRailDestination(
+      icon: Icon(Icons.shopping_cart_outlined),
+      selectedIcon: Icon(Icons.shopping_cart),
+      label: Text('Compras'),
+    ),
     if (userProvider.user!.hasPermission("/cliente"))
     AppRoutes.clientes : NavigationRailDestination(
       icon: Icon(Icons.person_outline),
@@ -27,8 +33,8 @@ class _SideMenuState extends State<SideMenu> {
     ),
     if (userProvider.user!.hasPermission("/produto"))
     AppRoutes.produtos: NavigationRailDestination(
-      icon: Icon(Icons.shopping_cart_outlined),
-      selectedIcon: Icon(Icons.shopping_cart),
+      icon: Icon(Icons.inventory_2_outlined),
+      selectedIcon: Icon(Icons.inventory_2),
       label: Text('Produtos'),
     ),
     if (userProvider.user!.hasPermission("/fornecedor"))
@@ -71,6 +77,8 @@ class _SideMenuState extends State<SideMenu> {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.clientes);
     } else if (currentRoute.startsWith(AppRoutes.produtos)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.produtos);
+    } else if (currentRoute.startsWith(AppRoutes.compras)) {
+      selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.compras);
     }
 
     return NavigationRail(
