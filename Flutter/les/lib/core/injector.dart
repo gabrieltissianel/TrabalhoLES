@@ -3,6 +3,7 @@ import 'package:auto_injector/auto_injector.dart';
 import 'package:dio/dio.dart';
 import 'package:les/services/auth_service.dart';
 import 'package:les/services/cliente_service.dart';
+import 'package:les/services/compra_service.dart';
 import 'package:les/services/fornecedor_service.dart';
 import 'package:les/services/historico_produto_service.dart';
 import 'package:les/services/pagamento_service.dart';
@@ -10,6 +11,7 @@ import 'package:les/services/produto_service.dart';
 import 'package:les/services/tela_service.dart';
 import 'package:les/services/usuario_service.dart';
 import 'package:les/view/cliente/view_model/cliente_view_model.dart';
+import 'package:les/view/compra/view_model/compra_view_model.dart';
 import 'package:les/view/fornecedor/view_model/fornecedor_view_model.dart';
 import 'package:les/view/fornecedor/view_model/pagamento_view_model.dart';
 import 'package:les/view/login/view_model/login_view_model.dart';
@@ -38,4 +40,6 @@ void setupDependencies(){
   injector.addSingleton(ProdutoService.new);
   injector.addSingleton(HistoricoProdutosService.new);
   injector.addSingleton(HistoricoProdutoViewModel.new);
+  injector.addSingleton(CompraViewModel.new);
+  injector.addSingleton(CompraService.new);
 }

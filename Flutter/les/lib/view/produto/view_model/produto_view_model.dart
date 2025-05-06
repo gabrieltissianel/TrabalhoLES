@@ -34,4 +34,6 @@ class ProdutoViewModel extends ChangeNotifier{
   AsyncResult<Produto> _getProdutoById(int id) async {
     return _produtoService.getById(id);
   }
+
+
 }

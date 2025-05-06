@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/usuario/permissao.dart';
 import 'package:les/view/cliente/cliente_view.dart';
+import 'package:les/view/compra/compra_produto_view.dart';
+import 'package:les/view/compra/compra_view.dart';
 import 'package:les/view/fornecedor/fornecedor_view.dart';
 import 'package:les/view/fornecedor/pagamento_view.dart';
 import 'package:les/view/home/home_view.dart';
@@ -25,6 +27,7 @@ class AppRoutes {
   static const String produtos = '/produto';
   static const String clientes = '/cliente';
   static const String historicoProduto = '/historicoproduto';
+  static const String compras = '/compra';
 }
 
 const List<String> freeRoutes = [ AppRoutes.login, AppRoutes.home ];
@@ -87,6 +90,17 @@ final GoRouter router = GoRouter(
               final fornecedorId = state.pathParameters['fornecedorId'];
               return PagamentoView(fornecedorId: int.parse(fornecedorId!));
             },
+        ),
+        GoRoute(
+          path: AppRoutes.compras,
+          builder: (context, state) => const CompraView()
+        ),
+        GoRoute(
+          path: '${AppRoutes.compras}/:compraId',
+          builder: (context, state) {
+            final compraId = state.pathParameters['compraId'];
+            return CompraProdutoView(compraId: int.parse(compraId!));
+          },
         ),
         GoRoute(
           path: '${AppRoutes.historicoProduto}/:produtoId',

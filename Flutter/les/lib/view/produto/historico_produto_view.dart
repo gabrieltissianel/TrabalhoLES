@@ -49,7 +49,7 @@ class _HistoricoProdutoViewState extends State<HistoricoProdutoView> {
                               child: CustomTable(title: "Historico Produtos",
                                   data: historicoHistoricoProdutos,
                                   columnHeaders: ["preco_novo", "custo_novo", "data"],
-                                  formatters: {
+                                  formatters: (historico) => {
                                     "data": (value) =>
                                         DateFormat('dd/MM/yyyy').format(DateTime.parse(value)).toString()
                                   },

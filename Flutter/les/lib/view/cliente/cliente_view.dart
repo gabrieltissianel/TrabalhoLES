@@ -50,7 +50,7 @@ class _ClienteViewState extends State<ClienteView> {
                               child: CustomTable(title: "Clientes",
                                   data: clientes,
                                   columnHeaders: ["id", "nome", "limite", "saldo", "dt_nascimento"],
-                                  formatters: {
+                                  formatters: (cliente) => {
                                     "saldo": (value) => "R\$ $value",
                                     "limite": (value) => "R\$ $value",
                                     "dt_nascimento": (value) =>
