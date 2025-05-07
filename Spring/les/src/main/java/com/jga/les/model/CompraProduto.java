@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -24,10 +23,7 @@ public class CompraProduto {
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
-    @NotNull
-    private Double qntd;
-    @NotNull
+    private Integer qntd;
     private Double preco;
-    @NotNull
     private Double custo;
 }
