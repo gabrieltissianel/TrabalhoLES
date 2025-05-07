@@ -1,5 +1,8 @@
 package com.jga.les.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -16,11 +19,13 @@ public class CompraProduto {
     @ManyToOne
     @MapsId("idcompra")
     @JoinColumn(name = "compra_id")
+    @JsonBackReference  
     private Compra compra;
 
     @ManyToOne
     @MapsId("idproduto")
     @JoinColumn(name = "produto_id")
+    @JsonBackReference  
     private Produto produto;
 
     private Integer qntd;
