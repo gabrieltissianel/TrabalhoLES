@@ -17,6 +17,5 @@ public class CompraProdutoService extends GenericService<CompraProduto, CompraPr
 
     public ResponseEntity<CompraProduto> findByCompraProdutoKey(CompraProdutoKey compraProdutoKey) {
         return ResponseEntity.ok(((CompraProdutoRepository) objRepository).findById(compraProdutoKey).get());
-
     }   
 }
