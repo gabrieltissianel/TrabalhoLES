@@ -8,7 +8,6 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.micrometer.common.lang.NonNull;

@@ -38,6 +38,6 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", orphanRemoval = true)
     @Cascade(CascadeType.ALL)
-    @JsonManagedReference
+    @JsonBackReference
     private List<CompraProduto> compraProdutos;
 }
