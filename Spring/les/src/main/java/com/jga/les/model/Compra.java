@@ -8,7 +8,6 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.micrometer.common.lang.NonNull;
@@ -41,4 +40,12 @@ public class Compra {
     @Cascade(CascadeType.ALL)
     @JsonManagedReference
     private List<CompraProduto> compraProdutos;
+
+    public double getTotal(){
+        double total = 0;
+        for (CompraProduto compraProduto : compraProdutos){
+            total += compraProduto.getPreco() * compraProduto.getQntd();
+        }
+        return total;
+    }
 }

@@ -1,18 +1,9 @@
 package com.jga.les.model;
 
-import java.util.List;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -35,9 +26,4 @@ public class Produto {
 
     @NotNull
     private Double custo;
-
-    @OneToMany(mappedBy = "produto", orphanRemoval = true)
-    @Cascade(CascadeType.ALL)
-    @JsonManagedReference
-    private List<CompraProduto> compraProdutos;
 }

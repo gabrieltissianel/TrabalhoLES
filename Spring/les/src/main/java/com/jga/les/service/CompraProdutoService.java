@@ -17,5 +17,24 @@ public class CompraProdutoService extends GenericService<CompraProduto, CompraPr
 
     public ResponseEntity<CompraProduto> findByCompraProdutoKey(CompraProdutoKey compraProdutoKey) {
         return ResponseEntity.ok(((CompraProdutoRepository) objRepository).findById(compraProdutoKey).get());
-    }   
+    }
+
+    @Override
+    public ResponseEntity<String> remove(CompraProdutoKey id) {
+        CompraProdutoRepository compraProdutoRepository = (CompraProdutoRepository) objRepository;
+        CompraProduto compraProduto = compraProdutoRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto nao comprado."));
+
+        if(compraProduto.getProduto().isUnitario()){
+            compraProduto.setQntd(compraProduto.getQntd() - 1);
+            if(compraProduto.getQntd() <= 0){
+                compraProdutoRepository.deleteById(id);
+            } else {
+                compraProdutoRepository.save(compraProduto);
+            }
+        } else {
+            compraProdutoRepository.deleteById(id);
+        }
+
+        return ResponseEntity.ok("Produto Removido.");
+    }
 }
