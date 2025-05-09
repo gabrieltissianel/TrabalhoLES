@@ -15,4 +15,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     @Query(value = "SELECT cli.id, cli.nome, SUM(CP.preco) FROM Cliente cli RIGHT JOIN Compra com on com.cliente_id=cli.id LEFT JOIN compra_produto CP ON CP.compra_id = com.id GROUP BY CLI.ID", nativeQuery = true)
     List<ConsumoClienteDto> findByConsumoTotalPorCliente();
+
+    @Query(value = "SELECT * FROM CLIENTE C WHERE C.ultimo_dia_negativado is not null or C.saldo<0", nativeQuery = true)
+    List<Cliente> findByClientesDevedores();
 }
