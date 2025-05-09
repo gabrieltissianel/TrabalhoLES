@@ -28,7 +28,7 @@ public class CompraProduto {
     @JsonManagedReference  
     private Produto produto;
 
-    private Integer qntd;
+    private Double qntd;
     private Double preco;
     private Double custo;
 }

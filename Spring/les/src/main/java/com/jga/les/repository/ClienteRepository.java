@@ -9,6 +9,6 @@ import com.jga.les.dtos.ClienteDto;
 import com.jga.les.model.Cliente;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    @Query("SELECT c FROM Cliente c WHERE FUNCTION('DAY', c.dt_nascimento) = FUNCTION('DAY', CURRENT_DATE) AND FUNCTION('MONTH', c.dt_nascimento) = FUNCTION('MONTH', CURRENT_DATE)")
+    @Query("SELECT c FROM Cliente c WHERE EXTRACT(DAY FROM c.dt_nascimento) = EXTRACT(DAY FROM CURRENT_DATE) AND EXTRACT(MONTH FROM c.dt_nascimento) = EXTRACT(MONTH FROM CURRENT_DATE)")
     List<ClienteDto> findByAniversario();
 }

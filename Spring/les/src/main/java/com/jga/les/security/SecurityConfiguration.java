@@ -41,6 +41,8 @@ public class SecurityConfiguration {
             "/cliente/**",
             "/compraproduto/**",
             "/compra/**",
+            "/jasper/**",
+            "/fornecedor/**",
     };
 
     @Bean
