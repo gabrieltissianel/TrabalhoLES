@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.jga.les.model.Fornecedor;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
