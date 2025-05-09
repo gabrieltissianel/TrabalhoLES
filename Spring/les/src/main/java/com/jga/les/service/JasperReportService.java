@@ -16,8 +16,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @Service
 public class JasperReportService {
     public <T> byte[] getRelatorio(List<T> items, String fileName, String title) throws JRException, IOException {
-        String jrxmlPath = "/home/pompom/Desktop/Faculdade/periodo7/LES/TrabalhoLES/Spring/les/src/main/resources/report/"+fileName+".jrxml";
-        String jasperOutputPath = "/home/pompom/Desktop/Faculdade/periodo7/LES/TrabalhoLES/Spring/les/src/main/resources/report/"+fileName+".jasper";
+        String jrxmlPath = "src/main/resources/report/"+fileName+".jrxml";
+        String jasperOutputPath = "src/main/resources/report/"+fileName+".jasper";
 
         JasperCompileManager.compileReportToFile(jrxmlPath, jasperOutputPath);
 

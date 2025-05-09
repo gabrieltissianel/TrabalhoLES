@@ -25,7 +25,6 @@ public class CompraProduto {
     @ManyToOne
     @MapsId("idproduto")
     @JoinColumn(name = "produto_id")
-    @JsonManagedReference  
     private Produto produto;
 
     private Double qntd;

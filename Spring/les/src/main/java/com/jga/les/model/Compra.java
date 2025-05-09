@@ -3,6 +3,7 @@ package com.jga.les.model;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,6 +42,7 @@ public class Compra {
     @JsonManagedReference
     private List<CompraProduto> compraProdutos;
 
+    @JsonIgnore
     public double getTotal(){
         double total = 0;
         for (CompraProduto compraProduto : compraProdutos){

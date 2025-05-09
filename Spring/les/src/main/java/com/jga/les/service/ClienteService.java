@@ -17,7 +17,7 @@ public class ClienteService extends GenericService<Cliente, Long> {
         super(objRepository, Cliente.class);
     }
 
-    public ResponseEntity<List<ClienteDto>> findByAniversario(){
+    public ResponseEntity<List<Cliente>> findByAniversario(){
         return ResponseEntity.ok(((ClienteRepository)objRepository).findByAniversario());
     }
 
