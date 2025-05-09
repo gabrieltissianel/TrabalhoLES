@@ -1,14 +1,44 @@
 import 'package:les/model/entity.dart';
 import 'package:les/model/produto/produto.dart';
 
-class CompraProduto extends Entity{
+class Id implements Entity{
+  int idCompra;
+  int idProduto;
+
+  Id({
+    required this.idCompra,
+    required this.idProduto
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'idcompra': idCompra,
+      'idproduto': idProduto
+    };
+  }
+
+  factory Id.fromJson(Map<String, dynamic> json){
+    return Id(
+      idCompra: json['idcompra'],
+      idProduto: json['idproduto']
+    );
+
+  }
+
+  @override
+  int? id;
+}
+
+class CompraProduto implements Entity{
+  Id idComposto;
   Produto produto;
   double qntd;
   double preco;
   double custo;
 
   CompraProduto({
-    super.id,
+    required this.idComposto,
     required this.produto,
     required this.qntd,
     required this.preco,
@@ -17,7 +47,7 @@ class CompraProduto extends Entity{
 
   factory CompraProduto.fromJson(Map<String, dynamic> json){
     return CompraProduto(
-      id: json['id'],
+      idComposto: Id.fromJson(json['id']),
       produto: Produto.fromJson(json['produto']),
       qntd: json['qntd'],
       preco: json['preco'],
@@ -28,12 +58,15 @@ class CompraProduto extends Entity{
   @override
   Map<String, dynamic> toJson(){
     return {
-      'id': id,
+      'id': idComposto.toJson(),
       'produto': produto.toJson(),
       'qntd': qntd,
       'preco': preco,
       'custo': custo
     };
   }
+
+  @override
+  int? id;
 
 }

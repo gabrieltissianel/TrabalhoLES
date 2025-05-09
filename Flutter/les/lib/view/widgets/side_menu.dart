@@ -49,11 +49,15 @@ class _SideMenuState extends State<SideMenu> {
         selectedIcon: Icon(Icons.account_circle),
         label: Text('Usuarios')
     ),
+    AppRoutes.relatorios : NavigationRailDestination(
+        icon: Icon(Icons.bar_chart_outlined),
+        selectedIcon: Icon(Icons.bar_chart),
+        label: Text('Relatorios')
+    ),
     AppRoutes.login: NavigationRailDestination(
         icon: Icon(Icons.logout_outlined),
         label: Text('Logout')
     ),
-
   };
 
   void _onDestinationSelected(int index) {
@@ -79,6 +83,8 @@ class _SideMenuState extends State<SideMenu> {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.produtos);
     } else if (currentRoute.startsWith(AppRoutes.compras)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.compras);
+    } else if (currentRoute.startsWith(AppRoutes.relatorios)) {
+      selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.relatorios);
     }
 
     return NavigationRail(
