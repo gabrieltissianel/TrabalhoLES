@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 
+import '../../core/injector.dart';
+import '../../services/relatorios_service.dart';
+
 class RelatoriosView extends StatelessWidget {
 
   const RelatoriosView({super.key});
@@ -28,7 +31,7 @@ class RelatoriosView extends StatelessWidget {
                 height: 100, // Altura fixa
                 child: ElevatedButton(
                   onPressed: () {
-                    // Ação do botão 1
+                    injector.get<RelatoriosService>().aniversariantes();
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.lightBlue,
@@ -52,7 +55,7 @@ class RelatoriosView extends StatelessWidget {
                     height: 100, // Altura fixa
                     child: ElevatedButton(
                       onPressed: () {
-                        // Ação do botão 1
+                        injector.get<RelatoriosService>().consumoCliente();
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.lightBlue,
@@ -76,7 +79,7 @@ class RelatoriosView extends StatelessWidget {
                     height: 100, // Altura fixa
                     child: ElevatedButton(
                       onPressed: () {
-                        // Ação do botão 1
+                        injector.get<RelatoriosService>().clientesDevedores();
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.lightBlue,
