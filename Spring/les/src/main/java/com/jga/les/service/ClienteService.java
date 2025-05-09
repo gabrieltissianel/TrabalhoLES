@@ -23,7 +23,7 @@ public class ClienteService extends GenericService<Cliente, Long> {
 
     @Override
     public ResponseEntity<Cliente> update(Cliente obj, Long id) {
-        if (obj.getSaldo() >  0 && obj.getUltimo_dia_negativado() != null) {
+        if (obj.getSaldo() >=  0 && obj.getUltimo_dia_negativado() != null) {
             obj.setUltimo_dia_negativado(null);
         }
         return super.update(obj, id);
