@@ -6,7 +6,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +37,6 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", orphanRemoval = true)
     @Cascade(CascadeType.ALL)
-    @JsonManagedReference
+    @JsonBackReference
     private List<CompraProduto> compraProdutos;
 }

@@ -25,10 +25,10 @@ public class CompraProduto {
     @ManyToOne
     @MapsId("idproduto")
     @JoinColumn(name = "produto_id")
-    @JsonBackReference  
+    @JsonManagedReference  
     private Produto produto;
 
-    private Integer qntd;
+    private Double qntd;
     private Double preco;
     private Double custo;
 }

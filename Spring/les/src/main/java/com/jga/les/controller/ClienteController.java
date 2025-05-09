@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jga.les.dtos.ClienteDto;
 import com.jga.les.model.Cliente;
-import com.jga.les.dtos.*;
 import com.jga.les.service.ClienteService;
 import com.jga.les.service.GenericService;
+
+import net.sf.jasperreports.engine.JRException;
 
 @RestController
 @RequestMapping("/cliente")
@@ -24,7 +26,7 @@ public class ClienteController extends GenericController<Cliente, Long> {
 
     @GetMapping("/aniversario")
     @PreAuthorize("hasAuthority(#root.this.getNomeTela(''))")
-    public ResponseEntity<List<ClienteDto>> relatorioAniversarioEntity(@PathVariable long id) {
+    public ResponseEntity<List<ClienteDto>> relatorioAniversarioEntity() throws JRException {
         return ((ClienteService)genericService).findByAniversario();
     }
 }
