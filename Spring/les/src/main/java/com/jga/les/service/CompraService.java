@@ -22,12 +22,17 @@ public class CompraService extends GenericService<Compra, Long> {
         Compra compra = objRepository.findById(id).orElseThrow(() -> new RuntimeException("Compra nao existente."));
         if (compra.getSaida() == null) {
 
+            Date hoje = new Date();
+
             Cliente cliente = compra.getCliente();
             cliente.setSaldo(cliente.getSaldo() - compra.getTotal());
+            if (cliente.getSaldo() < 0 && cliente.getUltimo_dia_negativado() == null) {
+                cliente.setUltimo_dia_negativado(hoje);
+            }
             clienteService.update(cliente, cliente.getId());
 
             compra.setCliente(cliente);
-            compra.setSaida(new Date());
+            compra.setSaida(hoje);
             objRepository.save(compra);
             return compra;
 
