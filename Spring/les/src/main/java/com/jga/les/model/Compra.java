@@ -40,4 +40,12 @@ public class Compra {
     @Cascade(CascadeType.ALL)
     @JsonManagedReference
     private List<CompraProduto> compraProdutos;
+
+    public double getTotal(){
+        double total = 0;
+        for (CompraProduto compraProduto : compraProdutos){
+            total += compraProduto.getPreco() * compraProduto.getQntd();
+        }
+        return total;
+    }
 }

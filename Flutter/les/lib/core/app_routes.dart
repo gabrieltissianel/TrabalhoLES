@@ -12,6 +12,7 @@ import 'package:les/view/login/login_view.dart';
 import 'package:les/view/login/view_model/login_view_model.dart';
 import 'package:les/view/produto/historico_produto_view.dart';
 import 'package:les/view/produto/produto_view.dart';
+import 'package:les/view/relatorios/relatorios_view.dart';
 import 'package:les/view/usuario/tela_view.dart';
 import 'package:les/view/usuario/usuario_view.dart';
 import 'package:les/view/widgets/app_layout.dart';
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String clientes = '/cliente';
   static const String historicoProduto = '/historicoproduto';
   static const String compras = '/compra';
+  static const String relatorios = '/relatorios';
 }
 
 const List<String> freeRoutes = [ AppRoutes.login, AppRoutes.home ];
@@ -112,6 +114,9 @@ final GoRouter router = GoRouter(
         GoRoute(
             path: AppRoutes.tela,
             builder: (context, state) => const TelaView()),
+        GoRoute(
+            path: AppRoutes.relatorios,
+            builder: (context, state) => const RelatoriosView()),
       ]
     ),
     GoRoute(

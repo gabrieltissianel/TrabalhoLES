@@ -63,7 +63,7 @@ public class JasperReportController {
     public ResponseEntity<Resource> reportAniversariantes() {
         byte[] reportContent;
         try {
-            reportContent = jasperReportService.getRelatorio(clienteRepository.findAll(), "aniversario", "Aniversariantes");
+            reportContent = jasperReportService.getRelatorio(clienteRepository.findByAniversario(), "aniversario", "Aniversariantes");
         } catch (JRException e) {
             System.out.println("Erro de compilação: " + e.getMessage());
             return ResponseEntity.badRequest().body(null);

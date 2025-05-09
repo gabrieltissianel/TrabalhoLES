@@ -19,7 +19,7 @@ public class CompraProduto {
     @ManyToOne
     @MapsId("idcompra")
     @JoinColumn(name = "compra_id")
-    @JsonBackReference  
+    @JsonBackReference
     private Compra compra;
 
     @ManyToOne

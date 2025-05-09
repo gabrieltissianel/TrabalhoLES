@@ -59,7 +59,8 @@ class _CompraViewState extends State<CompraView> {
                             return sB.compareTo(sA);
                           });
                           return SizedBox.expand(
-                              child: CustomTable<Compra>(title: "Compras",
+                              child:
+                              CustomTable<Compra>(title: "Compras",
                                   data: compras,
                                   columnHeaders: ["cliente", "entrada", "saida"],
                                   formatters: (compra) => {
