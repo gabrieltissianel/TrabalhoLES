@@ -1,11 +1,10 @@
 package com.jga.les.service;
-
-import com.jga.les.dtos.ClienteDto;
 import com.jga.les.model.Cliente;
 import com.jga.les.repository.ClienteRepository;
 
 import java.util.List;
 
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ public class ClienteService extends GenericService<Cliente, Long> {
         super(objRepository, Cliente.class);
     }
 
-    public ResponseEntity<List<ClienteDto>> findByAniversario(){
+    public ResponseEntity<List<Cliente>> findByAniversario(){
         return ResponseEntity.ok(((ClienteRepository)objRepository).findByAniversario());
     }
 
@@ -27,5 +26,11 @@ public class ClienteService extends GenericService<Cliente, Long> {
             obj.setUltimo_dia_negativado(null);
         }
         return super.update(obj, id);
+    }
+
+    @Override
+    public ResponseEntity<Cliente> add(Cliente obj) throws IllegalArgumentException, OptimisticLockingFailureException {
+        obj.setDt_nascimento(obj.getDt_nascimento());
+        return super.add(obj);
     }
 }

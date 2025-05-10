@@ -34,9 +34,4 @@ public class Produto {
 
     @NotNull
     private Double custo;
-
-    @OneToMany(mappedBy = "produto", orphanRemoval = true)
-    @Cascade(CascadeType.ALL)
-    @JsonBackReference
-    private List<CompraProduto> compraProdutos;
 }

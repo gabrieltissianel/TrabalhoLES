@@ -25,9 +25,9 @@ public class Cliente {
 
     private Double saldo;
 
-    @DateTimeFormat
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date ultimo_dia_negativado;
     
-    @DateTimeFormat
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dt_nascimento;
 }

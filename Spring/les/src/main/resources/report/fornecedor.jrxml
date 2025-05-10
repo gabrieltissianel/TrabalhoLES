@@ -9,7 +9,7 @@ Ow==]]>
 	<style name="Title" forecolor="#FFFFFF" fontSize="50" isBold="false"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontSize="18" isBold="false"/>
 	<style name="Column header" forecolor="#666666" fontSize="14" isBold="true"/>
-	<style name="Detail" mode="Transparent" />
+	<style name="Detail" mode="Transparent"/>
 	<style name="Row" mode="Transparent" pdfFontName="Times-Roman">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -64,7 +64,7 @@ FROM fornecedor]]>
 					<textElement textAlignment="Right">
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -153,7 +153,7 @@ FROM fornecedor]]>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

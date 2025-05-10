@@ -7,7 +7,7 @@
 	<style name="SubTitle" forecolor="#CCCCCC" fontSize="18" isBold="false"/>
 	<style name="Column header" forecolor="#666666" fontSize="14" isBold="true"/>
 	<style name="Detail" mode="Transparent" />
-	<style name="Row" mode="Transparent" pdfFontName="Times-Roman">
+	<style name="Row" mode="Transparent"  pdfFontName="Times-Roman">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
 			<style mode="Opaque" backcolor="#F0EFEF"/>
@@ -62,7 +62,7 @@ WHERE
 					<textElement>
 						<font isBold="false"/>
 					</textElement>
-					<text><![CDATA[Negativados]]></text>
+					<text><![CDATA[Devedores]]></text>
 				</staticText>
 				<staticText>
 					<reportElement style="SubTitle" x="157" y="66" width="249" height="29" uuid="8978eac3-c578-41c9-837e-48d2b0184642"/>
@@ -75,11 +75,11 @@ WHERE
 			<frame>
 				<reportElement mode="Opaque" x="0" y="100" width="552" height="32" forecolor="#000000" backcolor="#CC0000" uuid="e3c14156-5b51-4201-918b-97fdc012e5d4"/>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement x="307" y="12" width="144" height="20" forecolor="#FFFFFF" uuid="5c3301e7-a737-4c59-8a2f-a6c79fd1adb8"/>
+					<reportElement x="405" y="12" width="144" height="20" forecolor="#FFFFFF" uuid="5c3301e7-a737-4c59-8a2f-a6c79fd1adb8"/>
 					<textElement textAlignment="Right">
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -96,7 +96,7 @@ WHERE
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[limite]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Detail" x="92" y="7" width="92" height="18" forecolor="#000000" uuid="32fa4dda-b084-41f6-8115-98aebeb3f656">
@@ -105,7 +105,7 @@ WHERE
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[saldo]]></text>
+				<text><![CDATA[Nome]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Detail" x="184" y="7" width="106" height="18" forecolor="#000000" uuid="3b789e98-9bea-4ac3-aa9a-128f098718e4">
@@ -114,34 +114,25 @@ WHERE
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[Data de Nascimento]]></text>
+				<text><![CDATA[Saldo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Detail" x="290" y="7" width="78" height="18" forecolor="#000000" uuid="f965bbfd-1802-4ef0-b5ed-2aeea415b8c1">
+				<reportElement style="Detail" x="290" y="7" width="115" height="18" forecolor="#000000" uuid="f965bbfd-1802-4ef0-b5ed-2aeea415b8c1">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="741448c5-e886-4c2a-820f-91435bd8c89d"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[id]]></text>
+				<text><![CDATA[Ultimo dia Negativado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Detail" x="368" y="7" width="112" height="18" forecolor="#000000" uuid="d03b06e7-cd67-4f5e-9358-478523f40e6f">
+				<reportElement style="Detail" x="406" y="7" width="95" height="18" forecolor="#000000" uuid="d03b06e7-cd67-4f5e-9358-478523f40e6f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d58df7bd-10b6-46ce-b361-d5cb616ffcc2"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[Ultimo dia Negativo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Detail" x="480" y="7" width="72" height="18" forecolor="#000000" uuid="21bf0741-47bd-4f9a-9292-17e75785d7d6">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c94dddd7-92b0-433f-bc27-6717f327e970"/>
-				</reportElement>
-				<textElement>
-					<font isBold="false"/>
-				</textElement>
-				<text><![CDATA[nome]]></text>
+				<text><![CDATA[Limite]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -156,7 +147,7 @@ WHERE
 					<textElement>
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{limite}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
 					<reportElement style="Detail" positionType="Float" x="92" y="0" width="92" height="18" uuid="95c7b23e-6163-49b5-9d12-488da628903e">
@@ -165,43 +156,34 @@ WHERE
 					<textElement>
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="184" y="0" width="106" height="18" uuid="e365dfbc-be00-4989-becd-986d5c8dedc6">
+					<reportElement style="Detail" positionType="Float" x="183" y="0" width="106" height="18" uuid="e365dfbc-be00-4989-becd-986d5c8dedc6">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="072821ae-4a04-4535-8e89-82e48b257e94"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{dt_nascimento}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="290" y="0" width="78" height="18" uuid="cf518c73-9341-463a-a2c8-f72cc8bf6a37">
+					<reportElement style="Detail" positionType="Float" x="290" y="0" width="115" height="18" uuid="cf518c73-9341-463a-a2c8-f72cc8bf6a37">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="741448c5-e886-4c2a-820f-91435bd8c89d"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ultimo_dia_negativado})]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="368" y="0" width="112" height="18" uuid="041a8ee0-f2fb-4963-8840-a107b7f4bf7e">
+					<reportElement style="Detail" positionType="Float" x="406" y="0" width="95" height="18" uuid="041a8ee0-f2fb-4963-8840-a107b7f4bf7e">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d58df7bd-10b6-46ce-b361-d5cb616ffcc2"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{ultimo_dia_negativado}]]></textFieldExpression>
-				</textField>
-				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="480" y="0" width="72" height="18" uuid="1a5ce6fc-d267-4185-8d29-53eca45e3d7d">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c94dddd7-92b0-433f-bc27-6717f327e970"/>
-					</reportElement>
-					<textElement>
-						<font size="14"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{limite}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
