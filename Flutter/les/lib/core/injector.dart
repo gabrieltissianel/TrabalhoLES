@@ -9,6 +9,7 @@ import 'package:les/services/fornecedor_service.dart';
 import 'package:les/services/historico_produto_service.dart';
 import 'package:les/services/pagamento_service.dart';
 import 'package:les/services/produto_service.dart';
+import 'package:les/services/relatorios_service.dart';
 import 'package:les/services/tela_service.dart';
 import 'package:les/services/usuario_service.dart';
 import 'package:les/view/cliente/view_model/cliente_view_model.dart';
@@ -46,4 +47,5 @@ void setupDependencies(){
   injector.addSingleton(CompraService.new);
   injector.addSingleton(CompraProdutoViewModel.new);
   injector.addSingleton(CompraProdutoService.new);
+  injector.addSingleton(RelatoriosService.new);
 }

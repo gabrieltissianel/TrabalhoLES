@@ -27,7 +27,7 @@ public class GenericController<E, T> {
         return genericService.list();
     }
 
-    @PostMapping("/add")
+    @PostMapping(value = "/add")
     @PreAuthorize("hasAuthority(#root.this.getNomeTela('/add'))")
     public ResponseEntity<E> add(@Valid @RequestBody E obj) {
         return genericService.add(obj);

@@ -3,7 +3,7 @@ package com.jga.les.controller;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
@@ -21,16 +21,15 @@ import com.jga.les.service.JasperReportService;
 
 import net.sf.jasperreports.engine.JRException;
 
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("/jasper")
 public class JasperReportController {
-    @Autowired
+
     JasperReportService jasperReportService;
 
-    @Autowired
     FornecedorRepository fornecedorRepository;
-    @Autowired
+
     ClienteRepository clienteRepository;
 
     private ResponseEntity<Resource> sendFile(byte[] reportContent, String fileName) {
