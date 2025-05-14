@@ -7,11 +7,11 @@ YTtjbGllbnRlICwzMzksMTUsZjIwMDY1NmItYmRlNC00ZjJhLWJhOTAtNDk4YmNmZjYzNTM0O2Nv
 bXByYSAsMTg5LDQ0LDg0ZjA0N2MwLWJjZmMtNGYxMy1iOTQwLWIwNGM2YzI2ZGEyNjs=]]>
 	</property>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LES"/>
-	<style name="Title" forecolor="#FFFFFF"  fontSize="50" isBold="false"/>
-	<style name="SubTitle" forecolor="#CCCCCC"  fontSize="18" isBold="false"/>
-	<style name="Column header" forecolor="#666666"  fontSize="14" isBold="true"/>
-	<style name="Detail" mode="Transparent" />
-	<style name="Row" mode="Transparent"  pdfFontName="Times-Roman">
+	<style name="Title" forecolor="#FFFFFF" fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent"/>
+	<style name="Row" mode="Transparent" pdfFontName="Times-Roman">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
 			<style mode="Opaque" backcolor="#F0EFEF"/>
@@ -42,6 +42,9 @@ GROUP BY cli.id]]>
 		<property name="com.jaspersoft.studio.field.name" value="valor_total"/>
 		<property name="com.jaspersoft.studio.field.label" value="valor_total"/>
 	</field>
+	<variable name="T_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor_total}]]></variableExpression>
+	</variable>
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{id}]]></groupExpression>
 		<groupHeader>
@@ -144,7 +147,7 @@ GROUP BY cli.id]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="7" splitType="Stretch">
+		<band height="37" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="1133a906-5b71-476e-9f3e-bc97c97058c1"/>
 				<graphicElement>
@@ -181,6 +184,19 @@ GROUP BY cli.id]]>
 			</frame>
 		</band>
 	</pageFooter>
+	<lastPageFooter>
+		<band height="50">
+			<textField>
+				<reportElement style="SubTitle" x="2" y="15" width="120" height="35" forecolor="#030000" uuid="7df29ab1-fc30-451e-b6d7-5136004ebefd">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<paragraph lineSpacingSize="1.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total: "+$V{T_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
 	<summary>
 		<band splitType="Stretch"/>
 	</summary>
