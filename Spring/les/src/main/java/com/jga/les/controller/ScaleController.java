@@ -36,8 +36,12 @@ public class ScaleController {
 
     @PostMapping("/open-port")
     public ResponseEntity<String> openPort() {
-        serialService.init();
-        return ResponseEntity.ok("Porta serial aberta");
+        if(BalancaService.init()) {
+            return ResponseEntity.ok("Porta serial aberta com sucesso");
+        }
+        else {
+            return ResponseEntity.status(500).body("Falha ao abrir a porta serial");
+        }
     }
     
 }
