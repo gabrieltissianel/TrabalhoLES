@@ -28,10 +28,16 @@ public class ScaleController {
         return ResponseEntity.ok(peso);
     }
 
-
     @PostMapping("/close-port")
     public ResponseEntity<String> closePort() {
         serialService.closePort();
         return ResponseEntity.ok("Porta serial fechada");
     }
+
+    @PostMapping("/open-port")
+    public ResponseEntity<String> openPort() {
+        serialService.init();
+        return ResponseEntity.ok("Porta serial aberta");
+    }
+    
 }

@@ -108,15 +108,15 @@ public class BalancaService {
         }
     }
     
-    public static void init() {
-        portaAberta = openningPort(portName0);
-        if(!portaAberta) {
-            portaAberta = openningPort(portName1);
+    public static boolean init() {
+        if(openningPort(portName0)){
+            return true;
         }
-        if(!portaAberta) {
-            logger.error("Nenhuma porta serial disponível.");
-            return;
+        if(openningPort(portName1)) {
+            return true;
         }
+        logger.error("Nenhuma porta serial disponível.");
+        return false;
     }
 
     // Método para fechar a porta manualmente
