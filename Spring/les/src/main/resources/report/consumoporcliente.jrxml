@@ -7,11 +7,11 @@ YTtjbGllbnRlICwzMzksMTUsZjIwMDY1NmItYmRlNC00ZjJhLWJhOTAtNDk4YmNmZjYzNTM0O2Nv
 bXByYSAsMTg5LDQ0LDg0ZjA0N2MwLWJjZmMtNGYxMy1iOTQwLWIwNGM2YzI2ZGEyNjs=]]>
 	</property>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LES"/>
-	<style name="Title" forecolor="#FFFFFF" fontSize="50" isBold="false"/>
-	<style name="SubTitle" forecolor="#CCCCCC" fontSize="18" isBold="false"/>
-	<style name="Column header" forecolor="#666666" fontSize="14" isBold="true"/>
+	<style name="Title" forecolor="#FFFFFF"  fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#CCCCCC"  fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666"  fontSize="14" isBold="true"/>
 	<style name="Detail" mode="Transparent" />
-	<style name="Row" mode="Transparent" pdfFontName="Times-Roman">
+	<style name="Row" mode="Transparent"  pdfFontName="Times-Roman">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
 			<style mode="Opaque" backcolor="#F0EFEF"/>
@@ -22,10 +22,10 @@ bXByYSAsMTg5LDQ0LDg0ZjA0N2MwLWJjZmMtNGYxMy1iOTQwLWIwNGM2YzI2ZGEyNjs=]]>
 	cli.nome,
 	SUM( CP.preco) AS "valor_total"
 FROM cliente cli
-	RIGHT JOIN compra com ON 
-	 com.cliente_id = cli.id 
-	LEFT JOIN compra_produto CP ON 
-	 CP.compra_id = com.id 
+	RIGHT JOIN compra com ON
+	 com.cliente_id = cli.id
+	LEFT JOIN compra_produto CP ON
+	 CP.compra_id = com.id
 GROUP BY cli.id]]>
 	</queryString>
 	<field name="id" class="java.lang.Long">
@@ -53,7 +53,7 @@ GROUP BY cli.id]]>
 						<textElement>
 							<font isBold="false"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+						<textFieldExpression><![CDATA["ID: "+ $F{id}]]></textFieldExpression>
 					</textField>
 				</frame>
 			</band>
@@ -74,18 +74,11 @@ GROUP BY cli.id]]>
 			<frame>
 				<reportElement mode="Opaque" x="0" y="0" width="451" height="95" backcolor="#000000" uuid="6c6ca4e1-17cd-4913-93d6-5e670ea9ae8a"/>
 				<staticText>
-					<reportElement style="Title" x="0" y="0" width="370" height="66" uuid="a2a2cac8-5a7d-4487-8c54-dab235ce4e21"/>
+					<reportElement style="Title" x="0" y="0" width="451" height="95" uuid="a2a2cac8-5a7d-4487-8c54-dab235ce4e21"/>
 					<textElement>
 						<font isBold="false"/>
 					</textElement>
-					<text><![CDATA[Cherry Title]]></text>
-				</staticText>
-				<staticText>
-					<reportElement style="SubTitle" x="157" y="66" width="249" height="29" uuid="8978eac3-c578-41c9-837e-48d2b0184642"/>
-					<textElement>
-						<font size="22" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Cherry SubTitle]]></text>
+					<text><![CDATA[Consumo]]></text>
 				</staticText>
 			</frame>
 			<frame>
@@ -95,7 +88,7 @@ GROUP BY cli.id]]>
 					<textElement textAlignment="Right">
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -104,24 +97,24 @@ GROUP BY cli.id]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="26" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="0" y="7" width="277" height="18" forecolor="#000000" uuid="06146841-3ab8-402c-b4a0-8741261b76f7">
+				<reportElement style="Column header" x="0" y="7" width="277" height="26" forecolor="#000000" uuid="06146841-3ab8-402c-b4a0-8741261b76f7">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8cbd05b2-015c-4130-8702-737edeb59650"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[nome]]></text>
+				<text><![CDATA[Nome]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="277" y="7" width="277" height="18" forecolor="#000000" uuid="84cb12f5-40e5-45e6-8cc8-deece32d569e">
+				<reportElement style="Column header" x="277" y="7" width="277" height="26" forecolor="#000000" uuid="84cb12f5-40e5-45e6-8cc8-deece32d569e">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2c734203-44b8-4772-8a40-5ca1e28b2a45"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[valor_total]]></text>
+				<text><![CDATA[Valor Total]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -183,7 +176,7 @@ GROUP BY cli.id]]>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

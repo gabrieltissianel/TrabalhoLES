@@ -3,11 +3,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aniversarios" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13acf49e-4913-4d1b-bccc-113817ad15d1">
 	<property name="com.jaspersoft.studio.data.sql.tables" value="Y2xpZW50ZSBBUyAsNTMsNjIsYzFmMmFhZTctYjEzNC00YzIwLWE3OTQtN2Q4OWNhMDYxNWQ0Ow=="/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LES"/>
-	<style name="Title" forecolor="#FFFFFF" fontSize="50" isBold="false"/>
-	<style name="SubTitle" forecolor="#CCCCCC" fontSize="18" isBold="false"/>
-	<style name="Column header" forecolor="#666666" fontSize="14" isBold="true"/>
+	<style name="Title" forecolor="#FFFFFF"  fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#CCCCCC"  fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666"  fontSize="14" isBold="true"/>
 	<style name="Detail" mode="Transparent" />
-	<style name="Row" mode="Transparent" pdfFontName="Times-Roman">
+	<style name="Row" mode="Transparent"  pdfFontName="Times-Roman">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
 			<style mode="Opaque" backcolor="#F0EFEF"/>
@@ -46,11 +46,11 @@ FROM cliente]]>
 			<frame>
 				<reportElement mode="Opaque" x="0" y="0" width="451" height="95" backcolor="#000000" uuid="6c6ca4e1-17cd-4913-93d6-5e670ea9ae8a"/>
 				<staticText>
-					<reportElement style="Title" x="0" y="0" width="370" height="66" uuid="a2a2cac8-5a7d-4487-8c54-dab235ce4e21"/>
+					<reportElement style="Title" x="0" y="0" width="451" height="95" uuid="a2a2cac8-5a7d-4487-8c54-dab235ce4e21"/>
 					<textElement>
 						<font isBold="false"/>
 					</textElement>
-					<text><![CDATA[Cherry Title]]></text>
+					<text><![CDATA[Aniversariantes]]></text>
 				</staticText>
 				<staticText>
 					<reportElement style="SubTitle" x="157" y="66" width="249" height="29" uuid="8978eac3-c578-41c9-837e-48d2b0184642"/>
@@ -67,7 +67,7 @@ FROM cliente]]>
 					<textElement textAlignment="Right">
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -76,33 +76,24 @@ FROM cliente]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="26" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="0" y="7" width="185" height="18" forecolor="#000000" uuid="fbaf32c9-b918-4a5a-bdc6-4b7689ba9af6">
+				<reportElement style="Column header" x="0" y="7" width="90" height="26" forecolor="#000000" uuid="fbaf32c9-b918-4a5a-bdc6-4b7689ba9af6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e0ec4c8-e043-4c8c-8da2-5fa754ac7614"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[id]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="185" y="7" width="185" height="18" forecolor="#000000" uuid="d2c940f9-f995-4b71-bb64-a1bc9e6f7dd3">
+				<reportElement style="Column header" x="90" y="7" width="280" height="26" forecolor="#000000" uuid="d2c940f9-f995-4b71-bb64-a1bc9e6f7dd3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0e74cc73-b5b7-4078-9554-bae98d373d43"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[nome]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" x="370" y="7" width="185" height="18" forecolor="#000000" uuid="9c56f3c9-4fad-4c4e-a6c5-9422bae3f892">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="97352ce5-1525-404b-815a-f036539c4f4a"/>
-				</reportElement>
-				<textElement>
-					<font isBold="false"/>
-				</textElement>
-				<text><![CDATA[dt_nascimento]]></text>
+				<text><![CDATA[Nome]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -111,7 +102,7 @@ FROM cliente]]>
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="18" uuid="b50221b5-8254-440b-8c6f-1f0b138c9259"/>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="0" y="0" width="185" height="18" uuid="83f18505-5d3b-473d-a3b9-27250fdca569">
+					<reportElement style="Detail" positionType="Float" x="0" y="0" width="90" height="18" uuid="83f18505-5d3b-473d-a3b9-27250fdca569">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5e0ec4c8-e043-4c8c-8da2-5fa754ac7614"/>
 					</reportElement>
 					<textElement>
@@ -120,22 +111,13 @@ FROM cliente]]>
 					<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="185" y="0" width="185" height="18" uuid="aeda3f33-4194-4cee-9722-539ea428208b">
+					<reportElement style="Detail" positionType="Float" x="90" y="0" width="280" height="18" uuid="aeda3f33-4194-4cee-9722-539ea428208b">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0e74cc73-b5b7-4078-9554-bae98d373d43"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
-				</textField>
-				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="370" y="0" width="185" height="18" uuid="12823e86-4327-46d3-b2a2-dda8a93772ab">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="97352ce5-1525-404b-815a-f036539c4f4a"/>
-					</reportElement>
-					<textElement>
-						<font size="14"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{dt_nascimento}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -173,7 +155,7 @@ FROM cliente]]>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
