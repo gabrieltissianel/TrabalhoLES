@@ -28,5 +28,8 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     List<ConsumoDiarioClienteDto> findByConsumoPorCliente(Long id);
 
     @Query(value = "SELECT * FROM COMPRA WHERE cliente_id = ?1 AND saida IS NULL", nativeQuery = true)
-    Compra findCompraAberta(Long clienteId);
+    Compra findCompraAbertaByClienteId(Long clienteId);
+
+    @Query(value = "SELECT * FROM COMPRA WHERE CARTAO = ?1 AND saida IS NULL", nativeQuery = true)
+    Compra findCompraAbertaByCartao(String cartao);
 }

@@ -18,7 +18,11 @@ public class ClienteService extends GenericService<Cliente, Long> {
     }
 
     public ResponseEntity<Compra> findCompraAberta(Long id) {
-        return ResponseEntity.ok(((ClienteRepository)objRepository).findCompraAberta(id));
+        return ResponseEntity.ok(((ClienteRepository)objRepository).findCompraAbertaByClienteId(id));
+    }
+
+    public ResponseEntity<Compra> findCompraAberta(String cartao) {
+        return ResponseEntity.ok(((ClienteRepository)objRepository).findCompraAbertaByCartao(cartao));
     }
 
     public ResponseEntity<List<Cliente>> findByAniversario(){
