@@ -17,8 +17,7 @@ import jakarta.annotation.PreDestroy;
 @Component
 public class BalancaService {
     private static SerialPort serialPort;
-    private static String portName0 = "/dev/ttyUSB0"; 
-    private static String portName1 = "/dev/ttyUSB1"; 
+    private static String portName = "/dev/ttyUSB"; 
     private static boolean portaAberta = false;
     private static final Logger logger = LoggerFactory.getLogger(BalancaService.class);
     private static Double ultimoPeso; // Armazena o último peso
@@ -102,17 +101,15 @@ public class BalancaService {
             logger.info("Porta {} aberta com sucesso.", port);
             return true;
         } catch (Exception e) {
-            logger.error("Falha ao abrir a porta {}. Verifique as configurações.", port);
             return false;
         }
     }
     
     public static boolean init() {
-        if(openningPort(portName0)){
-            return true;
-        }
-        if(openningPort(portName1)) {
-            return true;
+        for(int i=0; i<4; i++){// testa 4 portas seriais
+            if(openningPort(portName+i)){
+                return true;
+            }
         }
         logger.error("Nenhuma porta serial disponível.");
         return false;

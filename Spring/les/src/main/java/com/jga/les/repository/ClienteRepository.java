@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.jga.les.dtos.ConsumoClienteDto;
 import com.jga.les.dtos.ConsumoDiarioClienteDto;
 import com.jga.les.model.Cliente;
+import com.jga.les.model.Compra;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     //relatorio de aniversariantes
@@ -25,4 +26,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     //relatorio de consumo diario por cliente
     @Query(value = "SELECT CLI.ID, CLI.NOME, CAST(COM.entrada AS DATE), SUM(CP.preco), SUM(CP.custo) FROM CLIENTE CLI RIGHT JOIN COMPRA COM ON CLI.ID=COM.cliente_id LEFT JOIN compra_produto CP ON CP.compra_id = COM.id WHERE CLI.ID=?1 GROUP BY COM.entradA, CLI.ID", nativeQuery = true)
     List<ConsumoDiarioClienteDto> findByConsumoPorCliente(Long id);
+
+    @Query(value = "SELECT * FROM COMPRA WHERE cliente_id = ?1 AND saida IS NULL", nativeQuery = true)
+    Compra findCompraAberta(Long clienteId);
 }
