@@ -25,8 +25,10 @@ public class CompraService extends GenericService<Compra, Long> {
 
     @Override
     public ResponseEntity<Compra> add(Compra obj) throws IllegalArgumentException, OptimisticLockingFailureException {
+        obj.setCliente(clienteService.findById(obj.getCliente().getId()).getBody());
+
         Cliente cliente = obj.getCliente();
-        Compra compraAberta = ((ClienteService) clienteService).findCompraAberta(cliente.getId()).getBody();
+        Compra compraAberta = clienteService.findCompraAberta(cliente.getId()).getBody();
         Double saldoAtualizado = cliente.getLimite() + cliente.getSaldo();
 
         if (compraAberta != null) {
@@ -76,8 +78,7 @@ public class CompraService extends GenericService<Compra, Long> {
                                     .toLocalDate();
         
         // Calcular diferença em dias
-        long dias = ChronoUnit.DAYS.between(localDataAntiga, localDataAtual);
-        
+        long dias = ChronoUnit.DAYS.between(localDataAtual,localDataAntiga);
         return dias >= 30;
     }
 
