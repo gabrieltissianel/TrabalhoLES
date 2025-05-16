@@ -21,7 +21,15 @@ public class ScaleController {
 
     @GetMapping("/peso")
     public ResponseEntity<Double> getUltimoPeso() {
-        Double peso = serialService.getUltimoPeso(); // Suponha que este método existe
+        Double peso = null;
+        try {
+            peso = serialService.getUltimoPeso();
+        } catch (Exception e) {
+             closePort();
+             openPort();
+            peso = serialService.getUltimoPeso();
+        }
+
         if (peso == null) {
             throw new RuntimeException("Nenhum peso foi lido ainda.");
         }

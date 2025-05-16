@@ -1,5 +1,6 @@
 package com.jga.les.controller;
 
+import com.jga.les.device.BalancaService;
 import com.jga.les.model.*;
 import com.jga.les.service.CompraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class CompraProdutoController extends GenericController<CompraProduto, Co
     @Autowired
     CompraService compraService;
 
+    @Autowired
+    BalancaService balancaService;
+
     public CompraProdutoController(GenericService<CompraProduto, CompraProdutoKey> genericApplication) {
         super("/compraproduto", genericApplication);
     }
@@ -47,7 +51,12 @@ public class CompraProdutoController extends GenericController<CompraProduto, Co
 
         // Verifica se a quantidade está definida
         if(obj.getQntd() == null){
-            obj.setQntd(1.0);
+            if (obj.getProduto().isUnitario()){
+                obj.setQntd(1.0);
+            } else {
+                double peso = balancaService.getUltimoPeso();
+                obj.setQntd(peso);
+            }
         }
         //Verifica se o preço e o custo estão definidos 
         if(obj.getPreco() == null){
