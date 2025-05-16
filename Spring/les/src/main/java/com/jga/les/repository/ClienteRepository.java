@@ -30,6 +30,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     @Query(value = "SELECT * FROM COMPRA WHERE cliente_id = ?1 AND saida IS NULL", nativeQuery = true)
     Compra findCompraAbertaByClienteId(Long clienteId);
 
-    @Query(value = "SELECT * FROM COMPRA WHERE CARTAO = ?1 AND saida IS NULL", nativeQuery = true)
+    @Query(value = "SELECT COM.ID, COM.cliente_id, COM.entrada, COM.saida FROM COMPRA COM LEFT JOIN CLIENTE CLI ON CLI.id = COM.id  WHERE CLI.CARTAO = ?1 AND COM.saida IS NULL", nativeQuery = true)
     Compra findCompraAbertaByCartao(String cartao);
 }

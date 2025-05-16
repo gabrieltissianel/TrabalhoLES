@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jga.les.dtos.ClienteDto;
 import com.jga.les.model.Cliente;
 import com.jga.les.model.Compra;
 import com.jga.les.service.ClienteService;
@@ -31,8 +30,8 @@ public class ClienteController extends GenericController<Cliente, Long> {
         return ((ClienteService)genericService).findByAniversario();
     }
 
-    @GetMapping("/compraaberta/{id}")
-    @PreAuthorize("hasAuthority(#root.this.getNomeTela(''))")
+    @GetMapping("/compraaberta/{cartao}")
+    @PreAuthorize("hasAuthority(#root.this.getNomeTela('/compraaberta'))")
     public ResponseEntity<Compra> relatorioCompraAberta(@PathVariable String cartao) throws JRException {
         return ((ClienteService)genericService).findCompraAberta(cartao);
     }
