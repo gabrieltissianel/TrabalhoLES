@@ -27,7 +27,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     @Query(value = "SELECT CLI.ID, CLI.NOME, CAST(COM.entrada AS DATE), SUM(CP.preco), SUM(CP.custo) FROM CLIENTE CLI RIGHT JOIN COMPRA COM ON CLI.ID=COM.cliente_id LEFT JOIN compra_produto CP ON CP.compra_id = COM.id WHERE CLI.ID=?1 GROUP BY COM.entradA, CLI.ID", nativeQuery = true)
     List<ConsumoDiarioClienteDto> findByConsumoPorCliente(Long id);
 
-    @Query(value = "SELECT * FROM COMPRA WHERE cliente_id = ?1 AND saida IS NULL", nativeQuery = true)
+    @Query(value = "SELECT COM.ID, COM.cliente_id, COM.entrada, COM.saida FROM COMPRA COM LEFT JOIN CLIENTE CLI ON CLI.id = COM.id  WHERE CLI.ID = ?1 AND COM.saida IS NULL", nativeQuery = true)
     Compra findCompraAbertaByClienteId(Long clienteId);
 
     @Query(value = "SELECT COM.ID, COM.cliente_id, COM.entrada, COM.saida FROM COMPRA COM LEFT JOIN CLIENTE CLI ON CLI.id = COM.id  WHERE CLI.CARTAO = ?1 AND COM.saida IS NULL", nativeQuery = true)
