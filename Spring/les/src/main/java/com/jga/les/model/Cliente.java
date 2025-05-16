@@ -21,6 +21,8 @@ public class Cliente {
     @NotNull
     private String nome;
 
+    private String cartao;
+
     private Double limite;
 
     private Double saldo;
