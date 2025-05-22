@@ -14,9 +14,8 @@ import java.util.Date;
 
 @Service
 public class CompraService extends GenericService<Compra, Long> {
-
     @Autowired
-    private ClienteService clienteService;
+    ClienteService clienteService;
 
     public CompraService(JpaRepository<Compra, Long> objRepository) {
         super(objRepository, Compra.class);
