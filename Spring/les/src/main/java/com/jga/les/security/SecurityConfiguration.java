@@ -44,6 +44,7 @@ public class SecurityConfiguration {
             "/jasper/**",
             "/fornecedor/**",
             "/balanca/**",
+            "/tmt20x/**",
     };
 
     @Bean
