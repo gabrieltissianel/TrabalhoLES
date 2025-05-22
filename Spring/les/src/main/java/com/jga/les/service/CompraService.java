@@ -9,12 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Service
 public class CompraService extends GenericService<Compra, Long> {
+
     @Autowired
-    ClienteService clienteService;
+    private ClienteService clienteService;
 
     public CompraService(JpaRepository<Compra, Long> objRepository) {
         super(objRepository, Compra.class);
@@ -27,6 +29,14 @@ public class CompraService extends GenericService<Compra, Long> {
         if (compraAberta != null) {
             // Se já existe uma compra aberta, não permite a criação de uma nova
             throw new RuntimeException("Cliente já possui uma compra aberta.");
+        }
+        if (cliente.getUltimo_dia_negativado() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, 30);
+            Date vencimento = calendar.getTime();
+            if (cliente.getUltimo_dia_negativado().before(vencimento)) {
+                throw new RuntimeException("Cliente esta devendo a mais de 30 dias");
+            }
         }
         return super.add(obj);
     }

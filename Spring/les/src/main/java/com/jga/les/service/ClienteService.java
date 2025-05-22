@@ -4,7 +4,9 @@ import com.jga.les.model.Compra;
 import com.jga.les.repository.ClienteRepository;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,22 @@ public class ClienteService extends GenericService<Cliente, Long> {
     public ResponseEntity<Compra> findCompraAberta(Long id) {
         return ResponseEntity.ok(((ClienteRepository)objRepository).findCompraAbertaByClienteId(id));
     }
-    
+
+    public ResponseEntity<Cliente> findClienteByCartao(String cartao) {
+        Optional<Cliente> cliente = ((ClienteRepository)objRepository).findClienteByCartao(cartao);
+        if (cliente.isEmpty()) {
+            throw new OptimisticLockingFailureException("Cliente nao encontrado");
+        }
+        return ResponseEntity.ok(cliente.get());
+    }
+
+
     public ResponseEntity<Compra> findCompraAberta(String cartao) {
-        return ResponseEntity.ok(((ClienteRepository)objRepository).findCompraAbertaByCartao(cartao));
+        Optional<Compra> compra = ((ClienteRepository)objRepository).findCompraAbertaByCartao(cartao);
+        if (compra.isEmpty()) {
+            throw new OptimisticLockingFailureException("Cliente nao possui compras em aberto.");
+        }
+        return ResponseEntity.ok(compra.get());
     }
 
     public ResponseEntity<List<Cliente>> findByAniversario(){
