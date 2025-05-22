@@ -1,6 +1,7 @@
 package com.jga.les.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,8 @@ import com.jga.les.model.Cliente;
 import com.jga.les.model.Compra;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+    Optional<Cliente> findByCartao(String cartao);
+
     //relatorio de aniversariantes
     @Query("SELECT c FROM Cliente c WHERE EXTRACT(DAY FROM c.dt_nascimento)+1 = EXTRACT(DAY FROM CURRENT_DATE) AND EXTRACT(MONTH FROM c.dt_nascimento) = EXTRACT(MONTH FROM CURRENT_DATE)")
     List<Cliente> findByAniversario();
