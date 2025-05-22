@@ -17,6 +17,8 @@ import javax.print.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 @Component
@@ -29,6 +31,7 @@ public class TMT20XService {
     private static final Logger logger = LoggerFactory.getLogger(TMT20XService.class);
     private OutputStream outputStream;
     private TMT20XPrinter printer;
+    private NumberFormat formatter = new DecimalFormat("#0.00");     
 
     public TMT20XService(ClienteRepository clienteRepository){
         try {
@@ -70,11 +73,12 @@ public class TMT20XService {
         produtos = compraProdutoService.findByCompra(compra);
         try {
             printer.setUnderline(false);
+            printer.setBold(false); // Sem negrito
             //titulo
             printer.setAlignment(1); // Alinhamento à esquerda
             printer.setFontSize(2, 2); // Tamanho normal
             printer.setInverseColors(true);
-            printer.printText("Comprovante de Compra\n\n");
+            printer.printText(" Comprovante da Compra \n\n");
 
             //corpo
             printer.setInverseColors(false);
@@ -88,12 +92,12 @@ public class TMT20XService {
                 printer.printText("N/A.\n");
             }else{
                 for (CompraProduto produto : produtos) {
-                    printer.printText(" - " + produto.getProduto().getNome() + ": R$" + produto.getPreco() + "\t" + produto.getQntd() + (produto.getProduto().isUnitario() ? "\n" : "Kg\n"));
+                    printer.printText(" - " + produto.getProduto().getNome() + ": \tR$" + produto.getPreco() + "\t" + produto.getQntd() + (produto.getProduto().isUnitario() ? "\n" : "Kg\n"));
                 }
                 // Total
                 printer.setBold(true); // Negrito
             }
-            printer.printText("Total: " + compra.getTotal() + "\n");
+            printer.printText("Total: " + formatter.format(compra.getTotal()) + "\n");
             printer.cutPaper();
 
         } catch (Exception e) {
