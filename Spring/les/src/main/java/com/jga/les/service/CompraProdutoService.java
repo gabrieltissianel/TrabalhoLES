@@ -1,8 +1,11 @@
 package com.jga.les.service;
 
+import com.jga.les.model.Compra;
 import com.jga.les.model.CompraProduto;
 import com.jga.les.model.CompraProdutoKey;
 import com.jga.les.repository.CompraProdutoRepository;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,5 +44,9 @@ public class CompraProdutoService extends GenericService<CompraProduto, CompraPr
         }
 
         return ResponseEntity.ok("Produto Removido.");
+    }
+
+    public List<CompraProduto> findByCompra(Compra compra){
+        return ((CompraProdutoRepository) objRepository).findByCompraId(compra.getId()).isPresent() ? ((CompraProdutoRepository) objRepository).findByCompraId(compra.getId()).get() : null;
     }
 }

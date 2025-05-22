@@ -5,6 +5,7 @@ import com.jga.les.model.*;
 import com.jga.les.service.CompraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,17 +36,19 @@ public class CompraProdutoController extends GenericController<CompraProduto, Co
     @SuppressWarnings("null")
     @Override
     public ResponseEntity<CompraProduto> add(@Valid @RequestBody CompraProduto obj) {
+        Produto produto;
+        Compra compra;
         // Verifica se o id do produto e da compra são válidos
         if(obj.getId().getIdcompra() == 0 || obj.getId().getIdproduto() == 0){
             return ResponseEntity.badRequest().build();
         }
 
         if(obj.getProduto() == null){
-            Produto produto = produtoService.findById(obj.getId().getIdproduto()).getBody();
+            produto = produtoService.findById(obj.getId().getIdproduto()).getBody();
             obj.setProduto(produto);
         }
         if(obj.getCompra() == null){
-            Compra compra = compraService.findById(obj.getId().getIdcompra()).getBody();
+            compra = compraService.findById(obj.getId().getIdcompra()).getBody();
             obj.setCompra(compra);
         }
 

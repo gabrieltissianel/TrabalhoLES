@@ -1,39 +1,48 @@
 package com.jga.les.device;
+import com.jga.les.model.Cliente;
+import com.jga.les.model.Compra;
+import com.jga.les.model.CompraProduto;
 import com.jga.les.repository.ClienteRepository;
+import com.jga.les.service.ClienteService;
+import com.jga.les.service.CompraProdutoService;
 
 import jakarta.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
-import com.jga.les.model.Cliente;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.print.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Optional;
+import java.util.List;
 
-@Service
+@Component
 public class TMT20XService {
-    private final ClienteRepository clienteRepository;
+    @Autowired
+    private ClienteService clienteService;
+    @Autowired
+    private CompraProdutoService compraProdutoService;
+
     private static final Logger logger = LoggerFactory.getLogger(TMT20XService.class);
     private OutputStream outputStream;
     private TMT20XPrinter printer;
 
-    public TMT20XService(ClienteRepository clienteRepository) throws IOException {
-        if(outputStream != null) {
+    public TMT20XService(ClienteRepository clienteRepository){
+        try {
             outputStream.close();
+        } catch (Exception e) {
+            // Nao faz nada
         }
+        
         try {
             this.outputStream = new FileOutputStream("/dev/usb/lp0");
             this.printer = new TMT20XPrinter(outputStream);
         } catch (Exception e) {
-            logger.error("Erro ao inicializar TMT20XService: {}", e.getMessage());
-            this.outputStream.close();
+            logger.error("Erro ao inicializar TMT20XService: {}", e.getMessage());  
         }
-        this.clienteRepository = clienteRepository;
     }
 
     public void listarImpressoras() {
@@ -44,59 +53,75 @@ public class TMT20XService {
         }
     }
 
-    public void imprimirComprovanteSaldo(String cartao) {
-        Optional<Cliente> clienteO;
+    public void imprimirComprovanteCompra(String cartao) {
         Cliente cliente;
-        clienteO = clienteRepository.findByCartao(cartao);
-        System.out.println(clienteO.get().getNome());
-        if(clienteO.isPresent()){
-            cliente = clienteO.get();
-        } else {
-            logger.error("Cliente não encontrado com o cartão: {}", cartao);
-            throw new RuntimeException("Cliente não encontrado com o cartão: " + cartao);
-        }
-        try {
-            printer.setAlignment(1); // Centralizado
-            printer.setFontSize(2, 2); // Dobro de tamanho
-            printer.setBold(true); // Negrito
-            printer.printText("==COMPROVANTE DO SALDO==");
+        Compra compra;
+        List<CompraProduto> produtos;
 
-            printer.setFontSize(1, 1); // Volta ao normal
-            printer.setAlignment(0); // Esquerda
-            printer.setBold(false); // Tira o Negrito
-            printer.printText("Cliente: " + cliente.getNome() + "\n");
-            printer.printText("Codigo: " + cliente.getCartao() + "\n");
-            printer.printText("Saldo: R$ " + String.format("%.2f", cliente.getSaldo()) + "\n");
-            printer.printText("-------------------------\n");
-            printer.cutPaper(); // Cortar o papel;
+        try {
+            cliente = clienteService.findByCartao(cartao);
+            compra = clienteService.findCompraAberta(cartao).getBody();
         } catch (Exception e) {
-            logger.error("Erro ao imprimir informações do Cliente: {}", e.getMessage());
-        } 
+            logger.error("Erro ao buscar cliente ou compra: {}", e.getMessage());
+            throw new RuntimeException("Erro ao buscar cliente ou compra: " + cartao);
+        }
+        logger.info("Cliente: {}", cliente.getNome());
+        logger.info("Compra: {}", compra.getId());
+        produtos = compraProdutoService.findByCompra(compra);
+        try {
+            printer.setUnderline(false);
+            //titulo
+            printer.setAlignment(1); // Alinhamento à esquerda
+            printer.setFontSize(2, 2); // Tamanho normal
+            printer.setInverseColors(true);
+            printer.printText("Comprovante de Compra\n\n");
+
+            //corpo
+            printer.setInverseColors(false);
+            printer.setAlignment(0); // Alinhamento à esquerda
+            printer.setFontSize(1, 1); // Tamanho normal
+            printer.setBold(false); // Sem negrito
+            printer.printText("Cliente: " + cliente.getNome() + "\n");
+            printer.printText("Produtos:\n");
+            
+            if(produtos.isEmpty()){
+                printer.printText("N/A.\n");
+            }else{
+                for (CompraProduto produto : produtos) {
+                    printer.printText(" - " + produto.getProduto().getNome() + ": R$" + produto.getPreco() + "\t" + produto.getQntd() + (produto.getProduto().isUnitario() ? "\n" : "Kg\n"));
+                }
+                // Total
+                printer.setBold(true); // Negrito
+            }
+            printer.printText("Total: " + compra.getTotal() + "\n");
+            printer.cutPaper();
+
+        } catch (Exception e) {
+            logger.error("Nenhuma compra encontrada para o cartão: {}", cartao);
+        }
+        return; 
     }
 
     public void teste(){
         logger.info("Iniciando teste de impressão...");
         try{
-    
-            // Exemplo de impressão customizada
             printer.setAlignment(1); // Centralizado
             printer.setFontSize(2, 2); // Dobro de tamanho
-            printer.setBold(true);
+            printer.setBold(true); // Negrito
             printer.printText("TÍTULO GRANDE\n");
             
             printer.setFontSize(1, 1); // Volta ao normal
-            printer.setBold(false);
+            printer.setBold(false); // Sem Negrito
             printer.setAlignment(0); // Alinhamento à esquerda
-            printer.setUnderline(true);
+            printer.setUnderline(true); //Sublinhado
             printer.printText("Texto normal\n");
             
-            printer.setInverseColors(true);
+            printer.setInverseColors(true); 
             printer.printText("Texto invertido\n");
             printer.setInverseColors(false);
             
             // Cortar o papel
             printer.cutPaper();
-            
         } catch (Exception e) {
             logger.error("Erro ao imprimir: {}", e.getMessage());
         }

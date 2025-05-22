@@ -2,6 +2,8 @@ package com.jga.les.service;
 
 import com.jga.les.model.Cliente;
 import com.jga.les.model.Compra;
+import com.jga.les.model.CompraProduto;
+import com.jga.les.repository.CompraRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -13,6 +15,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CompraService extends GenericService<Compra, Long> {

@@ -29,6 +29,11 @@ public class ClienteService extends GenericService<Cliente, Long> {
         return ResponseEntity.ok(((ClienteRepository)objRepository).findByAniversario());
     }
 
+    public Cliente findByCartao(String cartao) {
+        return ((ClienteRepository)objRepository).findByCartao(cartao);
+    }
+    
+
     @Override
     public ResponseEntity<Cliente> update(Cliente obj, Long id) {
         if (obj.getSaldo() >=  0 && obj.getUltimo_dia_negativado() != null) {

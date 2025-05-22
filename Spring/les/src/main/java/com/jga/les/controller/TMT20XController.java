@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +16,7 @@ public class TMT20XController {
     @Autowired
     private TMT20XService tmt20xService;
 
-    @PostMapping("teste")
+    @PostMapping("/teste")
     public ResponseEntity<String> teste() {
         try {
             tmt20xService.teste();
@@ -28,11 +27,11 @@ public class TMT20XController {
         return ResponseEntity.ok("ok");
     }
 
-    @PostMapping("/cartao")
-    @PreAuthorize("hasAuthority(#root.this.getNomeTela('/cartao'))")
+    @PostMapping("/cartao/{cartao}")
+    @PreAuthorize("hasAuthority(#root.this.getNomeTela(''))")
     public ResponseEntity<String> informacoesDoCliente(@PathVariable String cartao) {
         try {
-            tmt20xService.imprimirComprovanteSaldo(cartao);
+            tmt20xService.imprimirComprovanteCompra(cartao);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Erro ao gerar informacoes do cliente: " + e.getMessage());
