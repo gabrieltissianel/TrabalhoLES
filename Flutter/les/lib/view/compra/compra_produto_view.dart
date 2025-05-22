@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +24,8 @@ class CompraProdutoView extends StatefulWidget {
 
 class _CompraProdutoViewState extends State<CompraProdutoView> {
   final _compraProdutoViewModel = injector.get<CompraProdutoViewModel>();
+  late Timer _timer;
+  double? _peso;
 
   @override
   void initState() {
@@ -29,6 +33,13 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
     _compraProdutoViewModel.getCompra.execute(widget.compraId);
     _compraProdutoViewModel.getProdutos.execute();
     _compraProdutoViewModel.getPeso.execute();
+    //_timer = Timer.periodic(Duration(milliseconds: 500), (timer) => _compraProdutoViewModel.getPeso.execute());
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -73,7 +84,6 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
   _form() {
     return Column(
         children: [
-
           ListenableBuilder(
               listenable: _compraProdutoViewModel.getCompra,
               builder: (context, child) {
@@ -87,7 +97,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                   final success = _compraProdutoViewModel.getCompra
                       .value as SuccessCommand;
                   var compra = success.value as Compra;
-                  return Text("Total: ${_compraProdutoViewModel.total(compra)}",
+                  return Text("Total: ${_formatCurrency(_compraProdutoViewModel.total(compra))}",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
                   );
                 }
@@ -110,7 +120,11 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                   ),
                   onSubmitted: (value) async {
                     await _compraProdutoViewModel.pesquisar.execute();
-                    FocusScope.of(context).requestFocus(_compraProdutoViewModel.pesquisarFocusNode);
+                    if (_compraProdutoViewModel.pesquisar.isFailure){
+                      final res = _compraProdutoViewModel.pesquisar.value as FailureCommand;
+                      showError(res.error.toString());
+                    }
+                    _compraProdutoViewModel.pesquisarFocusNode.requestFocus();
                     _compraProdutoViewModel.getCompra.execute(widget.compraId);
                   },
                 ),
@@ -118,29 +132,35 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
               const SizedBox(width: 16),
           Expanded(
               flex: 1,
-              child: ListenableBuilder(
+              child:
+              ListenableBuilder(
                   listenable: _compraProdutoViewModel.getPeso,
                   builder: (context, child) {
                     if (_compraProdutoViewModel.getPeso.isRunning) {
-                      return Center(child: CircularProgressIndicator());
+                      if (_peso == null) {
+                        return Center(child: CircularProgressIndicator());
+                      } else {
+                        return Center( child: Text(
+                          "Peso: ${_peso?.toStringAsFixed(3)} kg",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ));
+                      }
                     } else if (_compraProdutoViewModel.getPeso.isFailure) {
-                      return Center( child: Text(
-                        "Error.",
-                        style: TextStyle(color: Colors.red),
-                      ));
+                      _peso = null;
+                      return Center(child: CircularProgressIndicator());
                     } else {
                       final success = _compraProdutoViewModel.getPeso.value
                           as SuccessCommand;
-                      var peso = success.value as double;
+                      _peso = success.value as double;
                       return Center( child: Text(
-                        "Peso: ${peso.toStringAsFixed(3)} kg",
+                        "Peso: ${_peso?.toStringAsFixed(3)} kg",
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ));
                     }
                   })),
               Expanded(
                   flex: 1,
-                  child: TextButton(
+                  child: ElevatedButton(
                       onPressed: () {
                         _compraProdutoViewModel.concluir.execute(widget.compraId).then((result) {
                           if(_compraProdutoViewModel.concluir.isSuccess){
@@ -148,7 +168,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                           }
                         });
                       },
-                      child: Text("Concluir."))
+                      child: Text("Concluir"))
               )
             ],
           )
@@ -274,4 +294,15 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
     return DateFormat('dd/MM/yyyy HH:mm').format(date);
   }
 
+  void showError(String error){
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        error,
+        style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: Colors.red,
+    ));
+  }
 }
