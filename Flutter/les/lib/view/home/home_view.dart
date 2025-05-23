@@ -23,6 +23,7 @@ class _HomeViewState extends State<HomeView>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Entrada/Saida"),),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,7 +46,12 @@ class _HomeViewState extends State<HomeView>{
             onSubmitted: (value) async {
               _viewModel.getClienteByCartao(value).fold((cliente) {
                 _viewModel.getCompraByCartao(value).fold((compraAberta) {
-                   router.go("${AppRoutes.compras}/${compraAberta.id}");
+                   //router.go("${AppRoutes.compras}/${compraAberta.id}");
+                  _viewModel.concluirCompra(compraAberta).fold((onSuccess) {
+                    showMessage("Saida de ${cliente.nome}.");
+                  }, (onError) {
+                    showMessage("Erro ao concluir compra.");
+                  });
                 }, (failure) {
                   Compra compra = Compra(entrada: DateTime.now(), cliente: cliente, compraProdutos: []);
                   _viewModel.criarCompra(compra).fold((onSuccess){

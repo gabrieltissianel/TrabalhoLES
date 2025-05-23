@@ -161,14 +161,8 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
               Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                      onPressed: () {
-                        _compraProdutoViewModel.concluir.execute(widget.compraId).then((result) {
-                          if(_compraProdutoViewModel.concluir.isSuccess){
-                            context.go(AppRoutes.home);
-                          }
-                        });
-                      },
-                      child: Text("Concluir"))
+                      onPressed: () => context.go(AppRoutes.compraCartao),
+                      child: Text("Fechar"))
               )
             ],
           )
@@ -216,17 +210,13 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                   IconButton(
                       onPressed: () async {
                         await _compraProdutoViewModel.addProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
-                        if (_compraProdutoViewModel.addProduto.isSuccess){
-                          _compraProdutoViewModel.getCompra.execute(widget.compraId);
-                        }
+                        _compraProdutoViewModel.getCompra.execute(widget.compraId);
                       },
                       icon: Icon(Icons.add)),
                   IconButton(
                       onPressed: () async{
                         await _compraProdutoViewModel.removeProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
-                        if (_compraProdutoViewModel.removeProduto.isSuccess){
-                          _compraProdutoViewModel.getCompra.execute(widget.compraId);
-                        }
+                        _compraProdutoViewModel.getCompra.execute(widget.compraId);
                       },
                       icon: Icon(Icons.remove)
                   ),

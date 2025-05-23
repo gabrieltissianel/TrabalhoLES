@@ -24,4 +24,7 @@ class HomeViewModel {
     return _compraService.create(compra.toJson());
   }
 
+  AsyncResult<Compra> concluirCompra(Compra compra) async {
+    return _compraService.concluir(compra.id!);
+  }
 }

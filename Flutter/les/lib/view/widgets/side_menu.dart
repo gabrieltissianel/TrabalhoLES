@@ -20,7 +20,7 @@ class _SideMenuState extends State<SideMenu> {
       label: Text('Home'),
     ),
     if (userProvider.user!.hasPermission("/compra"))
-    AppRoutes.compras: NavigationRailDestination(
+    AppRoutes.compraCartao: NavigationRailDestination(
       icon: Icon(Icons.shopping_cart_outlined),
       selectedIcon: Icon(Icons.shopping_cart),
       label: Text('Compras'),
@@ -81,8 +81,8 @@ class _SideMenuState extends State<SideMenu> {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.clientes);
     } else if (currentRoute.startsWith(AppRoutes.produtos)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.produtos);
-    } else if (currentRoute.startsWith(AppRoutes.compras)) {
-      selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.compras);
+    } else if (currentRoute.startsWith(AppRoutes.compraCartao) || currentRoute.startsWith(AppRoutes.compras)) {
+      selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.compraCartao);
     } else if (currentRoute.startsWith(AppRoutes.relatorios)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.relatorios);
     }

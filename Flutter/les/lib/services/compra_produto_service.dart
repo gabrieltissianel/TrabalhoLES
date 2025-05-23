@@ -33,13 +33,11 @@ class CompraProdutoService {
 
   AsyncResult<String> removeProduto(int idCompra, int idProduto) async {
     try{
-      Map<String, Map<String, int>> key = {
-        'id': {
+      Map<String, int> key = {
           'idcompra': idCompra,
           'idproduto': idProduto
-        }
       };
-      final response = await dio.post('${Endpoints.baseUrl}/compraproduto/add', data: key);
+      final response = await dio.delete('${Endpoints.baseUrl}/compraproduto/del', data: key);
       return Success(response.data);
     } catch (e) {
       return Failure(Exception(e.toString()));

@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/usuario/permissao.dart';
 import 'package:les/view/cliente/cliente_view.dart';
+import 'package:les/view/cliente/historico_recarga_view.dart';
 import 'package:les/view/compra/compra_produto_view.dart';
 import 'package:les/view/compra/compra_view.dart';
+import 'package:les/view/compra/compra_cartao_view.dart';
 import 'package:les/view/fornecedor/fornecedor_view.dart';
 import 'package:les/view/fornecedor/pagamento_view.dart';
 import 'package:les/view/home/home_view.dart';
@@ -18,6 +20,7 @@ import 'package:les/view/usuario/usuario_view.dart';
 import 'package:les/view/widgets/app_layout.dart';
 
 
+
 class AppRoutes {
   static const String home = '/';
   static const String fornecedores = '/fornecedor';
@@ -28,8 +31,10 @@ class AppRoutes {
   static const String produtos = '/produto';
   static const String clientes = '/cliente';
   static const String historicoProduto = '/historicoproduto';
-  static const String compras = '/compra';
+  static const String compras = '/compras';
   static const String relatorios = '/relatorios';
+  static const String compraCartao = '/compracartao';
+  static const String historicoRecarga = '/historicorecarga';
 }
 
 const List<String> freeRoutes = [ AppRoutes.login, AppRoutes.home ];
@@ -75,6 +80,9 @@ final GoRouter router = GoRouter(
             path: AppRoutes.usuarios,
             builder: (context, state) => const UsuarioView()),
         GoRoute(
+            path: AppRoutes.compraCartao,
+            builder: (context, state) => const CompraCartaoView()),
+        GoRoute(
             path: AppRoutes.clientes,
             builder: (context, state) => const ClienteView()),
         GoRoute(
@@ -109,6 +117,13 @@ final GoRouter router = GoRouter(
           builder: (context, state) {
             final produtoId = state.pathParameters['produtoId'];
             return HistoricoProdutoView(produtoId: int.parse(produtoId!));
+          },
+        ),
+        GoRoute(
+          path: '${AppRoutes.historicoRecarga}/:clienteId',
+          builder: (context, state) {
+            final clienteId = state.pathParameters['clienteId'];
+            return HistoricoRecargaView(clienteId: int.parse(clienteId!));
           },
         ),
         GoRoute(
