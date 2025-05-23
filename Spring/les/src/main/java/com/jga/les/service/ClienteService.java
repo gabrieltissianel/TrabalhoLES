@@ -42,15 +42,15 @@ public class ClienteService extends GenericService<Cliente, Long> {
 
     @Override
     public ResponseEntity<Cliente> update(Cliente obj, Long id) {
+        Cliente cliente = ((ClienteRepository)objRepository).findById(id).get();
         if (obj.getSaldo() >=  0 && obj.getUltimo_dia_negativado() != null) {
             obj.setUltimo_dia_negativado(null);
         }
         // historico de recargas
-        Cliente cliente = ((ClienteRepository)objRepository).findById(id).get();
-        if(cliente.getSaldo() > obj.getSaldo()){
+        if(obj.getSaldo() > cliente.getSaldo()){
             historicoRecarga = new HistoricoRecarga();
             historicoRecarga.setCliente(obj);
-            historicoRecarga.setValor(obj.getSaldo());
+            historicoRecarga.setValor(obj.getSaldo()-cliente.getSaldo());
             historicoRecarga.setData(new Date()); 
             historicoRecargasService.add(historicoRecarga);
         }
