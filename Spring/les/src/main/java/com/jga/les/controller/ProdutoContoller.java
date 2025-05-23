@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/produto")
 public class ProdutoContoller extends GenericController<Produto, Long> {
     @Autowired
-    HistoricoProutosContoller historicoProutosContoller;
+    private HistoricoProutosContoller historicoProutosContoller;
     
-    HistoricoProdutos historicoProdutos;
+    private HistoricoProdutos historicoProdutos;
 
     public ProdutoContoller(GenericService<Produto, Long> genericApplication) {
         super("/produto", genericApplication);

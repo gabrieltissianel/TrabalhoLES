@@ -63,13 +63,17 @@ public class TMT20XService {
 
         try {
             cliente = clienteService.findByCartao(cartao);
-            compra = clienteService.findCompraAberta(cartao).getBody();
         } catch (Exception e) {
-            logger.error("Erro ao buscar cliente ou compra: {}", e.getMessage());
-            throw new RuntimeException("Erro ao buscar cliente ou compra: " + cartao);
+            logger.error("Erro ao buscar cliente: {}");
+            throw new RuntimeException("Erro ao buscar cliente: " + cartao);
         }
-        logger.info("Cliente: {}", cliente.getNome());
-        logger.info("Compra: {}", compra.getId());
+        
+        compra = clienteService.findCompraAberta(cartao).getBody();
+        if (compra == null) {
+            logger.error("Nenhuma compra encontrada para o cartão: {}", cartao);
+            throw new RuntimeException("Nenhuma compra encontrada para o cartão: " + cartao);
+        }
+
         produtos = compraProdutoService.findByCompra(compra);
         try {
             printer.setUnderline(false);
