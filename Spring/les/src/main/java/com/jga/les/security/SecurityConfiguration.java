@@ -38,6 +38,7 @@ public class SecurityConfiguration {
             "/swagger-resources/**",
             "/produto/**",
             "/historicoprodutos/**",
+            "/historicorecargas/**",
             "/cliente/**",
             "/compraproduto/**",
             "/compra/**",
