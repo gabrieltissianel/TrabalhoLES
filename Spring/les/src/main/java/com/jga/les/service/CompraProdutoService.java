@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CompraProdutoService extends GenericService<CompraProduto, CompraProdutoKey> {
-    @Autowired
-    ProdutoService produtoService;
-    @Autowired
-    CompraService compraService;
 
     public CompraProdutoService(JpaRepository<CompraProduto, CompraProdutoKey> objRepository) {
         super(objRepository, CompraProduto.class);

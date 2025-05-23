@@ -1,5 +1,6 @@
 package com.jga.les.service;
 
+import com.jga.les.device.TMT20XService;
 import com.jga.les.model.Cliente;
 import com.jga.les.model.Compra;
 import com.jga.les.model.CompraProduto;
@@ -19,6 +20,9 @@ import java.util.List;
 public class CompraService extends GenericService<Compra, Long> {
     @Autowired
     ClienteService clienteService;
+
+    @Autowired
+    TMT20XService tmt20XService;
 
     public CompraService(JpaRepository<Compra, Long> objRepository) {
         super(objRepository, Compra.class);
@@ -59,6 +63,13 @@ public class CompraService extends GenericService<Compra, Long> {
             compra.setCliente(cliente);
             compra.setSaida(hoje);
             objRepository.save(compra);
+
+            try {
+                tmt20XService.imprimirComprovanteCompra(compra);
+            } catch (Exception e) {
+
+            }
+
             return compra;
 
         } else {

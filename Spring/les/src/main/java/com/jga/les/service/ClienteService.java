@@ -68,7 +68,13 @@ public class ClienteService extends GenericService<Cliente, Long> {
             historicoRecarga.setData(new Date()); 
             historicoRecargasService.add(historicoRecarga);
         }
-        
+
+        double saldo = obj.getSaldo();
+        String saldoString = String.format("%.2f", saldo);
+        double saldoReduzido = Double.parseDouble(saldoString);
+
+        obj.setSaldo(saldoReduzido);
+
         return super.update(obj, id);
     }
 
