@@ -56,39 +56,6 @@ public class TMT20XService {
         }
     }
 
-    public void imprimirComprovanteCompra(Compra compra) throws Exception {
-        Cliente cliente = compra.getCliente();
-        List<CompraProduto> produtos = compra.getCompraProdutos();
-
-        printer.setUnderline(false);
-        printer.setBold(false); // Sem negrito
-        //titulo
-        printer.setAlignment(1); // Alinhamento à esquerda
-        printer.setFontSize(2, 2); // Tamanho normal
-        printer.setInverseColors(true);
-        printer.printText(" Comprovante da Compra \n\n");
-
-        //corpo
-        printer.setInverseColors(false);
-        printer.setAlignment(0); // Alinhamento à esquerda
-        printer.setFontSize(1, 1); // Tamanho normal
-        printer.setBold(false); // Sem negrito
-        printer.printText("Cliente: " + cliente.getNome() + "\n");
-        printer.printText("Produtos:\n");
-
-        if(produtos.isEmpty()){
-            printer.printText("N/A.\n");
-        }else{
-            for (CompraProduto produto : produtos) {
-                printer.printText(" - " + produto.getProduto().getNome() + ": \tR$" + produto.getPreco() + "\t" + produto.getQntd() + (produto.getProduto().isUnitario() ? "\n" : "Kg\n"));
-            }
-            // Total
-            printer.setBold(true); // Negrito
-        }
-        printer.printText("Total: " + formatter.format(compra.getTotal()) + "\n");
-        printer.cutPaper();
-    }
-
     public void imprimirComprovanteCompra(String cartao) {
         Cliente cliente;
         Compra compra;
@@ -129,12 +96,15 @@ public class TMT20XService {
                 printer.printText("N/A.\n");
             }else{
                 for (CompraProduto produto : produtos) {
-                    printer.printText(" - " + produto.getProduto().getNome() + ": \tR$" + produto.getPreco() + "\t" + produto.getQntd() + (produto.getProduto().isUnitario() ? "\n" : "Kg\n"));
+                    printer.printText(" - " + produto.getProduto().getNome() + ": \tR$" + produto.getPreco() + "\t" 
+                    + produto.getQntd() 
+                    + (produto.getProduto().isUnitario() ? "\t" : "Kg\t")
+                    + "R$" + formatter.format(produto.getPreco() * produto.getQntd()) + "\n");
                 }
                 // Total
                 printer.setBold(true); // Negrito
             }
-            printer.printText("Total: " + formatter.format(compra.getTotal()) + "\n");
+            printer.printText("\nTotal: R$" + formatter.format(compra.getTotal()) + "\n");
             printer.cutPaper();
 
         } catch (Exception e) {
