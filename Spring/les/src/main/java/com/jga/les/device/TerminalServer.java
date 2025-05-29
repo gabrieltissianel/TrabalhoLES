@@ -15,17 +15,13 @@ public class TerminalServer {
     private static final int PORTA = 5000;
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     private final ClienteRepository clienteRepository;
-    private final TMT20XService printerService;
 
-    public TerminalServer(ClienteRepository clienteRepository, TMT20XService printerService) {
+    public TerminalServer(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
-        this.printerService = printerService;
     }
 
     @PostConstruct
     public void iniciar() {
-        printerService.listarImpressoras();
-
         threadPool.execute(() -> {
             try (ServerSocket server = new ServerSocket(PORTA)) {
                 System.out.println("Servidor de terminais iniciado na porta " + PORTA);
@@ -33,7 +29,7 @@ public class TerminalServer {
                 while (!Thread.currentThread().isInterrupted()) {
                     Socket socket = server.accept();
                     System.out.println("Novo terminal conectado: " + socket.getInetAddress());
-                    threadPool.execute(new TerminalSession(socket, clienteRepository, printerService));
+                    threadPool.execute(new TerminalSession(socket, clienteRepository));
                 }
             } catch (IOException e) {
                 System.err.println("Erro no servidor: " + e.getMessage());
