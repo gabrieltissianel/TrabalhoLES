@@ -96,8 +96,8 @@ public class TMT20XService {
                 printer.printText("N/A.\n");
             }else{
                 for (CompraProduto produto : produtos) {
-                    printer.printText(" - " + produto.getProduto().getNome() + ": \tR$" + produto.getPreco() + "\t" 
-                    + produto.getQntd() 
+                    printer.printText(" - " + produto.getProduto().getNome() + ": \tR$" + produto.getPreco() + "\t"
+                    + produto.getQntd()
                     + (produto.getProduto().isUnitario() ? "\t" : "Kg\t")
                     + "R$" + formatter.format(produto.getPreco() * produto.getQntd()) + "\n");
                 }

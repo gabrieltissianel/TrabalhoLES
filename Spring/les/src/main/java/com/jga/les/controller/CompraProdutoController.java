@@ -6,10 +6,7 @@ import com.jga.les.service.CompraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.jga.les.service.CompraProdutoService;
 import com.jga.les.service.GenericService;
@@ -31,6 +28,12 @@ public class CompraProdutoController extends GenericController<CompraProduto, Co
 
     public CompraProdutoController(GenericService<CompraProduto, CompraProdutoKey> genericApplication) {
         super("/compraproduto", genericApplication);
+    }
+
+
+    @PutMapping("/edit")
+    public ResponseEntity<CompraProduto> edit (@Valid @RequestBody CompraProduto obj) {
+        return ((CompraProdutoService) genericService ).updateWithBody(obj);
     }
 
     @SuppressWarnings("null")
