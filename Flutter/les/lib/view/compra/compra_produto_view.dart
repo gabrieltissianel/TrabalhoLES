@@ -11,6 +11,8 @@ import 'package:les/model/compra/compra_produto.dart';
 import 'package:les/model/produto/produto.dart';
 import 'package:les/view/compra/view_model/compra_produto_view_model.dart';
 import 'package:les/view/widgets/custom_table.dart';
+import 'package:les/view/widgets/qntd_dialog.dart';
+import 'package:les/view/widgets/toast.dart';
 import 'package:result_command/result_command.dart';
 
 class CompraProdutoView extends StatefulWidget {
@@ -71,7 +73,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
               child: Card(
                 elevation: 4,
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(30.0),
                   child: _form(), // Removida a Column extra
                 ),
               ),
@@ -83,8 +85,9 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
 
   _form() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          ListenableBuilder(
+          ListenableBuilder( // preço total
               listenable: _compraProdutoViewModel.getCompra,
               builder: (context, child) {
                 if (_compraProdutoViewModel.getCompra.isRunning) {
@@ -110,7 +113,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
               Expanded(
                 flex: 2,
                 child:
-                TextField(
+                TextField( // pesquisa produto
                   controller: _compraProdutoViewModel.pesquisarController,
                   autofocus: true,
                   focusNode: _compraProdutoViewModel.pesquisarFocusNode,
@@ -122,7 +125,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                     await _compraProdutoViewModel.pesquisar.execute();
                     if (_compraProdutoViewModel.pesquisar.isFailure){
                       final res = _compraProdutoViewModel.pesquisar.value as FailureCommand;
-                      showError(res.error.toString());
+                      MensagemAlerta(context, res.error.toString());
                     }
                     _compraProdutoViewModel.pesquisarFocusNode.requestFocus();
                     _compraProdutoViewModel.getCompra.execute(widget.compraId);
@@ -148,7 +151,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                     } else if (_compraProdutoViewModel.getPeso.isFailure) {
                       _peso = null;
                       return Center(child: CircularProgressIndicator());
-                    } else {
+                    } else if (_compraProdutoViewModel.getPeso.isSuccess) {
                       final success = _compraProdutoViewModel.getPeso.value
                           as SuccessCommand;
                       _peso = success.value as double;
@@ -157,6 +160,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ));
                     }
+                    return Center(child: CircularProgressIndicator());
                   })),
               Expanded(
                   flex: 1,
@@ -209,17 +213,29 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                 return [
                   IconButton(
                       onPressed: () async {
-                        await _compraProdutoViewModel.addProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
-                        _compraProdutoViewModel.getCompra.execute(widget.compraId);
+                        _compraProdutoViewModel.addProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
                       },
                       icon: Icon(Icons.add)),
                   IconButton(
                       onPressed: () async{
-                        await _compraProdutoViewModel.removeProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
-                        _compraProdutoViewModel.getCompra.execute(widget.compraId);
+                        _compraProdutoViewModel.removeProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
                       },
-                      icon: Icon(Icons.remove)
-                  ),
+                      icon: Icon(Icons.remove)),
+                  if (compraProduto.produto.unitario)
+                  IconButton(
+                      onPressed: () {
+                        QuantityEditDialog(
+                          minQuantity: 0,
+                          initialQuantity: compraProduto.qntd as int,
+                          context: context,
+                          onSave: (valor) {
+                            compraProduto.qntd = valor as double;
+                            _compraProdutoViewModel.updateProduto(compraProduto);
+                          }
+                        ).show();
+                      },
+                      icon: Icon(Icons.edit))
+
                 ];
               } : null,
           );
@@ -284,15 +300,4 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
     return DateFormat('dd/MM/yyyy HH:mm').format(date);
   }
 
-  void showError(String error){
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        error,
-        style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.red,
-    ));
-  }
 }

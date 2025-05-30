@@ -52,7 +52,7 @@ class _PagamentoViewState extends State<PagamentoView> {
                               .value as SuccessCommand;
                           final pagamentos = success.value as List<Pagamento>;
                           return SizedBox.expand(
-                              child: CustomTable(
+                              child: CustomTable<Pagamento>(
                             title: "Pagamentos",
                             data: pagamentos,
                             columnHeaders: [
@@ -62,6 +62,18 @@ class _PagamentoViewState extends State<PagamentoView> {
                               "dt_vencimento",
                               "dt_pagamento"
                             ],
+                            formatters: (pagamento) => {
+                              "fornecedor": (p) {
+                                return pagamento.fornecedor.nome;
+                              },
+                              "valor": NumberFormat.currency(
+                                locale: 'pt_BR',
+                                symbol: 'R\$',
+                                decimalDigits: 2,
+                              ).format,
+                              "dt_vencimento": (p) => DateFormat('dd/MM/yyyy').format(pagamento.dt_vencimento),
+                              "dt_pagamento": (p) => pagamento.dt_pagamento != null ? DateFormat('dd/MM/yyyy').format(pagamento.dt_pagamento!) : 'Nao Pago'
+                            },
                             getActions: (pagamento) {
                               return [
                                 WidgetComPermissao(
@@ -122,49 +134,6 @@ class _PagamentoViewState extends State<PagamentoView> {
             child: Icon(Icons.add),
           ),
         ]);
-  }
-  Widget _table(List<Pagamento> pagamentos){
-    return DataTable(
-        columns: [
-          DataColumn(label: Text("ID", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Fornecedor", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Valor", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Data Vencimento", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Data Pagamento", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-          DataColumn(label: Text("Açoes", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold))),
-        ],
-        rows: pagamentos.map((pagamento) {
-          return DataRow(cells: [
-            DataCell(Text(pagamento.id.toString())),
-            DataCell(Text(pagamento.fornecedor.nome)),
-            DataCell(Text(NumberFormat.currency(
-              locale: 'pt_BR',
-              symbol: 'R\$',
-              decimalDigits: 2,
-            ).format(pagamento.valor))),
-            DataCell(Text(DateFormat('dd/MM/yyyy').format(pagamento.dt_vencimento))),
-              DataCell(Text(pagamento.dt_pagamento != null ? DateFormat('dd/MM/yyyy').format(pagamento.dt_pagamento!): 'Nao Pago')),
-            DataCell(Row(
-              children: [
-                IconButton(
-                    icon: Icon(Icons.delete),
-                    tooltip: 'Deletar',
-                    onPressed: () async {
-                      await _pagamentoViewModel.deletePagamento
-                          .execute(pagamento.id!);
-                      _pagamentoViewModel.getPagamentos.execute();
-                    }),
-                if (pagamento.dt_pagamento == null)
-                IconButton(
-                    icon: Icon(Icons.check),
-                    tooltip: 'Pagar',
-                    onPressed: () async {
-                      _selecionarData(context, pagamento);
-                    }),
-              ],
-            )),
-          ]);
-        }).toList());
   }
 
   Future<void> _selecionarData(BuildContext context, Pagamento pagamento) async {

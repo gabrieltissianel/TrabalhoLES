@@ -46,11 +46,15 @@ class CompraProdutoViewModel extends ChangeNotifier{
   }
 
   AsyncResult<CompraProduto> _addProduto(int idcompra, int idproduto, {double? qtde}) async {
-    return _compraProdutoService.addProduto(idcompra, idproduto, qtde: qtde);
+    return _compraProdutoService.addProduto(idcompra, idproduto, qtde: qtde).onSuccess((onSuccess) => getCompra.execute(idcompra));
   }
 
   AsyncResult<String> _removeProduto(int idcompra, int idproduto) async {
-    return _compraProdutoService.removeProduto(idcompra, idproduto);
+    return _compraProdutoService.removeProduto(idcompra, idproduto).onSuccess((onSuccess) => getCompra.execute(idcompra));
+  }
+
+  AsyncResult<CompraProduto> updateProduto(CompraProduto compraProduto) async {
+    return _compraProdutoService.updateProduto(compraProduto).onSuccess((onSuccess) => getCompra.execute(compraProduto.idComposto.idCompra));
   }
 
   double total(Compra compra) {
