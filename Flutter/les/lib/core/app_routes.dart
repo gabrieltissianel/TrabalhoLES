@@ -22,7 +22,7 @@ import 'package:les/view/widgets/app_layout.dart';
 
 
 class AppRoutes {
-  static const String home = '/';
+  static const String home = '/entrada';
   static const String fornecedores = '/fornecedor';
   static const String pagamentos = '/pagamento';
   static const String login = '/login';
@@ -46,8 +46,11 @@ final userProvider = injector<LoginViewModel>();
 
 final GoRouter router = GoRouter(
   refreshListenable: userProvider,
-  redirect: (BuildContext context, GoRouterState state) {
-    if (!userProvider.isLoggedIn) {
+  redirect: (BuildContext context, GoRouterState state) async {
+
+    var user = userProvider.user;
+
+    if (user == null) {
       return AppRoutes.login;
     }
 
@@ -57,7 +60,7 @@ final GoRouter router = GoRouter(
       return null;
     }
 
-    List<Permissao> permissoes = userProvider.user!.permissoes;
+    List<Permissao> permissoes = user.permissoes;
 
     for (Permissao permissao in permissoes) {
       if (uri.startsWith(permissao.tela.nome)) {

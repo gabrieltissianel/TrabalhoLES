@@ -34,8 +34,8 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
     super.initState();
     _compraProdutoViewModel.getCompra.execute(widget.compraId);
     _compraProdutoViewModel.getProdutos.execute();
-    _compraProdutoViewModel.getPeso.execute();
-    //_timer = Timer.periodic(Duration(milliseconds: 500), (timer) => _compraProdutoViewModel.getPeso.execute());
+    //_compraProdutoViewModel.getPeso.execute();
+    _timer = Timer.periodic(Duration(milliseconds: 500), (timer) => _compraProdutoViewModel.getPeso.execute());
   }
 
   @override
