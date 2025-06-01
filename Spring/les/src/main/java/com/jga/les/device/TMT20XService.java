@@ -32,8 +32,10 @@ public class TMT20XService {
     private OutputStream outputStream;
     private TMT20XPrinter printer;
     private NumberFormat formatter = new DecimalFormat("#0.00");     
+    private static final String PORTA_SERIAL = "/dev/usb/lp1"; // Altere conforme necessário
 
     public TMT20XService(ClienteRepository clienteRepository){
+        
         try {
             outputStream.close();
         } catch (Exception e) {
@@ -41,8 +43,9 @@ public class TMT20XService {
         }
         
         try {
-            this.outputStream = new FileOutputStream("/dev/usb/lp0");
+            this.outputStream = new FileOutputStream(PORTA_SERIAL);
             this.printer = new TMT20XPrinter(outputStream);
+            logger.info("TMT20xPrinter inicializada na porta: {}", PORTA_SERIAL);
         } catch (Exception e) {
             logger.error("Erro ao inicializar TMT20XService: {}", e.getMessage());  
         }
@@ -79,7 +82,7 @@ public class TMT20XService {
             printer.setUnderline(false);
             printer.setBold(false); // Sem negrito
             //titulo
-            printer.setAlignment(1); // Alinhamento à esquerda
+            printer.setAlignment(1); // Alinhamento centralizado
             printer.setFontSize(2, 2); // Tamanho normal
             printer.setInverseColors(true);
             printer.printText(" Comprovante da Compra \n\n");
@@ -89,9 +92,13 @@ public class TMT20XService {
             printer.setAlignment(0); // Alinhamento à esquerda
             printer.setFontSize(1, 1); // Tamanho normal
             printer.setBold(false); // Sem negrito
+            
             printer.printText("Cliente: " + cliente.getNome() + "\n");
             printer.printText("Produtos:\n");
-            
+
+            printer.setAlignment(1); // Alinhamento à esquerda
+            printer.printText("Nome\tPreco\tQntd\tTotal");
+            printer.setAlignment(0); // Alinhamento à esquerda
             if(produtos.isEmpty()){
                 printer.printText("N/A.\n");
             }else{
