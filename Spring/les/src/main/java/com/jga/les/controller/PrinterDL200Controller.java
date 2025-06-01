@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jga.les.device.PrinterDL200Device;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/printerdl200")
 public class PrinterDL200Controller {
@@ -27,10 +24,10 @@ public class PrinterDL200Controller {
 
     @PostMapping("/barcode")
     @PreAuthorize("hasAuthority(#root.this.getNomeTela(''))")
-    public ResponseEntity<String> teste(@RequestParam String data, @RequestParam PrinterDL200Device.BarcodeType type) {
-        System.out.println("Imprimindo código de barras: " + data + " com tipo: " + type);
+    public ResponseEntity<String> teste(@RequestParam String data, @RequestParam Integer qntd) {
+        System.out.println("Imprimindo código de barras: " + data + " com tipo: " + qntd);
         try {
-            printerDL200Device.printBarcode(data, type);
+            printerDL200Device.imprimirCodigoBarras(data, qntd);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Erro ao imprimir código de barras: " + e.getMessage());
