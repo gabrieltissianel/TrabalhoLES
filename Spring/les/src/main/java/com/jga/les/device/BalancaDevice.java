@@ -15,11 +15,11 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 import jakarta.annotation.PreDestroy;
 
 @Component
-public class BalancaService {
+public class BalancaDevice {
     private static SerialPort serialPort;
     private static String portName = "/dev/ttyUSB"; 
     private static boolean portaAberta = false;
-    private static final Logger logger = LoggerFactory.getLogger(BalancaService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BalancaDevice.class);
     private static Double ultimoPeso; // Armazena o último peso
 
     static {

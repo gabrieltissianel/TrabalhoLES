@@ -1,6 +1,6 @@
 package com.jga.les.controller;
 
-import com.jga.les.device.BalancaService;
+import com.jga.les.device.BalancaDevice;
 import com.jga.les.model.*;
 import com.jga.les.service.CompraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class CompraProdutoController extends GenericController<CompraProduto, Co
     CompraService compraService;
 
     @Autowired
-    BalancaService balancaService;
+    BalancaDevice balancaService;
 
     public CompraProdutoController(GenericService<CompraProduto, CompraProdutoKey> genericApplication) {
         super("/compraproduto", genericApplication);

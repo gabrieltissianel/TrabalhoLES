@@ -1,14 +1,10 @@
 package com.jga.les.device;
 
-import com.fazecast.jSerialComm.*;
 import com.jga.les.service.ProdutoService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -17,19 +13,12 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 
-import java.io.OutputStream;
-
 @Component
 public class PrinterDL200Device {
-    private OutputStream printerStream;
     private static final String NOME_IMPRESSORA = "Tally Dascom DL-200Z (Copiar 1)"; // Nome da impressora, se necessário
     @Autowired
     private ProdutoService produtoService;
-    private SerialPort serialPort;
     private PrintService impressora = null;
-
-    private static final String PORTA_SERIAL = "/dev/usb/lp0"; // Altere conforme necessário
-    private static final Logger logger = LoggerFactory.getLogger(PrinterDL200Device.class);
 
     @PostConstruct
     public void init() {

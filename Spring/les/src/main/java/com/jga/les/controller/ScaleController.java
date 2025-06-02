@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jga.les.device.BalancaService;
+import com.jga.les.device.BalancaDevice;
 
 @RestController
 @RequestMapping("/balanca")
@@ -17,7 +17,7 @@ public class ScaleController {
     //c15 - 9600
     //c16 - L
     @Autowired
-    private BalancaService serialService;
+    private BalancaDevice serialService;
 
     @GetMapping("/peso")
     public ResponseEntity<Double> getUltimoPeso() {
@@ -44,7 +44,7 @@ public class ScaleController {
 
     @PostMapping("/open-port")
     public ResponseEntity<String> openPort() {
-        if(BalancaService.init()) {
+        if(BalancaDevice.init()) {
             return ResponseEntity.ok("Porta serial aberta com sucesso");
         }
         else {
