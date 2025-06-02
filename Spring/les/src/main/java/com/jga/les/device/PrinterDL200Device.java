@@ -17,7 +17,6 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 @Component
@@ -56,29 +55,7 @@ public class PrinterDL200Device {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // try {
-        //     printerStream = new FileOutputStream(PORTA_SERIAL);
-        //     System.out.println("Conectado à impressora: " + PORTA_SERIAL);
-            // serialPort = SerialPort.getCommPort(PORTA_SERIAL);
-            // serialPort.setBaudRate(9600);
-            // serialPort.setNumDataBits(8);
-            // serialPort.setNumStopBits(1);
-            // serialPort.setParity(SerialPort.NO_PARITY);
-
-            // if (serialPort.openPort(1000)) { // Timeout de 1 segundo
-            //     logger.info("Conectado à impressora DL-200 na porta: {}", PORTA_SERIAL);
-            // } else {
-            //     logger.error("Falha ao conectar na DL-200 na porta: {}", PORTA_SERIAL);
-            // }
-        // } catch (Exception e) {
-        //     System.err.println("Erro na inicialização da impressora: " + e.getMessage());
-        // }
     }
-
-    //private void sendCommand(byte[] command) throws Exception {
-    //    printerStream.write(command);
-    //    printerStream.flush();
-    //}
 
     private void imprimirLinha(String codigo, int quantidade, String nomeProduto){
         StringBuilder zpl = new StringBuilder("^XA\n");
@@ -141,19 +118,5 @@ public class PrinterDL200Device {
             imprimirLinha(codigo, 3, nomeProduto);
         }
         imprimirLinha(codigo, col_restante, nomeProduto);
-    }
-
-    @PreDestroy
-    public void cleanup() {
-        try {
-            if (printerStream != null) {
-                printerStream.close();
-                System.out.println("Conexão fechada");
-            }
-        } catch (Exception e) {
-            System.err.println("Erro ao fechar conexão: " + e.getMessage());
-        } finally {
-            printerStream = null;
-        }
     }
 }
