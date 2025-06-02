@@ -7,6 +7,7 @@ import com.jga.les.model.CompraProduto;
 import com.jga.les.repository.CompraRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CompraService extends GenericService<Compra, Long> {
     @Autowired
     TMT20XService tmt20XService;
 
-    public CompraService(JpaRepository<Compra, Long> objRepository) {
+    public CompraService(@Qualifier("compraRepository") JpaRepository<Compra, Long> objRepository) {
         super(objRepository, Compra.class);
     }
 
