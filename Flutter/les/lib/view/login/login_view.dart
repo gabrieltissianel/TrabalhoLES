@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
 import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
@@ -32,7 +33,7 @@ class _LoginState extends State<LoginView>{
         context.go(AppRoutes.home);
       } else if (_loginViewModel.login.isFailure){
         final error = _loginViewModel.login.value as FailureCommand;
-        MensagemAlerta(context, error.error.toString());
+        MensagemAlerta(context, (error.error as DioException).response?.data);
       }
     }
   }

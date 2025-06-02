@@ -15,7 +15,7 @@ class AuthService {
       final json = await _dio.post(Endpoints.login, data: credentials.toJson());
       return Success(Usuario.fromJson(json.data));
     } catch (e) {
-      return Failure(Exception(e.toString()));
+      return Failure(e as DioException);
     }
   }
 
