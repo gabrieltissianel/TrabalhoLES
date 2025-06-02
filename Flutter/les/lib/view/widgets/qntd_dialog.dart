@@ -7,6 +7,7 @@ class QuantityEditDialog {
   final int minQuantity;
   final int? maxQuantity;
   final Function(int) onSave;
+  final String title;
 
   QuantityEditDialog({
     required this.context,
@@ -14,6 +15,7 @@ class QuantityEditDialog {
     this.initialQuantity = 1,
     this.minQuantity = 1,
     this.maxQuantity,
+    this.title = 'Editar quantidade'
   });
 
   Future<void> show() async {
@@ -31,7 +33,7 @@ class QuantityEditDialog {
             );
 
             return AlertDialog(
-              title: const Text('Editar quantidade'),
+              title: Text(title),
               content: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
