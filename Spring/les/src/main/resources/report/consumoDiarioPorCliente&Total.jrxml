@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="consumoDiarioPorCliente&amp;Total" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ced95029-b569-4027-895c-af2843a4e088">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LES"/>
+	<style name="Title" fontSize="50" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="SansSerif" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="SansSerif" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="SansSerif" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="ConsumoDiarioTotal" uuid="d5d15a00-2b5c-4ae6-98eb-b489d9adda27">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LES"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT SUM(compra_produto.preco * compra_produto.qntd) AS "VALOR_TOTAL",
+	CAST(compra.saida AS DATE)
+FROM compra_produto
+	INNER JOIN compra ON compra_produto.compra_id = compra.id
+WHERE COMPRA.SAIDA IS NOT NULL
+GROUP BY CAST(compra.saida AS DATE)
+ORDER BY CAST(compra.saida AS DATE)]]>
+		</queryString>
+		<field name="VALOR_TOTAL" class="java.lang.Double">
+			<property name="com.jaspersoft.studio.field.name" value="VALOR_TOTAL"/>
+			<property name="com.jaspersoft.studio.field.label" value="VALOR_TOTAL"/>
+		</field>
+		<field name="saida" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="saida"/>
+			<property name="com.jaspersoft.studio.field.label" value="saida"/>
+		</field>
+	</subDataset>
+	<subDataset name="ConsumoDiarioCliente" uuid="8bb5ff34-17cf-42fd-9bf4-9d7ae422fa09">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LES"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT CLIENTE.NOME, 
+	SUM(compra_produto.preco * compra_produto.qntd) AS "VALOR_TOTAL",
+	CAST(compra.saida AS DATE)
+FROM compra_produto
+	INNER JOIN compra ON compra_produto.compra_id = compra.id 
+	LEFT JOIN CLIENTE ON CLIENTE.id = compra.cliente_id
+WHERE COMPRA.SAIDA IS NOT NULL
+GROUP BY CAST(compra.saida AS DATE), CLIENTE.NOME
+ORDER BY CAST(compra.saida AS DATE)]]>
+		</queryString>
+		<field name="nome" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nome"/>
+			<property name="com.jaspersoft.studio.field.label" value="nome"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+		</field>
+		<field name="VALOR_TOTAL" class="java.lang.Double">
+			<property name="com.jaspersoft.studio.field.name" value="VALOR_TOTAL"/>
+			<property name="com.jaspersoft.studio.field.label" value="VALOR_TOTAL"/>
+		</field>
+		<field name="saida" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="saida"/>
+			<property name="com.jaspersoft.studio.field.label" value="saida"/>
+		</field>
+	</subDataset>
+	<queryString language="SQL">
+		<![CDATA[SELECT CLI.ID, CLI.NOME, 
+	(CAST(COM.saida AS DATE)), 
+	SUM(CP.preco*CP.qntd) AS "PRECO", 
+	SUM(CP.qntd) AS "QUANTIDADE", 
+	(SELECT SUM(PRECO*QNTD) 
+		FROM compra_produto
+		LEFT JOIN COMPRA ON COMPRA.id = compra_produto.compra_id
+		WHERE CAST(COMPRA.SAIDA AS DATE) = CAST(COM.SAIDA AS DATE)
+		GROUP BY CAST(COM.SAIDA AS DATE)) AS "TOTAL_DO_DIA"
+FROM CLIENTE CLI
+RIGHT JOIN COMPRA COM ON CLI.ID=COM.cliente_id
+LEFT JOIN compra_produto CP ON CP.compra_id = COM.id
+WHERE COM.saida IS NOT NULL 
+GROUP BY COM.saida, CLI.ID]]>
+	</queryString>
+	<field name="id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="saida" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="saida"/>
+		<property name="com.jaspersoft.studio.field.label" value="saida"/>
+	</field>
+	<field name="PRECO" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="PRECO"/>
+		<property name="com.jaspersoft.studio.field.label" value="PRECO"/>
+	</field>
+	<field name="QUANTIDADE" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="QUANTIDADE"/>
+		<property name="com.jaspersoft.studio.field.label" value="QUANTIDADE"/>
+	</field>
+	<field name="TOTAL_DO_DIA" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="TOTAL_DO_DIA"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTAL_DO_DIA"/>
+	</field>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{saida}]]></groupExpression>
+		<groupHeader>
+			<band height="37">
+				<frame>
+					<reportElement mode="Opaque" x="-21" y="7" width="597" height="30" forecolor="#B89F7D" backcolor="#F2EBDF" uuid="df26104b-a7fc-458f-8a21-50b13c7c7736"/>
+					<rectangle>
+						<reportElement mode="Opaque" x="21" y="0" width="47" height="30" backcolor="#736343" uuid="369745f3-8095-4b8b-8b7a-38e42b7aef67"/>
+						<graphicElement>
+							<pen lineWidth="0.0"/>
+						</graphicElement>
+					</rectangle>
+					<textField>
+						<reportElement style="SubTitle" x="68" y="0" width="413" height="30" forecolor="#736343" uuid="ef0a10c7-2940-4ac1-a69e-db1a00ae6f2e"/>
+						<textElement>
+							<font isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{saida})]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[$F{TOTAL_DO_DIA}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField>
+					<reportElement style="SubTitle" x="0" y="4" width="460" height="25" uuid="a1225b1f-5af9-4289-9f7a-1ad488bea9f4"/>
+					<textElement>
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total do Dia: "+$F{TOTAL_DO_DIA}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="136" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="1" y="0" width="554" height="70" uuid="1a652692-054a-40f3-ade5-68d8da36626d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Consumo Diário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="127" y="80" width="322" height="30" uuid="88d4231e-f014-4b0d-b871-1737ba63a1ae"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Consumo Diário e Total dos Clientes]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="1a61a836-d137-48b1-ad67-6ff64600bf93"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="138" height="15" forecolor="#736343" uuid="6032325b-d829-4d08-a5e3-70cdfdcfc5bb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a404fe45-b8c0-4a6d-82a0-1a2e38d41dc8"/>
+				</reportElement>
+				<text><![CDATA[id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="138" y="0" width="138" height="15" forecolor="#736343" uuid="ca43973a-4d6c-4da4-b76b-e37e1360a8c7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="321052b7-74eb-4658-b042-f92681b55941"/>
+				</reportElement>
+				<text><![CDATA[nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="276" y="0" width="138" height="15" forecolor="#736343" uuid="37750021-5dc6-48f8-8602-de5a5b90ced6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2a90146c-12e7-4f44-9078-bf0af453ddb3"/>
+				</reportElement>
+				<text><![CDATA[PRECO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="414" y="0" width="138" height="15" forecolor="#736343" uuid="f23b44bc-45d4-40fb-bb62-b718fec5505d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5f093384-2437-4928-96fe-b24e77024f6f"/>
+				</reportElement>
+				<text><![CDATA[QUANTIDADE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="15" uuid="a98495d8-3c8d-4fa0-81f5-30c3efc2f766"/>
+				<textField textAdjust="StretchHeight">
+					<reportElement style="Detail" x="0" y="0" width="138" height="22" uuid="9ef3df28-40d5-44f8-b828-f63be40a4ff2">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a404fe45-b8c0-4a6d-82a0-1a2e38d41dc8"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight">
+					<reportElement style="Detail" x="138" y="0" width="138" height="22" uuid="664ae8e0-a8d8-40b0-8f00-961e82909eb5">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="321052b7-74eb-4658-b042-f92681b55941"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight">
+					<reportElement style="Detail" x="276" y="0" width="138" height="22" uuid="132ecf7c-91c5-4e86-a14a-be729ec9679d">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2a90146c-12e7-4f44-9078-bf0af453ddb3"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{PRECO}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight">
+					<reportElement style="Detail" x="414" y="0" width="138" height="22" uuid="1a2014e5-71c2-4fd3-8e25-a24bd34dd288">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5f093384-2437-4928-96fe-b24e77024f6f"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{QUANTIDADE}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="34" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="fa45a887-615a-4d84-a2d7-8a2219671b3c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-21" y="1" width="597" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="183682bc-d976-4756-83e0-6625a3f98ed1"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="533" y="0" width="40" height="20" forecolor="#736343" uuid="0193f9b3-1559-491a-8580-b6988863b6a1"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="453" y="0" width="80" height="20" forecolor="#736343" uuid="d00b105e-494b-418b-8ac9-8b1b4824f4f0"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343" uuid="0616f3fe-0354-456f-8911-ec30ec51a5ae"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="580" splitType="Stretch">
+			<lineChart>
+				<chart evaluationTime="Report">
+					<reportElement x="2" y="60" width="553" height="259" uuid="521b99e2-a12d-4d06-87cc-4794ab6afa6c"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="ConsumoDiarioTotal" uuid="d8e4f6b7-2c70-4707-a0ae-ca5d9f9f2280">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["CONSUMO TOTAL"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{saida}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{VALOR_TOTAL}]]></valueExpression>
+						<labelExpression><![CDATA[$F{saida}.toString()]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<linePlot>
+					<plot/>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+				</linePlot>
+			</lineChart>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="340" width="555" height="1" uuid="455b4984-ab0a-4b74-8ef9-9aa31b7fbefb"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<barChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="380" width="555" height="200" uuid="382a9ae0-b90d-40b2-a911-0e4478b414ed"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="ConsumoDiarioCliente" uuid="754614ae-8dbe-48e9-b563-5d7963ad10fd">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{nome}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{saida}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{VALOR_TOTAL}]]></valueExpression>
+						<labelExpression><![CDATA[$F{nome}]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<staticText>
+				<reportElement x="80" y="34" width="399" height="30" uuid="62b5e4cb-168b-47f5-965a-f6514752e34a"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Consumo Diário Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="350" width="399" height="30" uuid="e6f4484a-389a-4fb3-b1c1-d59644234ab2"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Consumo Diário por Cliente]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

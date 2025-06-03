@@ -143,5 +143,4 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
 
     @Query("SELECT c FROM Cliente c WHERE c.id = :id")
     Cliente findClienteById(@Param("id") Long id);  // corrigido Gabriel
-
 }

@@ -46,6 +46,7 @@ public class SecurityConfiguration {
             "/fornecedor/**",
             "/balanca/**",
             "/tmt20x/**",
+            "/relatorios/**",
             "/printerdl200/**",
     };
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jga.les.dtos.ConsumoClienteDto;
 import com.jga.les.repository.ClienteRepository;
 import com.jga.les.repository.FornecedorRepository;
+import com.jga.les.repository.RelatorioRepository;
 import com.jga.les.service.JasperReportService;
 
 import net.sf.jasperreports.engine.JRException;
@@ -31,6 +32,8 @@ public class JasperReportController {
     FornecedorRepository fornecedorRepository;
 
     ClienteRepository clienteRepository;
+
+    RelatorioRepository relatorioRepository;
 
     private ResponseEntity<Resource> sendFile(byte[] reportContent, String fileName) {
         ByteArrayResource resource = new ByteArrayResource(reportContent);
@@ -48,7 +51,7 @@ public class JasperReportController {
     public ResponseEntity<Resource> reportFornecedores() {
         byte[] reportContent;
         try {
-            reportContent = jasperReportService.getRelatorio(fornecedorRepository.findAll(), "fornecedor", "Fornecedores");
+            reportContent = jasperReportService.getRelatorio("fornecedor", "Fornecedores");
         } catch (JRException | IOException e) {
             System.out.println("Error generating report: " + e.getMessage());
             return ResponseEntity.badRequest().body(null);
@@ -62,7 +65,7 @@ public class JasperReportController {
     public ResponseEntity<Resource> reportAniversariantes() {
         byte[] reportContent;
         try {
-            reportContent = jasperReportService.getRelatorio(clienteRepository.findByAniversario(), "aniversario", "Aniversariantes");
+            reportContent = jasperReportService.getRelatorio("aniversario", "Aniversariantes");
         } catch (JRException e) {
             System.out.println("Erro de compilação: " + e.getMessage());
             return ResponseEntity.badRequest().body(null);
@@ -81,7 +84,7 @@ public class JasperReportController {
         List<ConsumoClienteDto> consumoClienteDto = clienteRepository.findByConsumoTotalPorCliente();
         System.out.println(consumoClienteDto.get(0));
         try {
-            reportContent = jasperReportService.getRelatorio(clienteRepository.findByConsumoTotalPorCliente(), "consumoporcliente", "Consumo Total por Cliente");
+            reportContent = jasperReportService.getRelatorio("consumoporcliente", "Consumo Total por Cliente");
         } catch (JRException e) {
             System.out.println("Erro de compilação: " + e.getMessage());
             return ResponseEntity.badRequest().body(null);
@@ -98,7 +101,7 @@ public class JasperReportController {
     public ResponseEntity<Resource> reportClientesNegativos() {
         byte[] reportContent;
         try {
-            reportContent = jasperReportService.getRelatorio(clienteRepository.findByClientesDevedores(), "clientenegativado", "Clientes Negativados");
+            reportContent = jasperReportService.getRelatorio("clientenegativado", "Clientes Negativados");
         } catch (JRException e) {
             System.out.println("Erro de compilação: " + e.getMessage());
             return ResponseEntity.badRequest().body(null);
@@ -111,11 +114,12 @@ public class JasperReportController {
         return sendFile(reportContent, "cliente_negativado.pdf");
     }
 
-    @GetMapping("/compradiaria")
-    public ResponseEntity<Resource> reportCompraDiaria() {
+    @GetMapping("/consumodiarioporcliente")
+    public ResponseEntity<Resource> reportConsumoDiarioPorCliente() {
         byte[] reportContent;
         try {
-            reportContent = jasperReportService.getRelatorio(clienteRepository.findByClientesDevedores(), "clientenegativado", "Clientes Negativados");
+            reportContent = jasperReportService.getRelatorio("consumoDiarioPorCliente&Total", "Consumo Diário por Cliente");
+            System.out.println("\n\n\n--Relatório gerado com sucesso--\n"+reportContent.length+" bytes\n\n\n");
         } catch (JRException e) {
             System.out.println("Erro de compilação: " + e.getMessage());
             return ResponseEntity.badRequest().body(null);
@@ -125,6 +129,6 @@ public class JasperReportController {
         }
         // System.out.println(resource+" resource");
 
-        return sendFile(reportContent, "cliente_negativado.pdf");
+        return sendFile(reportContent, "consumoPorCliente&Total.pdf");
     }
 }
