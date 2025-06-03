@@ -15,7 +15,17 @@ class CompraProdutoService {
     dio.options.headers['Authorization'] = 'Bearer $token';
   }
 
+  AsyncResult<CompraProduto> updateProduto(CompraProduto compraProduto) async {
+    try{
+      final response = await dio.put('${Endpoints.baseUrl}/compraproduto/edit', data: compraProduto.toJson());
+      return Success(CompraProduto.fromJson(response.data));
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
   AsyncResult<CompraProduto> addProduto(int idCompra, int idProduto, {double? qtde}) async {
+    refreshToken();
     try{
       Map<String, dynamic> key = {
         'id': {
@@ -32,14 +42,13 @@ class CompraProdutoService {
   }
 
   AsyncResult<String> removeProduto(int idCompra, int idProduto) async {
+    refreshToken();
     try{
-      Map<String, Map<String, int>> key = {
-        'id': {
+      Map<String, int> key = {
           'idcompra': idCompra,
           'idproduto': idProduto
-        }
       };
-      final response = await dio.post('${Endpoints.baseUrl}/compraproduto/add', data: key);
+      final response = await dio.delete('${Endpoints.baseUrl}/compraproduto/del', data: key);
       return Success(response.data);
     } catch (e) {
       return Failure(Exception(e.toString()));

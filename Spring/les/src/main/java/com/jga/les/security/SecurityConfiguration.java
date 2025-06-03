@@ -79,6 +79,7 @@ public class SecurityConfiguration {
 
         // Permitir origens do frontend (ajuste para sua URL)
         config.setAllowedOrigins(List.of(
+                "http://localhost:8080/swagger-ui/index.html",
                 "http://localhost:4020"          // Exemplo para Flutter Web
         ));
 

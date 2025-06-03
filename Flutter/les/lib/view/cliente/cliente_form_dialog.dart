@@ -25,6 +25,7 @@ class _UserFormDialogState extends State<ClienteFormDialog> {
   );
 
   final TextEditingController _nomeController = TextEditingController();
+  final TextEditingController _cartaoController = TextEditingController();
   final TextEditingController _dataController = TextEditingController();
 
   DateTime? _dataSelecionada;
@@ -36,6 +37,7 @@ class _UserFormDialogState extends State<ClienteFormDialog> {
       _nomeController.text = widget.cliente!.nome;
       _limiteController.text = widget.cliente!.limite.toString();
       _dataSelecionada = widget.cliente!.dtNascimento;
+      _cartaoController.text = widget.cliente!.cartao!;
       _dataController.text = DateFormat('dd/MM/yyyy').format(_dataSelecionada!);
     }
   }
@@ -45,12 +47,14 @@ class _UserFormDialogState extends State<ClienteFormDialog> {
       if (widget.cliente == null){
         double valor = _limiteController.numberValue;
         String nome = _nomeController.text;
-        Cliente cliente = Cliente(dtNascimento: _dataSelecionada!, limite: valor, nome: nome);
+        String cartao = _cartaoController.text;
+        Cliente cliente = Cliente(dtNascimento: _dataSelecionada!, cartao: cartao, limite: valor, nome: nome);
         await clienteViewModel.addCliente.execute(cliente);
       } else {
         Cliente cliente = widget.cliente!;
         cliente.nome = _nomeController.text;
         cliente.limite = _limiteController.numberValue;
+        cliente.cartao = _cartaoController.text;
         cliente.dtNascimento = _dataSelecionada!;
         await clienteViewModel.updateCliente.execute(cliente);
       }
@@ -91,7 +95,17 @@ class _UserFormDialogState extends State<ClienteFormDialog> {
                 border: OutlineInputBorder(),
               ),
               validator: (value) =>
-              value!.isEmpty ? "O nome não pode estar vazio" : null,
+              value!.isEmpty ? "Informe um nome" : null,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _cartaoController,
+              decoration: const InputDecoration(
+                labelText: "Numero Cartao",
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+              value!.isEmpty ? "Informe um numero de cartao" : null,
             ),
             const SizedBox(height: 16),
             TextFormField(

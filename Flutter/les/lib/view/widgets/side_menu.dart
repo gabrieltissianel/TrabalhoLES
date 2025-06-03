@@ -20,7 +20,7 @@ class _SideMenuState extends State<SideMenu> {
       label: Text('Home'),
     ),
     if (userProvider.user!.hasPermission("/compra"))
-    AppRoutes.compras: NavigationRailDestination(
+    AppRoutes.compraCartao: NavigationRailDestination(
       icon: Icon(Icons.shopping_cart_outlined),
       selectedIcon: Icon(Icons.shopping_cart),
       label: Text('Compras'),
@@ -49,6 +49,7 @@ class _SideMenuState extends State<SideMenu> {
         selectedIcon: Icon(Icons.account_circle),
         label: Text('Usuarios')
     ),
+    if (userProvider.user!.hasPermission(AppRoutes.relatorios))
     AppRoutes.relatorios : NavigationRailDestination(
         icon: Icon(Icons.bar_chart_outlined),
         selectedIcon: Icon(Icons.bar_chart),
@@ -77,12 +78,12 @@ class _SideMenuState extends State<SideMenu> {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.fornecedores);
     } else if (currentRoute.startsWith(AppRoutes.usuarios) || currentRoute.startsWith(AppRoutes.tela)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.usuarios);
-    } else if (currentRoute.startsWith(AppRoutes.clientes)) {
+    } else if (currentRoute.startsWith(AppRoutes.clientes) || currentRoute.startsWith(AppRoutes.historicoRecarga)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.clientes);
-    } else if (currentRoute.startsWith(AppRoutes.produtos)) {
+    } else if (currentRoute.startsWith(AppRoutes.produtos) || currentRoute.startsWith(AppRoutes.historicoProduto)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.produtos);
-    } else if (currentRoute.startsWith(AppRoutes.compras)) {
-      selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.compras);
+    } else if (currentRoute.startsWith(AppRoutes.compraCartao) || currentRoute.startsWith(AppRoutes.compras)){
+      selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.compraCartao);
     } else if (currentRoute.startsWith(AppRoutes.relatorios)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.relatorios);
     }

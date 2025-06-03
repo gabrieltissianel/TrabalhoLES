@@ -101,9 +101,7 @@ class _CompraViewState extends State<CompraView> {
                                       )
                                     ];
                                   },
-
                                   )
-
                           );
                         }
                       })

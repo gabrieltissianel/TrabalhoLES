@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/cliente/cliente.dart';
 import 'package:les/view/cliente/cliente_form_dialog.dart';
@@ -70,6 +72,16 @@ class _ClienteViewState extends State<ClienteView> {
                                                 );
                                               },
                                               icon: Icon(Icons.add_card))
+                                      ),
+                                      WidgetComPermissao(
+                                          permission: "/cliente",
+                                          delete: true,
+                                          child: IconButton(
+                                              icon: Icon(Icons.history),
+                                              onPressed: () {
+                                                context
+                                                    .go('${AppRoutes.historicoRecarga}/${cliente.id}');
+                                              })
                                       ),
                                       WidgetComPermissao(
                                           permission: "/cliente",

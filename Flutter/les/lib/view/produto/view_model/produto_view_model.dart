@@ -35,5 +35,8 @@ class ProdutoViewModel extends ChangeNotifier{
     return _produtoService.getById(id);
   }
 
+  AsyncResult<String> imprimirCodigoBarras(String codigo, int qtde) async {
+    return _produtoService.imprimirCodigoBarras(codigo, qtde);
+  }
 
 }

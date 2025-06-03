@@ -7,6 +7,7 @@ import 'package:les/model/produto/produto.dart';
 import 'package:les/view/produto/produto_form_dialog.dart';
 import 'package:les/view/produto/view_model/produto_view_model.dart';
 import 'package:les/view/widgets/custom_table.dart';
+import 'package:les/view/widgets/qntd_dialog.dart';
 import 'package:les/view/widgets/widget_com_permissao.dart';
 import 'package:result_command/result_command.dart';
 
@@ -57,6 +58,18 @@ class _ProdutoViewState extends State<ProdutoView> {
                                   },
                                   getActions: (produto) {
                                     return [
+                                      IconButton(
+                                          onPressed: () {
+                                            QuantityEditDialog(
+                                                minQuantity: 1,
+                                                initialQuantity: 1,
+                                                title: 'Imprimir etiqueta',
+                                                context: context,
+                                                onSave: (qntd) {
+                                                  _produtoViewModel.imprimirCodigoBarras(produto.codigo, qntd);
+                                                }).show();
+                                          },
+                                          icon: Icon(Icons.print)),
                                       WidgetComPermissao(
                                           permission: "/produto",
                                           edit: true,
@@ -90,8 +103,7 @@ class _ProdutoViewState extends State<ProdutoView> {
                                                     .execute(produto.id!);
                                                 _produtoViewModel.getProdutos.execute();
                                               })
-                                      )
-
+                                      ),
                                     ];
                                   })
 

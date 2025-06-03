@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:les/core/app_routes.dart';
 import 'package:les/core/injector.dart';
+import 'package:les/view/login/view_model/login_view_model.dart';
 
-void main() {
+
+
+void main() async {
   setupDependencies();
+  final userProvider = injector<LoginViewModel>();
+  await userProvider.isLoggedIn();
   runApp(MyApp());
 }
 

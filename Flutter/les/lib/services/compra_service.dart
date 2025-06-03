@@ -19,4 +19,13 @@ class CompraService extends GenericService<Compra> {
     }
   }
 
+  AsyncResult<Compra> getCompraByCartao(String cartao) async {
+    try{
+      final response = await dio.get('${Endpoints.baseUrl}/cliente/compraaberta/$cartao');
+      return Success(fromJson(response.data));
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
 }

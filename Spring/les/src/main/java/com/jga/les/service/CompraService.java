@@ -1,19 +1,19 @@
 package com.jga.les.service;
 
+import com.jga.les.device.TMT20XService;
 import com.jga.les.model.Cliente;
 import com.jga.les.model.Compra;
 import com.jga.les.model.CompraProduto;
 import com.jga.les.repository.CompraRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,29 +22,29 @@ public class CompraService extends GenericService<Compra, Long> {
     @Autowired
     ClienteService clienteService;
 
-    public CompraService(JpaRepository<Compra, Long> objRepository) {
+    @Autowired
+    TMT20XService tmt20XService;
+
+    public CompraService(@Qualifier("compraRepository") JpaRepository<Compra, Long> objRepository) {
         super(objRepository, Compra.class);
     }
 
     @Override
     public ResponseEntity<Compra> add(Compra obj) throws IllegalArgumentException, OptimisticLockingFailureException {
-        obj.setCliente(clienteService.findById(obj.getCliente().getId()).getBody());
-
         Cliente cliente = obj.getCliente();
-        Compra compraAberta = clienteService.findCompraAberta(cliente.getId()).getBody();
-        Double saldoAtualizado = cliente.getLimite() + cliente.getSaldo();
-
+        Compra compraAberta = ((ClienteService) clienteService).findCompraAberta(cliente.getId()).getBody();
         if (compraAberta != null) {
             // Se já existe uma compra aberta, não permite a criação de uma nova
             throw new RuntimeException("Cliente já possui uma compra aberta.");
         }
-        if(saldoAtualizado < 0) {
-            throw new RuntimeException("Cliente com saldo insuficiente.");
+        if (cliente.getUltimo_dia_negativado() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, 30);
+            Date vencimento = calendar.getTime();
+            if (cliente.getUltimo_dia_negativado().before(vencimento)) {
+                throw new RuntimeException("Cliente esta devendo a mais de 30 dias");
+            }
         }
-        if (cliente.getUltimo_dia_negativado() != null && passaramMaisDe30Dias(cliente.getUltimo_dia_negativado(), new Date())) {
-            throw new RuntimeException("Cliente negativado.");
-        }
-
         return super.add(obj);
     }
 
@@ -64,25 +64,18 @@ public class CompraService extends GenericService<Compra, Long> {
             compra.setCliente(cliente);
             compra.setSaida(hoje);
             objRepository.save(compra);
+
+            try {
+                tmt20XService.imprimirComprovanteCompra(compra);
+            } catch (Exception e) {
+
+            }
+
             return compra;
 
         } else {
             throw new RuntimeException("Compra ja concluida.");
         }
-    }
-
-    private boolean passaramMaisDe30Dias(Date dataAntiga, Date dataAtual) {
-        // Converter Date para LocalDate
-        LocalDate localDataAntiga = dataAntiga.toInstant()
-                                    .atZone(ZoneId.systemDefault())
-                                    .toLocalDate();
-        LocalDate localDataAtual = dataAtual.toInstant()
-                                    .atZone(ZoneId.systemDefault())
-                                    .toLocalDate();
-        
-        // Calcular diferença em dias
-        long dias = ChronoUnit.DAYS.between(localDataAtual,localDataAntiga);
-        return dias >= 30;
     }
 
 }

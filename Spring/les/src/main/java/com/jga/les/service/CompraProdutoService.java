@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CompraProdutoService extends GenericService<CompraProduto, CompraProdutoKey> {
-    @Autowired
-    ProdutoService produtoService;
-    @Autowired
-    CompraService compraService;
 
     public CompraProdutoService(JpaRepository<CompraProduto, CompraProdutoKey> objRepository) {
         super(objRepository, CompraProduto.class);
@@ -25,6 +21,18 @@ public class CompraProdutoService extends GenericService<CompraProduto, CompraPr
 
     public ResponseEntity<CompraProduto> findByCompraProdutoKey(CompraProdutoKey compraProdutoKey) {
         return ResponseEntity.ok(((CompraProdutoRepository) objRepository).findById(compraProdutoKey).get());
+    }
+
+    public ResponseEntity<CompraProduto> updateWithBody(CompraProduto obj) {
+        CompraProdutoRepository repo = (CompraProdutoRepository) objRepository;
+        repo.findById(obj.getId()).orElseThrow(() -> new RuntimeException("Produto nao encontrado"));
+
+        if (obj.getQntd() <= 0){
+            repo.delete(obj);
+            return ResponseEntity.ok(obj);
+        }
+
+        return ResponseEntity.ok(repo.save(obj));
     }
 
     @Override

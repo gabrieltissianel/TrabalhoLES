@@ -50,4 +50,12 @@ public class Compra {
         }
         return total;
     }
+
+    static public double getTotalStatic(Compra compra){
+        double total = 0;
+        for (CompraProduto compraProduto : compra.getCompraProdutos()){
+            total += compraProduto.getPreco() * compraProduto.getQntd();
+        }
+        return total;
+    }
 }

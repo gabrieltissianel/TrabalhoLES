@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +11,8 @@ import 'package:les/model/compra/compra_produto.dart';
 import 'package:les/model/produto/produto.dart';
 import 'package:les/view/compra/view_model/compra_produto_view_model.dart';
 import 'package:les/view/widgets/custom_table.dart';
+import 'package:les/view/widgets/qntd_dialog.dart';
+import 'package:les/view/widgets/toast.dart';
 import 'package:result_command/result_command.dart';
 
 class CompraProdutoView extends StatefulWidget {
@@ -22,13 +26,22 @@ class CompraProdutoView extends StatefulWidget {
 
 class _CompraProdutoViewState extends State<CompraProdutoView> {
   final _compraProdutoViewModel = injector.get<CompraProdutoViewModel>();
+  late Timer _timer;
+  double? _peso;
 
   @override
   void initState() {
     super.initState();
     _compraProdutoViewModel.getCompra.execute(widget.compraId);
     _compraProdutoViewModel.getProdutos.execute();
-    _compraProdutoViewModel.getPeso.execute();
+    //_compraProdutoViewModel.getPeso.execute();
+    _timer = Timer.periodic(Duration(milliseconds: 500), (timer) => _compraProdutoViewModel.getPeso.execute());
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -60,7 +73,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
               child: Card(
                 elevation: 4,
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(30.0),
                   child: _form(), // Removida a Column extra
                 ),
               ),
@@ -72,9 +85,9 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
 
   _form() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-
-          ListenableBuilder(
+          ListenableBuilder( // preço total
               listenable: _compraProdutoViewModel.getCompra,
               builder: (context, child) {
                 if (_compraProdutoViewModel.getCompra.isRunning) {
@@ -87,7 +100,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                   final success = _compraProdutoViewModel.getCompra
                       .value as SuccessCommand;
                   var compra = success.value as Compra;
-                  return Text("Total: ${_compraProdutoViewModel.total(compra)}",
+                  return Text("Total: ${_formatCurrency(_compraProdutoViewModel.total(compra))}",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
                   );
                 }
@@ -100,7 +113,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
               Expanded(
                 flex: 2,
                 child:
-                TextField(
+                TextField( // pesquisa produto
                   controller: _compraProdutoViewModel.pesquisarController,
                   autofocus: true,
                   focusNode: _compraProdutoViewModel.pesquisarFocusNode,
@@ -110,7 +123,11 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                   ),
                   onSubmitted: (value) async {
                     await _compraProdutoViewModel.pesquisar.execute();
-                    FocusScope.of(context).requestFocus(_compraProdutoViewModel.pesquisarFocusNode);
+                    if (_compraProdutoViewModel.pesquisar.isFailure){
+                      final res = _compraProdutoViewModel.pesquisar.value as FailureCommand;
+                      MensagemAlerta(context, res.error.toString());
+                    }
+                    _compraProdutoViewModel.pesquisarFocusNode.requestFocus();
                     _compraProdutoViewModel.getCompra.execute(widget.compraId);
                   },
                 ),
@@ -118,37 +135,38 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
               const SizedBox(width: 16),
           Expanded(
               flex: 1,
-              child: ListenableBuilder(
+              child:
+              ListenableBuilder(
                   listenable: _compraProdutoViewModel.getPeso,
                   builder: (context, child) {
                     if (_compraProdutoViewModel.getPeso.isRunning) {
-                      return Center(child: CircularProgressIndicator());
+                      if (_peso == null) {
+                        return Center(child: CircularProgressIndicator());
+                      } else {
+                        return Center( child: Text(
+                          "Peso: ${_peso?.toStringAsFixed(3)} kg",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ));
+                      }
                     } else if (_compraProdutoViewModel.getPeso.isFailure) {
-                      return Center( child: Text(
-                        "Error.",
-                        style: TextStyle(color: Colors.red),
-                      ));
-                    } else {
+                      _peso = null;
+                      return Center(child: CircularProgressIndicator());
+                    } else if (_compraProdutoViewModel.getPeso.isSuccess) {
                       final success = _compraProdutoViewModel.getPeso.value
                           as SuccessCommand;
-                      var peso = success.value as double;
+                      _peso = success.value as double;
                       return Center( child: Text(
-                        "Peso: ${peso.toStringAsFixed(3)} kg",
+                        "Peso: ${_peso?.toStringAsFixed(3)} kg",
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ));
                     }
+                    return Center(child: CircularProgressIndicator());
                   })),
               Expanded(
                   flex: 1,
-                  child: TextButton(
-                      onPressed: () {
-                        _compraProdutoViewModel.concluir.execute(widget.compraId).then((result) {
-                          if(_compraProdutoViewModel.concluir.isSuccess){
-                            context.go(AppRoutes.home);
-                          }
-                        });
-                      },
-                      child: Text("Concluir."))
+                  child: ElevatedButton(
+                      onPressed: () => context.go(AppRoutes.compraCartao),
+                      child: Text("Fechar"))
               )
             ],
           )
@@ -195,21 +213,29 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                 return [
                   IconButton(
                       onPressed: () async {
-                        await _compraProdutoViewModel.addProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
-                        if (_compraProdutoViewModel.addProduto.isSuccess){
-                          _compraProdutoViewModel.getCompra.execute(widget.compraId);
-                        }
+                        _compraProdutoViewModel.addProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
                       },
                       icon: Icon(Icons.add)),
                   IconButton(
                       onPressed: () async{
-                        await _compraProdutoViewModel.removeProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
-                        if (_compraProdutoViewModel.removeProduto.isSuccess){
-                          _compraProdutoViewModel.getCompra.execute(widget.compraId);
-                        }
+                        _compraProdutoViewModel.removeProduto.execute(compraProduto.idComposto.idCompra, compraProduto.idComposto.idProduto);
                       },
-                      icon: Icon(Icons.remove)
-                  ),
+                      icon: Icon(Icons.remove)),
+                  if (compraProduto.produto.unitario)
+                  IconButton(
+                      onPressed: () {
+                        QuantityEditDialog(
+                          minQuantity: 0,
+                          initialQuantity: compraProduto.qntd as int,
+                          context: context,
+                          onSave: (valor) {
+                            compraProduto.qntd = valor as double;
+                            _compraProdutoViewModel.updateProduto(compraProduto);
+                          }
+                        ).show();
+                      },
+                      icon: Icon(Icons.edit))
+
                 ];
               } : null,
           );

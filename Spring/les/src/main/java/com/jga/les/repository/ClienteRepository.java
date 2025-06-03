@@ -1,6 +1,7 @@
 package com.jga.les.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,5 +37,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     //Busca pelo cartao uma compra aberta do cliente
     @Query(value = "SELECT COM.ID, COM.cliente_id, COM.entrada, COM.saida FROM COMPRA COM LEFT JOIN CLIENTE CLI ON CLI.id = COM.cliente_id  WHERE CLI.CARTAO = ?1 AND COM.saida IS NULL", nativeQuery = true)
-    Compra findCompraAbertaByCartao(String cartao);
+    Optional<Compra> findCompraAbertaByCartao(String cartao);
+
+    Optional<Cliente> findClienteByCartao(String cartao);
 }

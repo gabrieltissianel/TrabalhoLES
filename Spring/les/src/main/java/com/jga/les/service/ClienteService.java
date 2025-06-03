@@ -6,6 +6,7 @@ import com.jga.les.repository.ClienteRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -26,9 +27,22 @@ public class ClienteService extends GenericService<Cliente, Long> {
     public ResponseEntity<Compra> findCompraAberta(Long id) {
         return ResponseEntity.ok(((ClienteRepository)objRepository).findCompraAbertaByClienteId(id));
     }
-    
+
+    public ResponseEntity<Cliente> findClienteByCartao(String cartao) {
+        Optional<Cliente> cliente = ((ClienteRepository)objRepository).findClienteByCartao(cartao);
+        if (cliente.isEmpty()) {
+            throw new OptimisticLockingFailureException("Cliente nao encontrado");
+        }
+        return ResponseEntity.ok(cliente.get());
+    }
+
+
     public ResponseEntity<Compra> findCompraAberta(String cartao) {
-        return ResponseEntity.ok(((ClienteRepository)objRepository).findCompraAbertaByCartao(cartao));
+        Optional<Compra> compra = ((ClienteRepository)objRepository).findCompraAbertaByCartao(cartao);
+        if (compra.isEmpty()) {
+            throw new OptimisticLockingFailureException("Cliente nao possui compras em aberto.");
+        }
+        return ResponseEntity.ok(compra.get());
     }
 
     public ResponseEntity<List<Cliente>> findByAniversario(){
@@ -54,7 +68,13 @@ public class ClienteService extends GenericService<Cliente, Long> {
             historicoRecarga.setData(new Date()); 
             historicoRecargasService.add(historicoRecarga);
         }
-        
+
+        double saldo = obj.getSaldo();
+        String saldoString = String.format("%.2f", saldo);
+        double saldoReduzido = Double.parseDouble(saldoString);
+
+        obj.setSaldo(saldoReduzido);
+
         return super.update(obj, id);
     }
 
