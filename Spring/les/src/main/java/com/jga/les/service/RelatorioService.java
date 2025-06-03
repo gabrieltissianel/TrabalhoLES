@@ -48,8 +48,8 @@ public class RelatorioService {
                 .collect(Collectors.toList());
     }
 
-    public UltimaVendaDTO getUltimaVenda(Long clienteId) {
-        Object[] result = relatorioRepository.getUltimaVenda(clienteId);
+    public UltimaVendaDTO getUltimaVenda(long clienteId) {
+        Object[] result = relatorioRepository.getUltimaVenda(clienteId).getFirst();
         return result != null ? new UltimaVendaDTO(result) : null;
     }
     public List<UltimaVendaDTO> getUltimasVendasTodosClientes() {
@@ -81,14 +81,14 @@ public class RelatorioService {
     }
 
     public List<ClienteDiarioDTO> getVendasPorData(Date data) {
-        return relatorioRepository.findVendasPorDia(parseDate(data))
+        return relatorioRepository.findVendasPorDia(data)
                 .stream()
                 .map(this::mapToClienteDiarioDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<Cliente> getClientesEndividados() {
-        return relatorioRepository.findClientesEndividados();
+    public List<DividaDTO> getClientesEndividados() {
+        return relatorioRepository.findClientesEndividados().stream().map(DividaDTO::new).collect(Collectors.toList());
     }
 
 

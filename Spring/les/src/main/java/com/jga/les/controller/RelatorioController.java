@@ -19,6 +19,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -67,7 +69,7 @@ public class RelatorioController {
     @GetMapping(value = "/pdf/ultimasVendas/{clienteId}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getUltimaVendaPDF(
             @Parameter(description = "ID do cliente")
-            @PathVariable Long clienteId) {
+            @PathVariable long clienteId) {
 
         UltimaVendaDTO resultado = relatorioService.getUltimaVenda(clienteId);
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(List.of(resultado), "Última Venda"));
@@ -78,7 +80,7 @@ public class RelatorioController {
     @GetMapping(value = "/ultimasVendas/{clienteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UltimaVendaDTO> getUltimaVendaJSON(
             @Parameter(description = "ID do cliente")
-            @PathVariable Long clienteId) {
+            @PathVariable long clienteId) {
 
         UltimaVendaDTO resultado = relatorioService.getUltimaVenda(clienteId);
         return ResponseEntity.ok(resultado);
@@ -104,7 +106,7 @@ public class RelatorioController {
 
     // Vendas diárias - PDF e JSON
     @Operation(summary = "Vendas por data específica (PDF)")
-    @GetMapping(value = "/pdf/diario/{data}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/pdf/consumoData", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getVendasDiariasPDF(
             @Parameter(description = "Data no formato yyyy-MM-dd", example = "2023-05-15")
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date data) {
@@ -181,15 +183,15 @@ public class RelatorioController {
     @Operation(summary = "Clientes endividados (PDF)")
     @GetMapping(value = "/pdf/clientesEmAberto", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getClientesEndividadosPDF() {
-        List<Cliente> resultados = relatorioService.getClientesEndividados();
+        List<DividaDTO> resultados = relatorioService.getClientesEndividados();
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Clientes Endividados"));
     }
 
     // FUNCIONANDO GABRIEL, ACERTAR FORMATAÇAO DATA NO CLIENTE
     @Operation(summary = "Clientes endividados (JSON)")
     @GetMapping(value = "/clientesEmAberto", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Cliente>> getClientesEndividadosJSON() {
-        List<Cliente> resultados = relatorioService.getClientesEndividados();
+    public ResponseEntity<List<DividaDTO>> getClientesEndividadosJSON() {
+        List<DividaDTO> resultados = relatorioService.getClientesEndividados();
         return ResponseEntity.ok(resultados);
     }
 

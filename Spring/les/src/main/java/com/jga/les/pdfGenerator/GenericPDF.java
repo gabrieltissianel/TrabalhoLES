@@ -21,7 +21,7 @@ public class GenericPDF {
             doc.open();
 
             // Título do relatório
-            doc.add(new Paragraph(nomeRelatorio,
+            doc.add(new Paragraph(nomeRelatorio+"\n\n",
                     FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18)));
 
             if (objetos == null || objetos.isEmpty()) {
@@ -31,7 +31,7 @@ public class GenericPDF {
             }
 
             // Cria tabela com cabeçalhos dinâmicos
-            Class<?> classeDoObjeto = objetos.get(0).getClass();
+            Class<?> classeDoObjeto = objetos.getFirst().getClass();
             Field[] campos = classeDoObjeto.getDeclaredFields();
 
             PdfPTable tabela = new PdfPTable(campos.length);

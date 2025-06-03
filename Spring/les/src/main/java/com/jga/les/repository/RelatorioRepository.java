@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -61,15 +62,16 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
         FROM compra v
         JOIN cliente c ON v.cliente_id = c.id
         LEFT JOIN compra_produto cp ON cp.compra_id = v.id
-        WHERE (v.cliente_id, v.saida) IN (
-            SELECT cliente_id, MAX(saida) 
-            FROM compra
-            GROUP BY cliente_id
-        ) AND v.cliente_id = :idCliente
+        WHERE v.id = (
+            SELECT id 
+            FROM compra 
+            WHERE cliente_id = :idCliente 
+            ORDER BY saida DESC 
+            LIMIT 1
+        )
         GROUP BY v.id, v.cliente_id, c.nome, v.saida
-        ORDER BY c.nome DESC LIMIT 1
     """, nativeQuery = true)
-    Object[] getUltimaVenda(@Param("idCliente") long idCliente); //corrigido
+    List<Object[]> getUltimaVenda(@Param("idCliente") long idCliente); //corrigido
 
     // CLIENTES ENDIVIDADOS (mantido)
     @Query("SELECT c FROM Cliente c WHERE c.saldo < 0")
