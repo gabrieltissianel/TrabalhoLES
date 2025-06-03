@@ -26,28 +26,49 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
     List<Cliente> findAniversarianteMes(@Param("mes") int mes); //corrigido Gabriel
 
     // TICKET MÉDIO POR PERÍODO (PostgreSQL compatible)
-    @Query("SELECT v.cliente.id,  AVG(SUM(cp.qntd * cp.preco)) " +
-            "FROM Compra v JOIN v.compraProdutos cp " +
-            "WHERE CAST(v.saida AS date) BETWEEN CAST(:dataInicio AS date) AND CAST(:dataFim AS date) " +
-            "GROUP BY v.cliente.id")
+    @Query(value = """
+    SELECT cliente_id, AVG(total_compra)
+    FROM (
+        SELECT c.id AS compra_id, c.cliente_id, SUM(cp.qntd * cp.preco) AS total_compra
+        FROM compra c
+        JOIN compra_produto cp ON c.id = cp.compra_id
+        WHERE CAST(c.saida AS date) BETWEEN CAST(:dataInicio AS date) AND CAST(:dataFim AS date)
+        GROUP BY c.id, c.cliente_id
+    ) AS subquery
+    GROUP BY cliente_id
+    """, nativeQuery = true)
     List<Object[]> getTicketMedioMultiplosClientes(
             @Param("dataInicio") Date dataInicio,
             @Param("dataFim") Date dataFim); //corrigido Gabriel
 
     // VENDAS POR DIA (PostgreSQL compatible)
-    @Query("SELECT c.nome, SUM(cp.qntd * cp.preco), CAST(v.saida AS date) " +
+    @Query("SELECT c.nome, SUM(cp.qntd * cp.preco), v.saida " +
             "FROM Compra v " +
             "JOIN v.cliente c " +
             "JOIN v.compraProdutos cp " +  // Acesso aos produtos da compra
             "WHERE CAST(v.saida AS date) = CAST(:data AS date) " +
-            "GROUP BY c.nome, CAST(v.saida AS date)")
+            "GROUP BY c.nome, v.saida")
     List<Object[]> findVendasPorDia(@Param("data") Date data); //corrigido Gabriel
 
     // ÚLTIMA VENDA POR CLIENTE (PostgreSQL compatible)
-    @Query("SELECT v.id, v.cliente, v.saida, AVG(SUM(cp.qntd * cp.preco)) " +
-            "FROM Compra v JOIN v.compraProdutos cp " +
-            "WHERE v.cliente = :idCliente " +
-            "ORDER BY v.saida DESC LIMIT 1")
+    @Query(value = """
+        SELECT 
+            v.id AS venda_id, 
+            v.cliente_id, 
+            c.nome AS cliente_nome, 
+            v.saida, 
+            COALESCE(SUM(cp.qntd * cp.preco), 0) AS valor_total
+        FROM compra v
+        JOIN cliente c ON v.cliente_id = c.id
+        LEFT JOIN compra_produto cp ON cp.compra_id = v.id
+        WHERE (v.cliente_id, v.saida) IN (
+            SELECT cliente_id, MAX(saida) 
+            FROM compra
+            GROUP BY cliente_id
+        ) AND v.cliente_id = :idCliente
+        GROUP BY v.id, v.cliente_id, c.nome, v.saida
+        ORDER BY c.nome DESC LIMIT 1
+    """, nativeQuery = true)
     Object[] getUltimaVenda(@Param("idCliente") long idCliente); //corrigido
 
     // CLIENTES ENDIVIDADOS (mantido)

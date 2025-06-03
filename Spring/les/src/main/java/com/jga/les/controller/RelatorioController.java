@@ -49,6 +49,7 @@ public class RelatorioController {
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Ticket Médio"));
     }
 
+    //FUNCIONANDO
     @Operation(summary = "Ticket médio por período (JSON)")
     @GetMapping(value = "/ticketMedio", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TicketMedioDTO>> getTicketMedioMultiplosClientesJSON(
@@ -72,6 +73,7 @@ public class RelatorioController {
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(List.of(resultado), "Última Venda"));
     }
 
+
     @Operation(summary = "Última venda por cliente (JSON)")
     @GetMapping(value = "/ultimasVendas/{clienteId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UltimaVendaDTO> getUltimaVendaJSON(
@@ -91,6 +93,7 @@ public class RelatorioController {
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Últimas Vendas por Cliente"));
     }
 
+    // FUNCIONANDO GABRIEL
     @Operation(summary = "Última venda de cada cliente (JSON)",
             description = "Retorna a última venda registrada para cada cliente em JSON")
     @GetMapping(value = "/ultimasVendas", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -110,11 +113,12 @@ public class RelatorioController {
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Vendas Diárias"));
     }
 
+    //FUNCIONANDO GABRIEL
     @Operation(summary = "Vendas por data específica (JSON)")
     @GetMapping(value = "/diario/{data}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ClienteDiarioDTO>> getVendasDiariasJSON(
             @Parameter(description = "Data no formato yyyy-MM-dd", example = "2023-05-15")
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date data) {
+            @DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable Date data) {
 
         List<ClienteDiarioDTO> resultados = relatorioService.getVendasPorData(data);
         return ResponseEntity.ok(resultados);
@@ -128,6 +132,7 @@ public class RelatorioController {
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Vendas Hoje"));
     }
 
+    //FUNCIONANDO GABRIEL
     @Operation(summary = "Vendas do dia atual (JSON)")
     @GetMapping(value = "/diario", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ClienteDiarioDTO>> getVendasDoDiaAtualJSON() {
@@ -161,6 +166,7 @@ public class RelatorioController {
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Aniversariantes do Mês"));
     }
 
+    // FUNCIONANDO GABRIEL
     @Operation(summary = "Aniversariantes do mês (JSON)")
     @GetMapping(value = "/aniversariantes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AniversarianteDTO>> getAniversariantesDoMesJSON(
@@ -179,6 +185,7 @@ public class RelatorioController {
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Clientes Endividados"));
     }
 
+    // FUNCIONANDO GABRIEL, ACERTAR FORMATAÇAO DATA NO CLIENTE
     @Operation(summary = "Clientes endividados (JSON)")
     @GetMapping(value = "/clientesEmAberto", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Cliente>> getClientesEndividadosJSON() {
@@ -200,6 +207,7 @@ public class RelatorioController {
         return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Produtos Serial Vendidos"));
     }
 
+    //FUNCIONANDO GABRIEL
     @Operation(summary = "Produtos Serial Vendidos por Período (JSON)")
     @GetMapping(value = "/produtosSerial", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ProdutoRelatorioDTO>> getProdutosSerialVendidosJSON(

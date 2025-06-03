@@ -26,6 +26,7 @@ public class AniversarianteDTO {
     public AniversarianteDTO(Cliente cliente) {
         this.id = cliente.getId();
         this.nome = cliente.getNome();
+        this.nascimento = cliente.getDt_nascimento();
     }
 
     // Método para calcular idade (similar ao ClienteDTO)

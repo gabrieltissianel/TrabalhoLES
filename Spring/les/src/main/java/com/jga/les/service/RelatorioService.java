@@ -17,6 +17,7 @@ public class RelatorioService {
     private final RelatorioRepository relatorioRepository;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
 
     public RelatorioService(RelatorioRepository relatorioRepository)
     {
@@ -131,7 +132,7 @@ public class RelatorioService {
         return new ClienteDiarioDTO(
                 (String) result[0],  // nome
                 (Double) result[1],  // valorTotal
-                formatarData((Date) result[2])  // data formatada
+                formatarHora((Date) result[2])  // data formatada
         );
     }
 
@@ -151,6 +152,10 @@ public class RelatorioService {
 
     private String formatarData(Date data) {
         return data != null ? dateFormat.format(data) : "N/A";
+    }
+
+    private String formatarHora(Date data) {
+        return data != null ? hourFormat.format(data) : "N/A";
     }
 
 //    public List<DesempenhoDTO> gerarRelatorioDRE(Date dataInicio, Date dataFim) {
