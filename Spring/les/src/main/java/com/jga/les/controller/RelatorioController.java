@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -32,6 +33,9 @@ import java.util.UUID;
 public class RelatorioController {
 
     private final RelatorioService relatorioService;
+
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
 
     @Autowired
     public RelatorioController(RelatorioService relatorioService) {
@@ -48,7 +52,8 @@ public class RelatorioController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
 
         List<TicketMedioDTO> resultados = relatorioService.getTicketMedioMultiplosClientes(dataInicio, dataFim);
-        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Ticket Médio"));
+        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados,
+                "Ticket Médio dos Clientes: " + formatarData(dataInicio) + " - " + formatarData(dataFim)));
     }
 
     //FUNCIONANDO
@@ -72,7 +77,7 @@ public class RelatorioController {
             @PathVariable long clienteId) {
 
         UltimaVendaDTO resultado = relatorioService.getUltimaVenda(clienteId);
-        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(List.of(resultado), "Última Venda"));
+        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(List.of(resultado), "Última Compra do Cliente: " + resultado.getClienteNome()));
     }
 
 
@@ -92,7 +97,7 @@ public class RelatorioController {
     @GetMapping(value = "/pdf/ultimasVendas", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getUltimasVendasTodosClientesPDF() {
         List<UltimaVendaDTO> resultados = relatorioService.getUltimasVendasTodosClientes();
-        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Últimas Vendas por Cliente"));
+        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Últimas Compras por Cliente"));
     }
 
     // FUNCIONANDO GABRIEL
@@ -112,7 +117,7 @@ public class RelatorioController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date data) {
 
         List<ClienteDiarioDTO> resultados = relatorioService.getVendasPorData(data);
-        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Vendas Diárias"));
+        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Vendas do dia: " + formatarData(data)));
     }
 
     //FUNCIONANDO GABRIEL
@@ -131,7 +136,7 @@ public class RelatorioController {
     @GetMapping(value = "/pdf/diario", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getVendasDoDiaAtualPDF() {
         List<ClienteDiarioDTO> resultados = relatorioService.getVendasDoDia();
-        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Vendas Hoje"));
+        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Vendas de hoje: " + formatarData(new Date())));
     }
 
     //FUNCIONANDO GABRIEL
@@ -165,7 +170,8 @@ public class RelatorioController {
             @RequestParam int mes) {
 
         List<AniversarianteDTO> resultados = relatorioService.getAniversariantesDoMes(mes);
-        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Aniversariantes do Mês"));
+        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados,
+                "Aniversariantes do Mês: " + mes));
     }
 
     // FUNCIONANDO GABRIEL
@@ -206,7 +212,8 @@ public class RelatorioController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
 
         List<ProdutoRelatorioDTO> resultados = relatorioService.getRelatorioProdutos(dataInicio, dataFim);
-        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Produtos Serial Vendidos"));
+        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados,
+                "Produtos Vendidos: " + formatarData(dataInicio) + " - " + formatarData(dataFim)));
     }
 
     //FUNCIONANDO GABRIEL
@@ -231,7 +238,7 @@ public class RelatorioController {
         // Gera o gráfico como imagem
         BufferedImage imagemGerada = PlotUtils.generateConsumoDiarioChart(
                 relatorioService.getConsumoDiarioParaGrafico(dataInicio, dataFim),
-                "Relatório Consumo Diário");
+                "Relatório Consumo Diário: " + formatarData(dataInicio) + " - " + formatarData(dataFim));
 
         // Converte BufferedImage em byte[]
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -292,4 +299,12 @@ public class RelatorioController {
 //        return ResponseEntity.ok(relatorioService.gerarRelatorioDRE(dataInicio, dataFim));
 //    }
 
+
+    private String formatarData(Date data) {
+        return data != null ? dateFormat.format(data) : "N/A";
+    }
+
+    private String formatarHora(Date data) {
+        return data != null ? hourFormat.format(data) : "N/A";
+    }
 }
