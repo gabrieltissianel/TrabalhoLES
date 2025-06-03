@@ -80,7 +80,8 @@ class RelatoriosView extends StatelessWidget {
 
   void selecionarDuasDatas(BuildContext context,Function(DateTime, DateTime) function) async {
     final DateTime? dataInicio = await showDatePicker(
-      context: context, // Precisa do BuildContext
+      context: context, // Precisa d
+      helpText: "Data Inicial",// o BuildContext
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
       initialDate: DateTime.now(),
@@ -88,6 +89,7 @@ class RelatoriosView extends StatelessWidget {
     if (dataInicio == null) return; // Se o usuário cancelar a seleção, saia da função
     final DateTime? dataFim = await showDatePicker(
       context: context,
+      helpText: "Data Final",
       firstDate: dataInicio, // Não permitir data final antes da inicial
       lastDate: DateTime.now(),
       initialDate: DateTime.now(),
