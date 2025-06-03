@@ -12,14 +12,17 @@ import java.time.ZoneId;
 @Setter
 public class DividaDTO {
     private String nome;
-    private double saldo;
+    @PdfFormat(numberPattern = "R$ #,##0.00")
+    private double saldo_negativo;
+    @PdfFormat(numberPattern = "R$ #,##0.00")
     private double limite;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+
+    @PdfFormat()
     private LocalDate data_negativado;
 
     public DividaDTO(Cliente cliente) {
         this.nome = cliente.getNome();
-        this.saldo = cliente.getSaldo();
+        this.saldo_negativo = cliente.getSaldo();
         this.limite = cliente.getLimite();
         this.data_negativado = cliente.getUltimo_dia_negativado().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }

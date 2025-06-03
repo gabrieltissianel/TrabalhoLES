@@ -15,9 +15,10 @@ import java.util.UUID;
 public class AniversarianteDTO {
 
     private String nome;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @PdfFormat(datePattern = "dd/MM/yyyy", nullValue = "Sem data")
     private LocalDate nascimento;
-    private int idade;
+    @PdfFormat(numberPattern = "# anos")
+    private Integer idade;
 
     // Construtor a partir da entidade Cliente (com cálculo da idade)
     public AniversarianteDTO(Cliente cliente) {

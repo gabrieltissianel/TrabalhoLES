@@ -4,24 +4,27 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.jga.les.dtos.relatorios.PdfFormat;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 public class GenericPDF {
 
-    public static byte[] gerarRelatorioBytes(List<?> objetos,String nomeRelatorio) {
+    public static byte[] gerarRelatorioBytes(List<?> objetos, String nomeRelatorio) {
         Document doc = new Document();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         try {
-            // Cria o PDF diretamente na memória (ByteArrayOutputStream)
             PdfWriter.getInstance(doc, byteArrayOutputStream);
             doc.open();
-
-            // Título do relatório
-            doc.add(new Paragraph(nomeRelatorio+"\n\n",
+            doc.add(new Paragraph(nomeRelatorio + "\n\n",
                     FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18)));
 
             if (objetos == null || objetos.isEmpty()) {
@@ -30,7 +33,6 @@ public class GenericPDF {
                 return byteArrayOutputStream.toByteArray();
             }
 
-            // Cria tabela com cabeçalhos dinâmicos
             Class<?> classeDoObjeto = objetos.getFirst().getClass();
             Field[] campos = classeDoObjeto.getDeclaredFields();
 
@@ -49,27 +51,47 @@ public class GenericPDF {
                 for (Field campo : campos) {
                     campo.setAccessible(true);
                     Object valor = campo.get(obj);
-                    tabela.addCell(valor != null ? valor.toString() : "N/A");
+                    tabela.addCell(formatarValor(campo, valor));
                 }
             }
 
             doc.add(tabela);
             doc.close();
-
             return byteArrayOutputStream.toByteArray();
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new byte[0]; // Retorna array vazio em caso de erro
+            return new byte[0];
         } finally {
             try {
-                if (doc.isOpen()) {
-                    doc.close();
-                }
+                if (doc.isOpen()) doc.close();
                 byteArrayOutputStream.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private static String formatarValor(Field campo, Object valor) {
+        if (valor == null) {
+            PdfFormat annotation = campo.getAnnotation(PdfFormat.class);
+            return annotation != null ? annotation.nullValue() : "N/A";
+        }
+
+        PdfFormat format = campo.getAnnotation(PdfFormat.class);
+
+        try {
+            if (valor instanceof LocalDate && format != null) {
+                return ((LocalDate) valor).format(DateTimeFormatter.ofPattern(format.datePattern()));
+            } else if (valor instanceof LocalDateTime && format != null) {
+                return ((LocalDateTime) valor).format(DateTimeFormatter.ofPattern(format.dateTimePattern()));
+            } else if (valor instanceof Number && format != null) {
+                DecimalFormat df = new DecimalFormat(format.numberPattern());
+                return df.format(valor);
+            }
+            return valor.toString();
+        } catch (Exception e) {
+            return valor.toString(); // Fallback para toString() se houver erro na formatação
         }
     }
 

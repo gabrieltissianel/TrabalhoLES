@@ -7,12 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TicketMedioDTO {
-    private Cliente cliente;
-    private Double valor;
+    private String cliente;
+
+    @PdfFormat(numberPattern = "R$ #,##0.00")
+    private Double ticket_medio;
 
     // Construtor, Getters e Setters
     public TicketMedioDTO(Cliente cliente, Double valorMedio) {
-        this.cliente = cliente;
-        this.valor = valorMedio;
+        this.cliente = cliente.getNome();
+        this.ticket_medio = valorMedio;
     }
 }
