@@ -14,7 +14,7 @@ class RelatoriosService {
     _dio.options.headers['Authorization'] = 'Bearer $token';
   }
 
-  Future<void> _downloadReport(String nome, bool json, {Map<String, dynamic>? params, Object? body}) async {
+  Future<void> _downloadPdfReport(String nome, bool json, {Map<String, dynamic>? params, Object? body}) async {
     try {
       refreshToken();
       var endpoint = json ? "${Endpoints.baseUrl}/relatorios/$nome" : "${Endpoints.baseUrl}/relatorios/pdf/$nome";
@@ -69,41 +69,48 @@ class RelatoriosService {
   }
 
   Future<void> aniversariantes(int mes, {bool json = false}) async {
-    await _downloadReport("aniversariantes", json, params: {"mes": mes});
+    await _downloadPdfReport("aniversariantes", json, params: {"mes": mes});
   }
 
   Future<void> consumoDiarioHoje({bool json = false}) async {
-    await _downloadReport("diario", json);
+    await _downloadPdfReport("diario", json);
   }
 
   Future<void> ultimasVendas({bool json = false}) async {
-   await _downloadReport("ultimasVendas", json);
+   await _downloadPdfReport("ultimasVendas", json);
   }
 
   Future<void> clientesDevedores({bool json = false}) async {
-    await _downloadReport("clientesEmAberto", json);
+    await _downloadPdfReport("clientesEmAberto", json);
   }
 
   Future<void> vendaProdutos(DateTime dataInicio, DateTime dataFim, {bool json = false}) async {
-    await _downloadReport("produtosSerial", json, params: {
+    await _downloadPdfReport("produtosSerial", json, params: {
       "dataInicio": DateFormat('yyyy-MM-dd').format(dataInicio),
       "dataFim": DateFormat('yyyy-MM-dd').format(dataFim)
     });
   }
 
   Future<void> ticketMedio(DateTime dataInicio, DateTime dataFim, {bool json = false}) async {
-    await _downloadReport("ticketMedio", json, params: {
+    await _downloadPdfReport("ticketMedio", json, params: {
       "dataInicio": DateFormat('yyyy-MM-dd').format(dataInicio),
       "dataFim": DateFormat('yyyy-MM-dd').format(dataFim)
     });
   }
 
   Future<void> consumoData(DateTime data, {bool json = false}) async {
-    await _downloadReport("consumoData", json, params: {
+    await _downloadPdfReport("consumoData", json, params: {
       "data": DateFormat('yyyy-MM-dd').format(data)});
   }
 
   Future<void> ultimaCompraCliente(int id, {bool json = false}) async {
-    await _downloadReport("ultimasVendas/$id", json);
+    await _downloadPdfReport("ultimasVendas/$id", json);
+  }
+
+  Future<void> dreDiario(DateTime dataInicio, DateTime dataFim, {bool json = false}) async {
+    await _downloadPdfReport("dre-diario", json, params: {
+      "dataInicio": DateFormat('yyyy-MM-dd').format(dataInicio),
+      "dataFim": DateFormat('yyyy-MM-dd').format(dataFim)
+    });
   }
 }

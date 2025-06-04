@@ -48,6 +48,7 @@ class RelatoriosView extends StatelessWidget {
             builder: (context) => _dialogCliente(service.ultimaCompraCliente)
         );
       },
+      'DRE diario': (context) => selecionarDuasDatas(context, service.dreDiario)
     };
 
     return GridView.count(
