@@ -12,7 +12,7 @@ import java.time.ZoneId;
 @Setter
 public class DividaDTO {
     private String nome;
-    @PdfFormat(numberPattern = "R$ #,##0.00")
+    @PdfFormat(numberPattern = "R$ #.##0,00")
     private double saldo_negativo;
     @PdfFormat(numberPattern = "R$ #,##0.00")
     private double limite;

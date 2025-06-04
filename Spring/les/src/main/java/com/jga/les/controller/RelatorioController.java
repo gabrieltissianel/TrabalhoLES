@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -36,6 +37,7 @@ public class RelatorioController {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private final SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+    DecimalFormat df = new DecimalFormat("R$ #,##0.00");
 
     @Autowired
     public RelatorioController(RelatorioService relatorioService) {
@@ -284,20 +286,23 @@ public class RelatorioController {
         }
     }
 
-//    @GetMapping("/pdf/dre-diario")
-//    public ResponseEntity<byte[]> getDREPorDiaPdf(
-//            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataInicio,
-//            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
-//        List<DesempenhoDTO> resultados = relatorioService.gerarRelatorioDRE(dataInicio, dataFim);
-//        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados, "Produtos Serial Vendidos"));
-//    }
-//
-//    @GetMapping("/dre-diario")
-//    public ResponseEntity<List<DesempenhoDTO>> getDREPorDia(
-//            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataInicio,
-//            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
-//        return ResponseEntity.ok(relatorioService.gerarRelatorioDRE(dataInicio, dataFim));
-//    }
+    @GetMapping("/pdf/dre-diario")
+    public ResponseEntity<byte[]> getDREPorDiaPdf(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataInicio,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
+        List<dreDTO> resultados = relatorioService.getDre(dataInicio, dataFim);
+
+        return ResponseEntity.ok(GenericPDF.gerarRelatorioBytes(resultados,
+                "DRE diario: " + formatarData(dataInicio) + " - " + formatarData(dataFim) + "\n"
+                        + "Saldo Anterior: " + df.format(relatorioService.consularSaldoAnteriorAData(dataInicio))));
+    }
+
+    @GetMapping("/dre-diario")
+    public ResponseEntity<List<dreDTO>> getDREPorDia(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataInicio,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
+        return ResponseEntity.ok(relatorioService.getDre(dataInicio, dataFim));
+    }
 
 
     private String formatarData(Date data) {

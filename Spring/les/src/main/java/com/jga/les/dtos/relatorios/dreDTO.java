@@ -1,7 +1,23 @@
 package com.jga.les.dtos.relatorios;
 
-import java.sql.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public record dreDTO(Date data, Double receber, Double pagar, Double resultado, Double saldo) {
+@Getter
+@Setter
+@AllArgsConstructor
+public class dreDTO {
+
+    private String dia;
+
+    @PdfFormat(numberPattern = "R$ #,##0.00")
+    private Double receber;
+    @PdfFormat(numberPattern = "R$ #,##0.00")
+    private Double pagar;
+    @PdfFormat(numberPattern = "R$ #,##0.00")
+    private Double resultado;
+    @PdfFormat(numberPattern = "R$ #,##0.00")
+    private Double saldo;
 
 }

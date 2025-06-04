@@ -119,21 +119,25 @@ public class RelatorioService {
 
     public List<dreDTO> getDre(Date dataInicio, Date dataFim) {
         // Validação básica
-        if (dataInicio == null && dataFim == null) {
+        if (dataInicio == null || dataFim == null) {
             throw new IllegalArgumentException("Datas não podem ser nulas");
         }
         if (dataFim.before(dataInicio)) {
             throw new IllegalArgumentException("Data final deve ser após data inicial");
         }
-        if(dataFim == null && dataInicio != null) {
-            dataFim = new Date(); // Se dataFim for nula, usa a data atual
-        }
 
-
-        return relatorioRepository.findDreDiario(dataInicio, dataFim)
+        List<dreDTO> dreDTOS = relatorioRepository.findDreDiario(dataInicio, dataFim)
                 .stream()
-                .map(r -> new dreDTO())
-                .collect(Collectors.toList());
+                .map(this::mapTodreDTO)
+                .toList();
+
+        double saldo_anterior = relatorioRepository.findAcumulado(dataInicio);
+
+        return dreDTOS.stream().peek((dto -> dto.setSaldo(dto.getSaldo() + saldo_anterior))).collect(Collectors.toList());
+    }
+
+    public double consularSaldoAnteriorAData(Date data){
+        return relatorioRepository.findAcumulado(data);
     }
 
 
@@ -144,6 +148,16 @@ public class RelatorioService {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao formatar data", e);
         }
+    }
+
+    private dreDTO mapTodreDTO(Object[] result) {
+        return new dreDTO(
+                formatarData((Date) result[0]),
+                (Double) result[1],
+                (Double) result[2],
+                (Double) result[3],
+                (Double) result[4]
+        );
     }
 
     private ClienteDiarioDTO mapToClienteDiarioDTO(Object[] result) {

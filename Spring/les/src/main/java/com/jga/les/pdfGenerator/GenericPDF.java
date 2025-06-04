@@ -41,7 +41,7 @@ public class GenericPDF {
 
             // Cabeçalhos
             for (Field campo : campos) {
-                PdfPCell cabecalho = new PdfPCell(new Phrase(campo.getName()));
+                PdfPCell cabecalho = new PdfPCell(new Phrase(campo.getName().toUpperCase()));
                 cabecalho.setBackgroundColor(BaseColor.LIGHT_GRAY);
                 tabela.addCell(cabecalho);
             }

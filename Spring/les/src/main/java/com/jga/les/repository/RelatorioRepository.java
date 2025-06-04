@@ -112,7 +112,6 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
             @Param("dataInicio") Date dataInicio,
             @Param("dataFim") Date dataFim);
 
-
     @Query(nativeQuery = true, value = """
     WITH dias AS (
         SELECT generate_series(
@@ -148,35 +147,46 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
 
     
     @Query(nativeQuery = true, value = """
-    SELECT 
-        data_saida,
-        COALESCE(SUM(HR.valor),0) AS "RECEBER",
-        COALESCE(SUM(pagamentos.total_pagar), 0) AS "PAGAR",
-        SUM(HR.valor) - COALESCE(SUM(pagamentos.total_pagar), 0) AS "RESULTADO",
-        SUM(SUM(HR.VALOR)-COALESCE(SUM(PAGAMENTOS.TOTAL_PAGAR),0))
-        OVER(ORDER BY compras_datas.data_saida) as "SALDO"
-    FROM (
-        SELECT 
-            CAST(COM.saida AS DATE) AS data_saida,
-            COM.id
-        FROM COMPRA COM
-        WHERE COM.SAIDA IS NOT NULL
-    ) AS compras_datas
-    LEFT JOIN CLIENTE CLI ON CLI.id = compras_datas.id
-    LEFT JOIN historico_recarga HR ON HR.cliente_id = CLI.id
-    LEFT JOIN (
-        SELECT 
-            CAST(PAG.dt_pagamento AS DATE) AS data_pagamento,
-            SUM(PAG.VALOR) AS total_pagar
-        FROM pagamento PAG
-        WHERE PAG.dt_pagamento IS NOT NULL
-        GROUP BY CAST(PAG.dt_pagamento AS DATE)
-    ) AS pagamentos ON compras_datas.data_saida = pagamentos.data_pagamento
-    WHERE COMPRAS_DATAS.DATA_SAIDA>:dataInicio AND DATA_SAIDA<:dataFim
-    GROUP BY compras_datas.data_saida
-    ORDER BY compras_datas.data_saida;
+
+            WITH datas AS (
+        SELECT generate_series(
+                       CAST(:dataInicio AS DATE),
+                       CAST(:dataFim AS DATE),
+                       INTERVAL '1 day'
+               )::DATE AS dia
+    )
+    SELECT
+        d.dia,
+        COALESCE(SUM(hr.valor), 0) AS total_recargas,
+        COALESCE(SUM(p.valor), 0) AS total_pagamentos,
+        COALESCE(SUM(hr.valor), 0) - COALESCE(SUM(p.valor), 0) AS saldo_diario,
+        SUM(COALESCE(SUM(hr.valor), 0) - COALESCE(SUM(p.valor), 0)) OVER (
+            ORDER BY d.dia
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+            ) AS saldo_acumulado
+    FROM
+        datas d
+            LEFT JOIN historico_recarga hr ON CAST(hr.data AS DATE) = d.dia
+            LEFT JOIN pagamento p ON CAST(p.dt_pagamento AS DATE) = d.dia
+    GROUP BY
+        d.dia
+    ORDER BY
+        d.dia;
     """)
     List<Object[]> findDreDiario(
         @Param("dataInicio") Date dataInicio, 
         @Param("dataFim") Date dataFim); // vsfd Igor
+
+    @Query(nativeQuery = true, value = """
+    SELECT
+        (SELECT COALESCE(SUM(hr.valor), 0)
+         FROM historico_recarga hr
+         WHERE hr.data <= :data) -
+    
+        (SELECT COALESCE(SUM(p.valor), 0)
+         FROM pagamento p
+         WHERE p.dt_pagamento <= :data) AS saldo_atual;
+    """)
+    double findAcumulado(
+            @Param("data") Date data);
 }
