@@ -29,11 +29,7 @@ public class JasperReportController {
 
     JasperReportService jasperReportService;
 
-    FornecedorRepository fornecedorRepository;
-
     ClienteRepository clienteRepository;
-
-    RelatorioRepository relatorioRepository;
 
     private ResponseEntity<Resource> sendFile(byte[] reportContent, String fileName) {
         ByteArrayResource resource = new ByteArrayResource(reportContent);

@@ -51,6 +51,18 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
             "GROUP BY c.nome, v.saida")
     List<Object[]> findVendasPorDia(@Param("data") Date data); //corrigido Gabriel
 
+    @Query("""
+        SELECT\s
+        c.nome,\s
+        SUM(cp.qntd * cp.preco) AS total_dia
+        FROM Compra v\s
+        JOIN v.cliente c\s
+        JOIN v.compraProdutos cp\s
+        WHERE CAST(v.saida AS DATE) = CAST(:data AS DATE)
+        GROUP BY c.nome
+    """)
+    List<Object[]> consumoPorDia(@Param("data") Date data);
+
     // ÚLTIMA VENDA POR CLIENTE (PostgreSQL compatible)
     @Query(value = """
         SELECT 

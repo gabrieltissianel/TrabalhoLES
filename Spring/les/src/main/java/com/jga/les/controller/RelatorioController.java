@@ -149,6 +149,15 @@ public class RelatorioController {
         return ResponseEntity.ok(resultados);
     }
 
+    @Operation(summary = "Consumo do dia atual (JSON)")
+    @GetMapping(value = "/consumoGrafico", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ConsumoGraficoDTO>> getConsumoDoDiaAtualJSON(
+            @Parameter(description = "Data no formato yyyy-MM-dd", example = "2023-05-15")
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date data) {
+        List<ConsumoGraficoDTO> resultados = relatorioService.getConsumoDoDia(data);
+        return ResponseEntity.ok(resultados);
+    }
+
 //    // Aniversariantes do dia - PDF e JSON
 //    @Operation(summary = "Aniversariantes do dia (PDF)")
 //    @GetMapping(value = "/pdf/aniversariantesdia", produces = MediaType.APPLICATION_PDF_VALUE)

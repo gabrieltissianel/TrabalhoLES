@@ -87,6 +87,17 @@ public class RelatorioService {
                 .collect(Collectors.toList());
     }
 
+    public List<ConsumoGraficoDTO> getConsumoDoDia(Date data) {
+        return relatorioRepository.consumoPorDia( data )
+                .stream()
+                .map((object -> new ConsumoGraficoDTO(
+                        (String) object[0],
+                        (Double) object[1]
+                )))
+                .collect(Collectors.toList());
+    }
+
+
     public List<DividaDTO> getClientesEndividados() {
         return relatorioRepository.findClientesEndividados().stream().map(DividaDTO::new).collect(Collectors.toList());
     }
