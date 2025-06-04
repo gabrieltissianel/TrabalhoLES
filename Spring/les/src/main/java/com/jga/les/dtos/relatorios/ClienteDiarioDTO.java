@@ -2,13 +2,16 @@ package com.jga.les.dtos.relatorios;
 
 public class ClienteDiarioDTO {
     private String nome;
-    private Double valorTotal;
-    private String horaVenda;
+
+    @PdfFormat(numberPattern = "R$ #,##0.00")
+    private Double valor;
+
+    private String horario;
 
     public ClienteDiarioDTO(String nome, Double valorTotal, String horaVenda) {
         this.nome = nome;
-        this.valorTotal = valorTotal;
-        this.horaVenda = horaVenda;
+        this.valor = valorTotal;
+        this.horario = horaVenda;
     }
 
     // Getters
@@ -16,20 +19,20 @@ public class ClienteDiarioDTO {
         return nome;
     }
 
-    public Double getValorTotal() {
-        return valorTotal;
+    public Double getValor() {
+        return valor;
     }
 
-    public String getHoraVenda() {
-        return horaVenda;
+    public String getHorario() {
+        return horario;
     }
 
-    public void setValorTotal(Double valorTotal) {
-        this.valorTotal = valorTotal;
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
 
-    public void setHoraVenda(String horaVenda) {
-        this.horaVenda = horaVenda;
+    public void setHorario(String horario) {
+        this.horario = horario;
     }
 
     // Setters (opcional, dependendo do uso)

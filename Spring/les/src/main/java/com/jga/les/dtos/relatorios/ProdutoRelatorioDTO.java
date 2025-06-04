@@ -6,58 +6,60 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class ProdutoRelatorioDTO {
 
     @Schema(description = "Código do produto", example = "PRD-001")
-    private String codigoProduto;
+    private String codigo;
 
     @Schema(description = "Nome do produto", example = "Smartphone XYZ")
-    private String nomeProduto;
+    private String nome;
 
     @Schema(description = "Valor unitário do produto", example = "999.99")
-    private Double valorUnitario;
+    @PdfFormat(numberPattern = "R$ #,##0.00")
+    private Double valor;
 
     @Schema(description = "Quantidade total vendida no período", example = "15")
-    private Integer quantidadeVendida;
+    @PdfFormat(numberPattern = "# unidades")
+    private Integer quantidade;
 
     // Construtores
     public ProdutoRelatorioDTO() {
     }
 
     public ProdutoRelatorioDTO(String codigoProduto, String nomeProduto, Double valorUnitario, Integer quantidadeVendida) {
-        this.codigoProduto = codigoProduto;
-        this.nomeProduto = nomeProduto;
-        this.valorUnitario = valorUnitario;
-        this.quantidadeVendida = quantidadeVendida;
+        this.codigo = codigoProduto;
+        this.nome = nomeProduto;
+        this.valor = valorUnitario;
+        this.quantidade = quantidadeVendida;
     }
 
     // Getters e Setters
-    public String getCodigoProduto() {
-        return codigoProduto;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setCodigoProduto(String codigoProduto) {
-        this.codigoProduto = codigoProduto;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
-    public String getNomeProduto() {
-        return nomeProduto;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public Double getValorUnitario() {
-        return valorUnitario;
+    public Double getValor() {
+        return valor;
     }
 
-    public void setValorUnitario(Double valorUnitario) {
-        this.valorUnitario = valorUnitario;
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
 
-    public Integer getQuantidadeVendida() {
-        return quantidadeVendida;
+    public Integer getQuantidade() {
+        return quantidade;
     }
 
-    public void setQuantidadeVendida(Integer quantidadeVendida) {
-        this.quantidadeVendida = quantidadeVendida;
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
     }
 }
