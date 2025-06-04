@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:les/core/app_routes.dart';
 import 'package:les/core/endpoints.dart';
+import 'package:result_command/result_command.dart';
+import 'package:result_dart/result_dart.dart';
 import 'package:universal_html/html.dart' as html;
 
 class RelatoriosService {
@@ -112,5 +114,18 @@ class RelatoriosService {
       "dataInicio": DateFormat('yyyy-MM-dd').format(dataInicio),
       "dataFim": DateFormat('yyyy-MM-dd').format(dataFim)
     });
+  }
+
+  late final consumoGrafico = Command1(_consumoGrafico);
+  
+  AsyncResult<List<Map<String, dynamic>>> _consumoGrafico(DateTime data) async {
+    try{
+      final res = await _dio.get('${Endpoints.baseUrl}/relatorios/consumoGrafico',
+          queryParameters: {"data": DateFormat('yyyy-MM-dd').format(data)});
+      final success = (res.data as List).map((e) => {'cliente': e['cliente'], 'consumo': e['consumo']}).toList();
+      return Success(success);
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
   }
 }

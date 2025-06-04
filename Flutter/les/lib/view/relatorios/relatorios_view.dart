@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:les/core/app_routes.dart';
 import 'package:les/view/cliente/view_model/cliente_view_model.dart';
 import 'package:les/view/widgets/qntd_dialog.dart';
 import 'package:result_command/result_command.dart';
@@ -23,6 +25,7 @@ class RelatoriosView extends StatelessWidget {
 
 
   _body(BuildContext context){
+
     final service = injector.get<RelatoriosService>();
 
     final Map<String, Function(BuildContext)> buttons = {
@@ -36,27 +39,32 @@ class RelatoriosView extends StatelessWidget {
             initialQuantity: DateTime.now().month
         ).show();
       },
-      'Clientes em aberto': (context) => service.clientesDevedores(),
-      'Compras de hoje': (context) => service.consumoDiarioHoje(),
-      'Ultimas compras por clientes': (context) => service.ultimasVendas(),
-      'Compra de produtos': (context) => selecionarDuasDatas(context, service.vendaProdutos),
-      'Ticket médio': (context) => selecionarDuasDatas(context, service.ticketMedio),
-      'Compras por data': (context) => selecionarUmaDatas(context, service.consumoData),
-      'Ultima compra cliente' : (context) {
+      'Clientes Negativados': (context) => service.clientesDevedores(),
+      'Compras de Hoje': (context) => service.consumoDiarioHoje(),
+      'Ultimas Compras dos Clientes': (context) => service.ultimasVendas(),
+      'Compra de Produtos': (context) => selecionarDuasDatas(context, service.vendaProdutos),
+      'Ticket Médio': (context) => selecionarDuasDatas(context, service.ticketMedio),
+      'Compras por Data': (context) => selecionarUmaDatas(context, service.consumoData),
+      'Ultima Compra de um Cliente' : (context) {
         showDialog(
             context: context,
             builder: (context) => _dialogCliente(service.ultimaCompraCliente)
         );
       },
-      'DRE diario': (context) => selecionarDuasDatas(context, service.dreDiario)
+      'DRE Diario': (context) => selecionarDuasDatas(context, service.dreDiario),
+      'Grafico Consumo': (context) => context.go(AppRoutes.graficoConsumo)
     };
 
     return GridView.count(
-      crossAxisCount: 4, // Número de colunas
-      childAspectRatio: 1.75, // Proporção dos itens (largura/altura)
+      crossAxisCount: 4,
+      // Número de colunas
+      childAspectRatio: 1.75,
+      // Proporção dos itens (largura/altura)
       padding: EdgeInsets.all(8.0),
-      mainAxisSpacing: 16.0, // Espaçamento vertical entre os itens
-      crossAxisSpacing: 16.0, // Espaçamento horizontal entre os itens
+      mainAxisSpacing: 16.0,
+      // Espaçamento vertical entre os itens
+      crossAxisSpacing: 16.0,
+      // Espaçamento horizontal entre os itens
       children: buttons.entries.map((entry) {
         final text = entry.key;
         final onPressed = entry.value;
@@ -72,7 +80,10 @@ class RelatoriosView extends StatelessWidget {
               ),
             ),
             child: Text(text,
-            style: TextStyle(color: Colors.black54, fontSize: 20, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
           ),
         );
       }).toList(),

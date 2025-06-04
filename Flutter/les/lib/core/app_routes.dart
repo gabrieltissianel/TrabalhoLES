@@ -14,6 +14,7 @@ import 'package:les/view/login/login_view.dart';
 import 'package:les/view/login/view_model/login_view_model.dart';
 import 'package:les/view/produto/historico_produto_view.dart';
 import 'package:les/view/produto/produto_view.dart';
+import 'package:les/view/relatorios/grafico_consumo.dart';
 import 'package:les/view/relatorios/relatorios_view.dart';
 import 'package:les/view/usuario/tela_view.dart';
 import 'package:les/view/usuario/usuario_view.dart';
@@ -35,6 +36,7 @@ class AppRoutes {
   static const String relatorios = '/relatorios';
   static const String compraCartao = '/compracartao';
   static const String historicoRecarga = '/historicorecarga';
+  static const String graficoConsumo = '/graficoconsumo';
 }
 
 const List<String> freeRoutes = [ AppRoutes.login, AppRoutes.home ];
@@ -135,6 +137,8 @@ final GoRouter router = GoRouter(
         GoRoute(
             path: AppRoutes.relatorios,
             builder: (context, state) => const RelatoriosView()),
+        GoRoute(path: AppRoutes.graficoConsumo,
+                builder: (context, state) =>  GraficoConsumo())
       ]
     ),
     GoRoute(

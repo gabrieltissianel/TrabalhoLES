@@ -84,7 +84,7 @@ class _SideMenuState extends State<SideMenu> {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.produtos);
     } else if (currentRoute.startsWith(AppRoutes.compraCartao) || currentRoute.startsWith(AppRoutes.compras)){
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.compraCartao);
-    } else if (currentRoute.startsWith(AppRoutes.relatorios)) {
+    } else if (currentRoute.startsWith(AppRoutes.relatorios) || currentRoute.startsWith(AppRoutes.graficoConsumo)) {
       selectedIndex = _destinations.keys.toList().indexOf(AppRoutes.relatorios);
     }
 
