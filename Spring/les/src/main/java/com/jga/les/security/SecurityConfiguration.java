@@ -36,6 +36,7 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
+            "/pagamento/**",
             "/produto/**",
             "/historicoprodutos/**",
             "/historicorecargas/**",

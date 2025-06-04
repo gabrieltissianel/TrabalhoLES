@@ -15,7 +15,6 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 
 @Service
@@ -28,7 +27,6 @@ public class JasperReportService {
         String jasperOutputPath = "src/main/resources/report/"+fileName+".jasper";
 
         JasperCompileManager.compileReportToFile(jrxmlPath, jasperOutputPath);
-
         // JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(items);
         Map<String, Object> parameters = new HashMap<>();
         //parameters.put("title", title);

@@ -131,4 +131,22 @@ public class JasperReportController {
 
         return sendFile(reportContent, "consumoPorCliente&Total.pdf");
     }
+
+    @GetMapping("/dre")
+    public ResponseEntity<Resource> reportDre() {
+        byte[] reportContent;
+        try {
+            reportContent = jasperReportService.getRelatorio("dre", "DRE Diario");
+            System.out.println("\n\n\n--Relatório gerado com sucesso--\n"+reportContent.length+" bytes\n\n\n");
+        } catch (JRException e) {
+            System.out.println("Erro de compilação: " + e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        }catch (IOException e) {
+            System.out.println("Erro IO: " + e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        }
+        // System.out.println(resource+" resource");
+
+        return sendFile(reportContent, "dre.pdf");
+    }
 }

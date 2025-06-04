@@ -49,6 +49,12 @@
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>3.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
@@ -128,11 +134,19 @@
 			<artifactId>javaee-api</artifactId>
 			<version>8.0.1</version>
 		</dependency>
+
+		<!--Jasper Report-->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>7.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-jdt</artifactId>
+			<version>7.0.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.fazecast</groupId>
 			<artifactId>jSerialComm</artifactId>
@@ -143,12 +157,6 @@
      <groupId>org.clojure</groupId>
      <artifactId>clojurescript</artifactId>
      <version>1.10.520</version>
-	<exclusions>
-		<exclusion>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-		</exclusion>
-	</exclusions>
    </dependency>
  </dependencies>
 

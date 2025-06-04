@@ -117,6 +117,24 @@ public class RelatorioService {
         return relatorioRepository.findConsumoDiario(dataInicio, dataFim);
     }
 
+    public List<dreDTO> getDre(Date dataInicio, Date dataFim) {
+        // Validação básica
+        if (dataInicio == null && dataFim == null) {
+            throw new IllegalArgumentException("Datas não podem ser nulas");
+        }
+        if (dataFim.before(dataInicio)) {
+            throw new IllegalArgumentException("Data final deve ser após data inicial");
+        }
+        if(dataFim == null && dataInicio != null) {
+            dataFim = new Date(); // Se dataFim for nula, usa a data atual
+        }
+
+
+        return relatorioRepository.findDreDiario(dataInicio, dataFim)
+                .stream()
+                .map(r -> new dreDTO())
+                .collect(Collectors.toList());
+    }
 
 
     // ---- MÉTODOS AUXILIARES ---- //

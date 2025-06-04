@@ -143,4 +143,38 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
 
     @Query("SELECT c FROM Cliente c WHERE c.id = :id")
     Cliente findClienteById(@Param("id") Long id);  // corrigido Gabriel
+
+    
+    @Query(nativeQuery = true, value = """
+    SELECT 
+        data_saida,
+        COALESCE(SUM(HR.valor),0) AS "RECEBER",
+        COALESCE(SUM(pagamentos.total_pagar), 0) AS "PAGAR",
+        SUM(HR.valor) - COALESCE(SUM(pagamentos.total_pagar), 0) AS "RESULTADO",
+        SUM(SUM(HR.VALOR)-COALESCE(SUM(PAGAMENTOS.TOTAL_PAGAR),0))
+        OVER(ORDER BY compras_datas.data_saida) as "SALDO"
+    FROM (
+        SELECT 
+            CAST(COM.saida AS DATE) AS data_saida,
+            COM.id
+        FROM COMPRA COM
+        WHERE COM.SAIDA IS NOT NULL
+    ) AS compras_datas
+    LEFT JOIN CLIENTE CLI ON CLI.id = compras_datas.id
+    LEFT JOIN historico_recarga HR ON HR.cliente_id = CLI.id
+    LEFT JOIN (
+        SELECT 
+            CAST(PAG.dt_pagamento AS DATE) AS data_pagamento,
+            SUM(PAG.VALOR) AS total_pagar
+        FROM pagamento PAG
+        WHERE PAG.dt_pagamento IS NOT NULL
+        GROUP BY CAST(PAG.dt_pagamento AS DATE)
+    ) AS pagamentos ON compras_datas.data_saida = pagamentos.data_pagamento
+    WHERE COMPRAS_DATAS.DATA_SAIDA>:dataInicio AND DATA_SAIDA<:dataFim
+    GROUP BY compras_datas.data_saida
+    ORDER BY compras_datas.data_saida;
+    """)
+    List<Object[]> findDreDiario(
+        @Param("dataInicio") Date dataInicio, 
+        @Param("dataFim") Date dataFim); // vsfd Igor
 }
