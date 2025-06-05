@@ -38,7 +38,7 @@ class _UserFormDialogState extends State<PagamentoFormDialog> {
     if (_formKey.currentState!.validate()) {
       double valor = _valorController.numberValue;
       Pagamento pagamento = Pagamento(dt_vencimento: _dataSelecionada!, valor: valor, fornecedor: widget.fornecedor);
-      pagamentoViewModel.addPagamento.execute(pagamento);
+      pagamentoViewModel.addPagamento.execute(pagamento).whenComplete( () => pagamentoViewModel.getPagamentoByFornecedorId.execute(widget.fornecedor.id!) );
       Navigator.of(context).pop(); // Fecha o pop-up após o envio
     }
   }

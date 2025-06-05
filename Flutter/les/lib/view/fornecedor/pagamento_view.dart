@@ -146,8 +146,8 @@ class _PagamentoViewState extends State<PagamentoView> {
 
     if (dataSelecionada != null) {
       pagamento.dt_pagamento = dataSelecionada;
-      await _pagamentoViewModel.updatePagamento.execute(pagamento);
-      _pagamentoViewModel.getPagamentos.execute();
+      _pagamentoViewModel.updatePagamento.execute(pagamento).whenComplete( () => _pagamentoViewModel.getPagamentoByFornecedorId.execute(widget.fornecedorId) );
+
     }
   }
 
