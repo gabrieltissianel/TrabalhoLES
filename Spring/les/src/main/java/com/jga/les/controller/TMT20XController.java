@@ -18,21 +18,36 @@ public class TMT20XController {
 
     @PostMapping("/teste")
     public ResponseEntity<String> teste() {
-        try {
-            tmt20xService.teste();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Erro ao listar impressoras: " + e.getMessage());
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("win")) {
+            try {
+                tmt20xService.testeWindows();
+            } catch (Exception e) {
+               e.printStackTrace();
+                return ResponseEntity.status(500).body("Erro ao listar impressoras: " + e.getMessage());
+            }
+        }else{
+            try {
+                tmt20xService.teste();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(500).body("Erro ao listar impressoras: " + e.getMessage());
+            }
         }
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok("ok");        
     }
 
     @PostMapping("/cartao/{cartao}")
     @PreAuthorize("hasAuthority(#root.this.getNomeTela(''))")
     public ResponseEntity<String> informacoesDoCliente(@PathVariable String cartao) {
-        try {
-            tmt20xService.imprimirComprovanteCompra(cartao);
-        } catch (Exception e) {
+        String osName = System.getProperty("os.name").toLowerCase();
+        try{
+            if (osName.contains("win")) {
+                tmt20xService.imprimirComprovanteWindows(cartao);
+            }else{
+                tmt20xService.imprimirComprovanteCompra(cartao);        
+            }
+        }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Erro ao gerar informacoes do cliente: " + e.getMessage());
         }
