@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/produto/produto.dart';
 import 'package:les/view/produto/view_model/produto_view_model.dart';
+
+import '../widgets/currency_form_text_field.dart';
 
 class ProdutoFormDialog extends StatefulWidget {
   final Produto? produto;
@@ -21,12 +24,14 @@ class _UserFormDialogState extends State<ProdutoFormDialog> {
     decimalSeparator: ',',
     thousandSeparator: '.',
     leftSymbol: 'R\$ ',
+    initialValue: 0.0
   );
 
   final MoneyMaskedTextController _custoController = MoneyMaskedTextController(
     decimalSeparator: ',',
     thousandSeparator: '.',
     leftSymbol: 'R\$ ',
+    initialValue: 0.0
   );
 
   final TextEditingController _codigoController = TextEditingController();
@@ -40,8 +45,8 @@ class _UserFormDialogState extends State<ProdutoFormDialog> {
     if (widget.produto != null) {
       _nomeController.text = widget.produto!.nome;
       _codigoController.text = widget.produto!.codigo;
-      _precoController.text = widget.produto!.preco.toString();
-      _custoController.text = widget.produto!.custo.toString();
+      _precoController.value = TextEditingValue(text: widget.produto!.preco.toStringAsFixed(2));
+      _custoController.value = TextEditingValue(text: widget.produto!.custo.toStringAsFixed(2));
     }
   }
 
@@ -111,6 +116,10 @@ class _UserFormDialogState extends State<ProdutoFormDialog> {
                 labelText: "Preço",
                 border: OutlineInputBorder(),
               ),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CurrencyPtBrInputFormatter(),
+              ],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Informe um preço";
@@ -126,6 +135,10 @@ class _UserFormDialogState extends State<ProdutoFormDialog> {
                 labelText: "Custo",
                 border: OutlineInputBorder(),
               ),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CurrencyPtBrInputFormatter(),
+              ],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Informe um custo";

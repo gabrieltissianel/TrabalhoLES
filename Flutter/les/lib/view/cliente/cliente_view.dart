@@ -53,8 +53,8 @@ class _ClienteViewState extends State<ClienteView> {
                                   data: clientes,
                                   columnHeaders: ["id", "nome", "limite", "saldo", "dt_nascimento"],
                                   formatters: (cliente) => {
-                                    "saldo": (value) => "R\$ $value",
-                                    "limite": (value) => "R\$ $value",
+                                    "saldo": (value) => "R\$ ${(value as double).toStringAsFixed(2).replaceFirst(".", ",")}",
+                                    "limite": (value) => "R\$ ${(value as double).toStringAsFixed(2).replaceFirst(".", ",")}",
                                     "dt_nascimento": (value) =>
                                       DateFormat('dd/MM/yyyy').format(DateTime.parse(value)).toString()
                                   },

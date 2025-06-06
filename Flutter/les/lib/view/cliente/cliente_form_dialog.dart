@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/cliente/cliente.dart';
 import 'package:les/view/cliente/view_model/cliente_view_model.dart';
+
+import '../widgets/currency_form_text_field.dart';
 
 class ClienteFormDialog extends StatefulWidget {
   final Cliente? cliente;
@@ -22,6 +25,7 @@ class _UserFormDialogState extends State<ClienteFormDialog> {
     decimalSeparator: ',',
     thousandSeparator: '.',
     leftSymbol: 'R\$ ',
+    initialValue: 0.00
   );
 
   final TextEditingController _nomeController = TextEditingController();
@@ -35,9 +39,9 @@ class _UserFormDialogState extends State<ClienteFormDialog> {
     super.initState();
     if (widget.cliente != null) {
       _nomeController.text = widget.cliente!.nome;
-      _limiteController.text = widget.cliente!.limite.toString();
+      _limiteController.text = widget.cliente!.limite.toStringAsFixed(2);
       _dataSelecionada = widget.cliente!.dtNascimento;
-      _cartaoController.text = widget.cliente!.cartao!;
+      _cartaoController.text = widget.cliente!.cartao;
       _dataController.text = DateFormat('dd/MM/yyyy').format(_dataSelecionada!);
     }
   }
@@ -111,6 +115,10 @@ class _UserFormDialogState extends State<ClienteFormDialog> {
             TextFormField(
               controller: _limiteController,
               keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CurrencyPtBrInputFormatter(),
+              ],
               decoration: const InputDecoration(
                 labelText: "Limite",
                 border: OutlineInputBorder(),

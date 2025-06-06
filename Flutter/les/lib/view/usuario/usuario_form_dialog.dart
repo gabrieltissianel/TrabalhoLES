@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ftoast/ftoast.dart';
 import 'package:les/view/usuario/view_model/tela_view_model.dart';
 import 'package:les/view/usuario/view_model/usuario_view_model.dart';
 import 'package:les/view/widgets/toast.dart';

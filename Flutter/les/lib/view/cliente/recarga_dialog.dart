@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/view/cliente/view_model/cliente_view_model.dart';
 
 import '../../model/cliente/cliente.dart';
+import '../widgets/currency_form_text_field.dart';
 
 class RecargaDialog extends StatefulWidget {
   final Cliente cliente;
@@ -24,6 +26,7 @@ class _RecargaDialogState extends State<RecargaDialog> {
     decimalSeparator: ',',
     thousandSeparator: '.',
     leftSymbol: 'R\$ ',
+    initialValue: 0.00
   );
 
   @override
@@ -44,6 +47,10 @@ class _RecargaDialogState extends State<RecargaDialog> {
                   labelText: "Valor",
                   border: OutlineInputBorder(),
                 ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  CurrencyPtBrInputFormatter(),
+                ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Informe um valor";

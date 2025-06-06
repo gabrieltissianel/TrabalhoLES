@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 import 'package:les/core/injector.dart';
 import 'package:les/model/fornecedor/fornecedor.dart';
 import 'package:les/model/fornecedor/pagamento.dart';
 import 'package:les/view/fornecedor/view_model/pagamento_view_model.dart';
+
+import '../widgets/currency_form_text_field.dart';
 
 class PagamentoFormDialog extends StatefulWidget {
   final Fornecedor fornecedor;
@@ -23,6 +26,7 @@ class _UserFormDialogState extends State<PagamentoFormDialog> {
     decimalSeparator: ',',
     thousandSeparator: '.',
     leftSymbol: 'R\$ ',
+    initialValue: 0.0
   );
 
   final TextEditingController _dataController = TextEditingController();
@@ -75,8 +79,12 @@ class _UserFormDialogState extends State<PagamentoFormDialog> {
                 labelText: "Valor",
                 border: OutlineInputBorder(),
               ),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CurrencyPtBrInputFormatter(),
+              ],
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                if (value == null || value.isEmpty || double.parse(value) <= 0) {
                   return "Informe um valor";
                 }
                 return null;

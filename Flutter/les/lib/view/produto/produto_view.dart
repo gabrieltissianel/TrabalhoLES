@@ -52,8 +52,8 @@ class _ProdutoViewState extends State<ProdutoView> {
                                   data: produtos,
                                   columnHeaders: ["id", "codigo", "nome", "preco", "custo", "unitario"],
                                   formatters: (produto) => {
-                                    "preco": (value) => "R\$ $value",
-                                    "custo": (value) => "R\$ $value",
+                                    "preco": (value) => "R\$ ${(value as double).toStringAsFixed(2).replaceFirst(".", ",")}",
+                                    "custo": (value) => "R\$ ${(value as double).toStringAsFixed(2).replaceFirst(".", ",")}",
                                     "unitario": (value) => value.toString() == 'true' ? "Sim" : "Nao"
                                   },
                                   getActions: (produto) {
