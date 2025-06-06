@@ -136,49 +136,62 @@ class _CompraViewState extends State<CompraView> {
   }
 
   _dialog() {
+    final screenSize = MediaQuery.of(context).size;
+    final dialogWidth = screenSize.width * 0.5;  // 50% da largura
+    final dialogHeight = screenSize.height * 0.5; // 50% da altura
     return AlertDialog(
-      content: ListenableBuilder(
+      scrollable: true,
+      content:
+      ListenableBuilder(
           listenable: _clienteViewModel.getClientes,
           builder: (context, child) {
             if (_clienteViewModel.getClientes.isRunning) {
               return CircularProgressIndicator();
             } else if (_clienteViewModel.getClientes.isFailure) {
-              final error = _clienteViewModel.getClientes
-                  .value as FailureCommand;
+              final error =
+                  _clienteViewModel.getClientes.value as FailureCommand;
               return Text(error.error.toString());
             } else {
-              final success = _clienteViewModel.getClientes
-                  .value as SuccessCommand;
+              final success =
+                  _clienteViewModel.getClientes.value as SuccessCommand;
               final clientes = success.value as List<Cliente>;
-              return SizedBox.expand(
-                  child: CustomTable(title: "Clientes",
-                      data: clientes,
-                      columnHeaders: ["id", "nome", "limite", "saldo", "dt_nascimento"],
-                      formatters: (cliente) => {
-                        "saldo": (value) => "R\$ $value",
-                        "limite": (value) => "R\$ $value",
-                        "dt_nascimento": (value) =>
-                            DateFormat('dd/MM/yyyy').format(DateTime.parse(value)).toString()
-                      },
-                      getActions: (cliente) {
-                        return [
-                          IconButton(
-                              onPressed: () async {
-                                Compra compra = Compra(
-                                    cliente: cliente,
-                                    entrada: DateTime.now(),
-                                    compraProdutos: []
-                                );
-                                await _compraViewModel.addCompra.execute(
-                                    compra);
-                                _compraViewModel.getCompras.execute();
-                                Navigator.pop(context);
+              return SizedBox(
+                  width: dialogWidth,
+                  height: dialogHeight,
+                      child: CustomTable(
+                          title: "Clientes",
+                          data: clientes,
+                          columnHeaders: [
+                            "id",
+                            "nome",
+                            "limite",
+                            "saldo",
+                            "dt_nascimento"
+                          ],
+                          formatters: (cliente) => {
+                                "saldo": (value) => "R\$ $value",
+                                "limite": (value) => "R\$ $value",
+                                "dt_nascimento": (value) =>
+                                    DateFormat('dd/MM/yyyy')
+                                        .format(DateTime.parse(value))
+                                        .toString()
                               },
-                              icon: Icon(Icons.shopping_cart))
-                        ];
-                      })
-
-              );
+                          getActions: (cliente) {
+                            return [
+                              IconButton(
+                                  onPressed: () async {
+                                    Compra compra = Compra(
+                                        cliente: cliente,
+                                        entrada: DateTime.now(),
+                                        compraProdutos: []);
+                                    await _compraViewModel.addCompra
+                                        .execute(compra);
+                                    _compraViewModel.getCompras.execute();
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Icon(Icons.shopping_cart))
+                            ];
+                          }));
             }
           }),
     );

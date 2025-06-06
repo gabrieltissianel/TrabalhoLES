@@ -107,6 +107,7 @@ class _UsuarioViewState extends State<UsuarioView> {
             },
             child: Icon(Icons.screenshot_monitor),
           ),
+           SizedBox(height: 8),
            FloatingActionButton(
                 onPressed: () {
                   showDialog(
