@@ -70,14 +70,9 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
           // Parte inferior - Formulário (apenas se compra não finalizada)
             Expanded(
               flex: 1,
-              child: Card(
-                elevation: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(30.0),
                   child: _form(), // Removida a Column extra
                 ),
-              ),
-            ),
+
         ],
       ),
     );
@@ -85,6 +80,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
 
   _form() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           ListenableBuilder( // preço total
@@ -106,8 +102,7 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                 }
               }),
 
-          const SizedBox(height: 16), // Espaçamento
-
+          SizedBox(height: 8),
           Row(
             children: [
               Expanded(
@@ -132,10 +127,20 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                   },
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
           Expanded(
               flex: 1,
               child:
+                  SizedBox(
+                    height: 55,
+                child:
+                      Card(
+                    elevation: 2,
+              child:
+                  Row(children: [
+                    SizedBox(width: 16),
+                    Text("Balança: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(width: 16),
               ListenableBuilder(
                   listenable: _compraProdutoViewModel.getPeso,
                   builder: (context, child) {
@@ -161,15 +166,21 @@ class _CompraProdutoViewState extends State<CompraProdutoView> {
                       ));
                     }
                     return Center(child: CircularProgressIndicator());
-                  })),
+                  }) ])
+                      )
+                  )
+              ),
+              SizedBox(width: 16),
               Expanded(
                   flex: 1,
                   child: ElevatedButton(
                       onPressed: () => context.go(AppRoutes.compraCartao),
                       child: Text("Fechar"))
-              )
+              ),
+
             ],
-          )
+          ),
+          SizedBox(height: 16)
     ]
 
     );
