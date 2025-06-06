@@ -45,7 +45,10 @@ class _LoginState extends State<LoginView>{
       child: Container(
         constraints: const BoxConstraints(maxWidth: 400),
         padding: const EdgeInsets.all(20),
-        child: Form(
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Image.asset('assets/logo.jpeg', width: 600, height: 400,),
+        Form(
             key: _formKey,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -80,6 +83,7 @@ class _LoginState extends State<LoginView>{
                         }
                       }))
             ])),
+        ])
       ),
     ));
   }
