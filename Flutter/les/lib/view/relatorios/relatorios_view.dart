@@ -74,14 +74,15 @@ class RelatoriosView extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => onPressed(context),
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.lightBlue,
+              backgroundColor: Color.fromARGB(255, 205, 231, 236),
+              foregroundColor: Colors.grey,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
             child: Text(text,
                 style: TextStyle(
-                    color: Colors.black54,
+                    color: Colors.black45,
                     fontSize: 20,
                     fontWeight: FontWeight.bold)),
           ),
@@ -95,7 +96,7 @@ class RelatoriosView extends StatelessWidget {
       context: context, // Precisa d
       helpText: "Data Inicial",// o BuildContext
       firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2100),
       initialDate: DateTime.now(),
     );
     if (dataInicio == null) return; // Se o usuário cancelar a seleção, saia da função
@@ -103,7 +104,7 @@ class RelatoriosView extends StatelessWidget {
       context: context,
       helpText: "Data Final",
       firstDate: dataInicio, // Não permitir data final antes da inicial
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2100),
       initialDate: DateTime.now(),
     );
     if (dataFim == null) return;
