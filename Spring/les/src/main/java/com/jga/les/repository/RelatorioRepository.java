@@ -179,7 +179,7 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
     FROM
         datas d
             LEFT JOIN historico_recarga hr ON CAST(hr.data AS DATE) = d.dia
-            LEFT JOIN pagamento p ON CAST(p.dt_pagamento AS DATE) = d.dia
+            LEFT JOIN pagamento p ON CAST(p.dt_vencimento AS DATE) = d.dia
     GROUP BY
         d.dia
     ORDER BY
