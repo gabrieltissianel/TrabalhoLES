@@ -103,10 +103,11 @@ public class TerminalSession implements Runnable {
     }
 
     private void printSaldoCliente(Cliente cliente, PrintWriter saida){
+        String nome;
         if (cliente != null) {
             saida.println("Cliente encontrado:\n");
             quebraLinha(saida);
-            saida.println("Nome: " + cliente.getNome()+"\n");
+            saida.println("Nome: " + formatarNome(cliente.getNome())+"\n");
             quebraLinha(saida);
             saida.println("Saldo: R$ " + String.format("%.2f", cliente.getSaldo()));
             System.out.println("Cliente " + cliente.getNome() + " encontrado com saldo: R$ " + cliente.getSaldo());
@@ -132,4 +133,12 @@ public class TerminalSession implements Runnable {
     private void quebraLinha(PrintWriter saida) {
         saida.print("\r\n");       // Quebra de linha (CRLF)
     }
+
+    private static String formatarNome(String nome) {
+        if (nome == null) {
+            return "";
+        }
+        return nome.length() > 8 ? nome.substring(0, 8) : nome;
+    }
+
 }

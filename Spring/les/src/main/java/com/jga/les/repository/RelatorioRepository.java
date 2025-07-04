@@ -179,7 +179,7 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
     FROM
         datas d
             LEFT JOIN historico_recarga hr ON CAST(hr.data AS DATE) = d.dia
-            LEFT JOIN pagamento p ON CAST(p.dt_pagamento AS DATE) = d.dia
+            LEFT JOIN pagamento p ON CAST(p.dt_vencimento AS DATE) = d.dia
     GROUP BY
         d.dia
     ORDER BY
@@ -197,7 +197,7 @@ public interface RelatorioRepository extends JpaRepository<Compra, Long>{
     
         (SELECT COALESCE(SUM(p.valor), 0)
          FROM pagamento p
-         WHERE p.dt_pagamento <= :data) AS saldo_atual;
+         WHERE p.dt_vencimento <= :data) AS saldo_atual;
     """)
     double findAcumulado(
             @Param("data") Date data);

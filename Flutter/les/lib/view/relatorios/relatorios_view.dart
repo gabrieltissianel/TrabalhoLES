@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:les/core/app_routes.dart';
@@ -12,46 +11,44 @@ import '../../services/relatorios_service.dart';
 import '../widgets/custom_table.dart';
 
 class RelatoriosView extends StatelessWidget {
-
   const RelatoriosView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Relatorios")),
-      body: _body(context)
-    );
+        appBar: AppBar(title: Text("Relatorios")), body: _body(context));
   }
 
-
-  _body(BuildContext context){
-
+  _body(BuildContext context) {
     final service = injector.get<RelatoriosService>();
 
     final Map<String, Function(BuildContext)> buttons = {
       '🎂 Aniversariantes': (context) {
         QuantityEditDialog(
-            context: context,
-            title: 'Selecione o mês:',
-            minQuantity: 1,
-            maxQuantity: 12,
-            onSave: (value) => service.aniversariantes(value),
-            initialQuantity: DateTime.now().month
-        ).show();
+                context: context,
+                title: 'Selecione o mês:',
+                minQuantity: 1,
+                maxQuantity: 12,
+                onSave: (value) => service.aniversariantes(value),
+                initialQuantity: DateTime.now().month)
+            .show();
       },
       'Clientes Negativados': (context) => service.clientesDevedores(),
       'Compras de Hoje': (context) => service.consumoDiarioHoje(),
       'Ultimas Compras dos Clientes': (context) => service.ultimasVendas(),
-      'Compra de Produtos': (context) => selecionarDuasDatas(context, service.vendaProdutos),
-      'Ticket Médio': (context) => selecionarDuasDatas(context, service.ticketMedio),
-      'Compras por Data': (context) => selecionarUmaDatas(context, service.consumoData),
-      'Ultima Compra de um Cliente' : (context) {
+      'Compra de Produtos': (context) =>
+          selecionarDuasDatas(context, service.vendaProdutos),
+      'Ticket Médio': (context) =>
+          selecionarDuasDatas(context, service.ticketMedio),
+      'Compras por Data': (context) =>
+          selecionarUmaDatas(context, service.consumoData),
+      'Ultima Compra de um Cliente': (context) {
         showDialog(
             context: context,
-            builder: (context) => _dialogCliente(service.ultimaCompraCliente)
-        );
+            builder: (context) => _dialogCliente(service.ultimaCompraCliente));
       },
-      'DRE Diario': (context) => selecionarDuasDatas(context, service.dreDiario),
+      'DRE Diario': (context) =>
+          selecionarDuasDatas(context, service.dreDiario),
       'Grafico Consumo': (context) => context.go(AppRoutes.graficoConsumo)
     };
 
@@ -90,28 +87,32 @@ class RelatoriosView extends StatelessWidget {
     );
   }
 
-  void selecionarDuasDatas(BuildContext context,Function(DateTime, DateTime) function) async {
+  void selecionarDuasDatas(
+      BuildContext context, Function(DateTime, DateTime) function) async {
     final DateTime? dataInicio = await showDatePicker(
       context: context, // Precisa d
-      helpText: "Data Inicial",// o BuildContext
+      helpText: "Data Inicial", // o BuildContext
       firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2050),
       initialDate: DateTime.now(),
     );
-    if (dataInicio == null) return; // Se o usuário cancelar a seleção, saia da função
+    if (dataInicio == null) {
+      return; // Se o usuário cancelar a seleção, saia da função
+    }
     final DateTime? dataFim = await showDatePicker(
       context: context,
       helpText: "Data Final",
       firstDate: dataInicio, // Não permitir data final antes da inicial
-      lastDate: DateTime.now(),
-      initialDate: DateTime.now(),
+      lastDate: DateTime(2050),
+      initialDate: dataInicio,
     );
     if (dataFim == null) return;
 
     function(dataInicio, dataFim);
   }
 
-  void selecionarUmaDatas(BuildContext context,Function(DateTime) function) async {
+  void selecionarUmaDatas(
+      BuildContext context, Function(DateTime) function) async {
     final DateTime? data = await showDatePicker(
       context: context,
       firstDate: DateTime(2020),
@@ -132,21 +133,22 @@ class RelatoriosView extends StatelessWidget {
             if (clienteViewModel.getClientes.isRunning) {
               return CircularProgressIndicator();
             } else if (clienteViewModel.getClientes.isFailure) {
-              final error = clienteViewModel.getClientes
-                  .value as FailureCommand;
+              final error =
+                  clienteViewModel.getClientes.value as FailureCommand;
               return Text(error.error.toString());
             } else {
-              final success = clienteViewModel.getClientes
-                  .value as SuccessCommand;
+              final success =
+                  clienteViewModel.getClientes.value as SuccessCommand;
               final clientes = success.value as List<Cliente>;
               return SizedBox.expand(
-                  child: CustomTable(title: "Clientes",
+                  child: CustomTable(
+                      title: "Clientes",
                       data: clientes,
                       columnHeaders: ["nome", "limite", "saldo"],
                       formatters: (cliente) => {
-                        "saldo": (value) => "R\$ $value",
-                        "limite": (value) => "R\$ $value",
-                      },
+                            "saldo": (value) => "R\$ $value",
+                            "limite": (value) => "R\$ $value",
+                          },
                       getActions: (cliente) {
                         return [
                           IconButton(
@@ -156,9 +158,7 @@ class RelatoriosView extends StatelessWidget {
                               },
                               icon: Icon(Icons.search))
                         ];
-                      })
-
-              );
+                      }));
             }
           }),
     );

@@ -17,7 +17,7 @@ import jakarta.annotation.PreDestroy;
 @Component
 public class BalancaDevice {
     private static SerialPort serialPort;
-    private static String portName0 = "/dev/ttyUSB0";
+    private static String portName0 = "COM10";
     private static String portName1 = "/dev/ttyUSB1";
     private static String portName = "/dev/ttyUSB";
     private static boolean portaAberta = false;

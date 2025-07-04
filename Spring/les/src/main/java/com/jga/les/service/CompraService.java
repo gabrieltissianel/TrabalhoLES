@@ -39,7 +39,7 @@ public class CompraService extends GenericService<Compra, Long> {
         }
         if (cliente.getUltimo_dia_negativado() != null) {
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, 30);
+            calendar.add(Calendar.DAY_OF_MONTH, -30);
             Date vencimento = calendar.getTime();
             if (cliente.getUltimo_dia_negativado().before(vencimento)) {
                 throw new RuntimeException("Cliente esta devendo a mais de 30 dias");
@@ -51,6 +51,10 @@ public class CompraService extends GenericService<Compra, Long> {
     public Compra concluir(Long id) {
         Compra compra = objRepository.findById(id).orElseThrow(() -> new RuntimeException("Compra nao existente."));
         if (compra.getSaida() == null) {
+            try {
+                tmt20XService.imprimirComprovanteWindows(compra.getCliente().getCartao());
+            } catch (Exception e) {
+            }
 
             Date hoje = new Date();
 
@@ -65,11 +69,6 @@ public class CompraService extends GenericService<Compra, Long> {
             compra.setSaida(hoje);
             objRepository.save(compra);
 
-            try {
-                tmt20XService.imprimirComprovanteCompra(compra);
-            } catch (Exception e) {
-
-            }
 
             return compra;
 

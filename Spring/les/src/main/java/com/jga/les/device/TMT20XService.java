@@ -44,7 +44,7 @@ public class TMT20XService {
     private static final String PORTA_SERIAL = "USB-001"; // Altere conforme necessário
     private static final String NOME_IMPRESSORA = "EPSON TM-T20X Receipt6"; // Nome exato da impressora no Windows
     
-    private static final int COLUNA_TAMANHO = 60;
+    private static final int COLUNA_TAMANHO = 47;
     private static final String LINHA = "-".repeat(COLUNA_TAMANHO) + "\n";
 
     public TMT20XService(ClienteRepository clienteRepository){
@@ -97,18 +97,18 @@ public class TMT20XService {
 
         // Cabeçalho
         sb.append(LINHA);
-        sb.append("COMPROVANTE\n");
+        sb.append(centralizar("COMPROVANTE\n"));
         sb.append(LINHA);
         
         // Informações do cliente e data
-        sb.append(String.format("Cliente: %s\n", compra.getCliente().getNome()));
-        sb.append(String.format("Data: %s\n", java.time.LocalDateTime.now().format(
-            java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))));
+        sb.append(centralizar(String.format("Cliente: %s\n", compra.getCliente().getNome())));
+        sb.append(centralizar(String.format("Data: %s\n", java.time.LocalDateTime.now().format(
+            java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))));
         sb.append(LINHA);
         
         // Cabeçalho dos produtos
         sb.append("ITENS:\n");
-        sb.append("Nome\t\t\tQuantidade   Preco   Valor\n");
+        sb.append("Nome\t\t    Quantidade  Preco  Valor\n");
         // Lista de produtos
         for (CompraProduto produto : produtos) {
             // Nome do produto (linha superior)
@@ -123,8 +123,8 @@ public class TMT20XService {
                     produto.getPreco()*produto.getQntd());
             } else {
                 detalhes = String.format("   %.3f KG X R$ %.2f = R$ %.2f", 
-                    produto.getQntd()/1000.0, 
-                    produto.getProduto().isUnitario(), 
+                    produto.getQntd(), 
+                    produto.getProduto().getPreco(), 
                     produto.getPreco()*produto.getQntd());
             }
             
@@ -139,7 +139,7 @@ public class TMT20XService {
         sb.append(LINHA);
         
         // Rodapé
-        sb.append(centralizar("Obrigado pela preferência!") + "\n");
+        sb.append(centralizar("Obrigado pela preferencia!") + "\n");
         sb.append(centralizar("Volte sempre!") + "\n");
         sb.append("\n\n\n"); // Espaço para corte
         

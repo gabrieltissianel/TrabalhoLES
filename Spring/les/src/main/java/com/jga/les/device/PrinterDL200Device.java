@@ -31,6 +31,7 @@ public class PrinterDL200Device {
             for (PrintService service : services) {
                 System.out.println("Impressora encontrada: " + service.getName());
                 if (service.getName().equalsIgnoreCase(nomeImpressora)) {
+                    System.out.println(service.getName());
                     impressora = service;
                     break;
                 }
@@ -94,7 +95,6 @@ public class PrinterDL200Device {
         } catch (PrintException e) {
             e.printStackTrace();
         }
-        System.out.println("Impressão enviada com sucesso!");
     }
 
     public void imprimirCodigoBarras(String codigo, Integer quantidade) {
@@ -107,5 +107,6 @@ public class PrinterDL200Device {
             imprimirLinha(codigo, 3, nomeProduto);
         }
         imprimirLinha(codigo, col_restante, nomeProduto);
+        System.out.println("Impressão enviada com sucesso!");
     }
 }

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3 (Python 3.13.4 on win32)" generated="2025-06-05T18:16:40.517273" rpa="false" schemaversion="5">
+<suite id="s1" name="Pagamento Tests" source="C:\Users\andre\OneDrive\Documentos\TrabalhoLES\Flutter\les\tests\pagamento_tests.robot">
+<test id="s1-t1" name="Criar Pagamento Válido" line="7">
+<kw name="Criar Fornecedor Para Teste" owner="api_helpers">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-05T18:16:40.812445" level="INFO">${headers} = {'Content-Type': 'application/json'}</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-05T18:16:40.812231" elapsed="0.000244"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-05T18:16:40.812680" level="INFO">${fornecedor} = {'nome': 'Fornecedor Pagamento'}</msg>
+<var>${fornecedor}</var>
+<arg>nome=Fornecedor Pagamento</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-05T18:16:40.812573" elapsed="0.000132"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2025-06-05T18:16:40.820092" level="INFO">POST Request : url=http://localhost:4020/#/fornecedores 
+ path_url=/ 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '32'} 
+ body=b'{"nome": "Fornecedor Pagamento"}' 
+ </msg>
+<msg time="2025-06-05T18:16:40.820159" level="INFO">POST Response : url=http://localhost:4020/#/fornecedores 
+ status=404, reason=Not Found 
+ headers={'x-powered-by': 'Dart with package:shelf', 'content-type': 'text/plain; charset=utf-8', 'x-xss-protection': '1; mode=block', 'date': 'Thu, 05 Jun 2025 21:16:40 GMT', 'x-content-type-options': 'nosniff', 'content-length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-06-05T18:16:40.820273" level="FAIL">HTTPError: 404 Client Error: Not Found for url: http://localhost:4020/#/fornecedores</msg>
+<arg>${API_URL}/fornecedores</arg>
+<arg>json=${fornecedor}</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a POST request.</doc>
+<status status="FAIL" start="2025-06-05T18:16:40.812771" elapsed="0.008925">HTTPError: 404 Client Error: Not Found for url: http://localhost:4020/#/fornecedores</status>
+</kw>
+<status status="FAIL" start="2025-06-05T18:16:40.811779" elapsed="0.010058">HTTPError: 404 Client Error: Not Found for url: http://localhost:4020/#/fornecedores</status>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-06-05T18:16:40.822078" elapsed="0.000020"/>
+</kw>
+<kw name="Get Current Date" owner="DateTime">
+<var>${vencimento}</var>
+<arg>increment=30 days</arg>
+<arg>result_format=%Y-%m-%d</arg>
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<status status="NOT RUN" start="2025-06-05T18:16:40.822221" elapsed="0.000014"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<var>${data}</var>
+<arg>valor=1500.50</arg>
+<arg>dt_vencimento=${vencimento}</arg>
+<arg>fornecedor_id=1</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-06-05T18:16:40.822347" elapsed="0.000013"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<var>${response}</var>
+<arg>${API_URL}/pagamento</arg>
+<arg>json=${data}</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a POST request.</doc>
+<status status="NOT RUN" start="2025-06-05T18:16:40.822453" elapsed="0.000012"/>
+</kw>
+<kw name="Status Should Be" owner="RequestsLibrary">
+<arg>201</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="NOT RUN" start="2025-06-05T18:16:40.822557" elapsed="0.000011"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<arg>${response.json()['valor']}</arg>
+<arg>1500.50</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="NOT RUN" start="2025-06-05T18:16:40.822659" elapsed="0.000012"/>
+</kw>
+<kw name="Dictionary Should Contain Key">
+<arg>${response.json()['fornecedor']}</arg>
+<arg>nome</arg>
+<status status="NOT RUN" start="2025-06-05T18:16:40.822804" elapsed="0.000016"/>
+</kw>
+<status status="FAIL" start="2025-06-05T18:16:40.811126" elapsed="0.011854">HTTPError: 404 Client Error: Not Found for url: http://localhost:4020/#/fornecedores</status>
+</test>
+<test id="s1-t2" name="Validar Formato de Datas" line="23">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2025-06-05T18:16:40.826243" level="INFO">GET Request : url=http://localhost:4020/#/pagamento/1 
+ path_url=/ 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-06-05T18:16:40.826330" level="INFO">GET Response : url=http://localhost:4020/#/pagamento/1 
+ status=200, reason=OK 
+ headers={'x-powered-by': 'Dart with package:shelf', 'content-type': 'text/html', 'x-xss-protection': '1; mode=block', 'date': 'Thu, 05 Jun 2025 21:16:40 GMT', 'x-content-type-options': 'nosniff', 'content-length': '1225'} 
+ body=&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  --&gt;
+  &lt;base href="/"&gt;
+
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta content="IE=Edge" http-equiv="X-UA-Compatible"&gt;
+  &lt;meta name="description" content="A new Flutter project."&gt;
+
+  &lt;!-- iOS meta tags &amp; icons --&gt;
+  &lt;meta name="mobile-web-app-capable" content="yes"&gt;
+  &lt;meta name="apple-mobile-web-app-status-bar-style" content="black"&gt;
+  &lt;meta name="apple-mobile-web-app-title" content="les"&gt;
+  &lt;link rel="apple-touch-icon" href="icons/Icon-192.png"&gt;
+
+  &lt;!-- Favicon --&gt;
+  &lt;link rel="icon" type="image/png" href="favicon.png"/&gt;
+
+  &lt;title&gt;les&lt;/title&gt;
+  &lt;link rel="manifest" href="manifest.json"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script src="flutter_bootstrap.js" async&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+ 
+ </msg>
+<msg time="2025-06-05T18:16:40.826437" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${API_URL}/pagamento/1</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2025-06-05T18:16:40.823461" elapsed="0.002993"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-06-05T18:16:40.826982" level="FAIL">Resolving variable '${response.json()['dt_vencimento']}' failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)</msg>
+<var>${dt_vencimento}</var>
+<arg>${response.json()['dt_vencimento']}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="FAIL" start="2025-06-05T18:16:40.826648" elapsed="0.000364">Resolving variable '${response.json()['dt_vencimento']}' failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)</status>
+</kw>
+<kw name="Should Match Regexp" owner="BuiltIn">
+<arg>${dt_vencimento}</arg>
+<arg>^\\d{4}-\\d{2}-\\d{2}T</arg>
+<doc>Fails if ``string`` does not match ``pattern`` as a regular expression.</doc>
+<status status="NOT RUN" start="2025-06-05T18:16:40.827156" elapsed="0.000017"/>
+</kw>
+<status status="FAIL" start="2025-06-05T18:16:40.823236" elapsed="0.004074">Resolving variable '${response.json()['dt_vencimento']}' failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)</status>
+</test>
+<status status="FAIL" start="2025-06-05T18:16:40.518473" elapsed="0.309308"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="2" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Pagamento Tests" id="s1" pass="0" fail="2" skip="0">Pagamento Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
