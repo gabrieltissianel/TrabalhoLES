@@ -16,7 +16,9 @@ class RelatoriosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Relatorios")), body: _body(context));
+      appBar: AppBar(title: Text("Relatorios")),
+      body: _body(context),
+    );
   }
 
   _body(BuildContext context) {
@@ -25,13 +27,13 @@ class RelatoriosView extends StatelessWidget {
     final Map<String, Function(BuildContext)> buttons = {
       '🎂 Aniversariantes': (context) {
         QuantityEditDialog(
-                context: context,
-                title: 'Selecione o mês:',
-                minQuantity: 1,
-                maxQuantity: 12,
-                onSave: (value) => service.aniversariantes(value),
-                initialQuantity: DateTime.now().month)
-            .show();
+          context: context,
+          title: 'Selecione o mês:',
+          minQuantity: 1,
+          maxQuantity: 12,
+          onSave: (value) => service.aniversariantes(value),
+          initialQuantity: DateTime.now().month,
+        ).show();
       },
       'Clientes Negativados': (context) => service.clientesDevedores(),
       'Compras de Hoje': (context) => service.consumoDiarioHoje(),
@@ -44,12 +46,13 @@ class RelatoriosView extends StatelessWidget {
           selecionarUmaDatas(context, service.consumoData),
       'Ultima Compra de um Cliente': (context) {
         showDialog(
-            context: context,
-            builder: (context) => _dialogCliente(service.ultimaCompraCliente));
+          context: context,
+          builder: (context) => _dialogCliente(service.ultimaCompraCliente),
+        );
       },
       'DRE Diario': (context) =>
           selecionarDuasDatas(context, service.dreDiario),
-      'Grafico Consumo': (context) => context.go(AppRoutes.graficoConsumo)
+      'Grafico Consumo': (context) => context.go(AppRoutes.graficoConsumo),
     };
 
     return GridView.count(
@@ -71,16 +74,20 @@ class RelatoriosView extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => onPressed(context),
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.lightBlue,
+              backgroundColor: Color.fromARGB(255, 205, 231, 236),
+              foregroundColor: Colors.grey,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            child: Text(text,
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.black45,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         );
       }).toList(),
@@ -88,7 +95,9 @@ class RelatoriosView extends StatelessWidget {
   }
 
   void selecionarDuasDatas(
-      BuildContext context, Function(DateTime, DateTime) function) async {
+    BuildContext context,
+    Function(DateTime, DateTime) function,
+  ) async {
     final DateTime? dataInicio = await showDatePicker(
       context: context, // Precisa d
       helpText: "Data Inicial", // o BuildContext
@@ -112,7 +121,9 @@ class RelatoriosView extends StatelessWidget {
   }
 
   void selecionarUmaDatas(
-      BuildContext context, Function(DateTime) function) async {
+    BuildContext context,
+    Function(DateTime) function,
+  ) async {
     final DateTime? data = await showDatePicker(
       context: context,
       firstDate: DateTime(2020),
@@ -128,39 +139,42 @@ class RelatoriosView extends StatelessWidget {
     clienteViewModel.getClientes.execute();
     return AlertDialog(
       content: ListenableBuilder(
-          listenable: clienteViewModel.getClientes,
-          builder: (context, child) {
-            if (clienteViewModel.getClientes.isRunning) {
-              return CircularProgressIndicator();
-            } else if (clienteViewModel.getClientes.isFailure) {
-              final error =
-                  clienteViewModel.getClientes.value as FailureCommand;
-              return Text(error.error.toString());
-            } else {
-              final success =
-                  clienteViewModel.getClientes.value as SuccessCommand;
-              final clientes = success.value as List<Cliente>;
-              return SizedBox.expand(
-                  child: CustomTable(
-                      title: "Clientes",
-                      data: clientes,
-                      columnHeaders: ["nome", "limite", "saldo"],
-                      formatters: (cliente) => {
-                            "saldo": (value) => "R\$ $value",
-                            "limite": (value) => "R\$ $value",
-                          },
-                      getActions: (cliente) {
-                        return [
-                          IconButton(
-                              onPressed: () {
-                                acao(cliente.id!);
-                                Navigator.pop(context);
-                              },
-                              icon: Icon(Icons.search))
-                        ];
-                      }));
-            }
-          }),
+        listenable: clienteViewModel.getClientes,
+        builder: (context, child) {
+          if (clienteViewModel.getClientes.isRunning) {
+            return CircularProgressIndicator();
+          } else if (clienteViewModel.getClientes.isFailure) {
+            final error = clienteViewModel.getClientes.value as FailureCommand;
+            return Text(error.error.toString());
+          } else {
+            final success =
+                clienteViewModel.getClientes.value as SuccessCommand;
+            final clientes = success.value as List<Cliente>;
+            return SizedBox.expand(
+              child: CustomTable(
+                title: "Clientes",
+                data: clientes,
+                columnHeaders: ["nome", "limite", "saldo"],
+                formatters: (cliente) => {
+                  "saldo": (value) => "R\$ $value",
+                  "limite": (value) => "R\$ $value",
+                },
+                getActions: (cliente) {
+                  return [
+                    IconButton(
+                      onPressed: () {
+                        acao(cliente.id!);
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.search),
+                    ),
+                  ];
+                },
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

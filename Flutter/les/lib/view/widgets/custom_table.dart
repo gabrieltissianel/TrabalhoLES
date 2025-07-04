@@ -96,7 +96,7 @@ class _CustomTableState<T extends Entity> extends State<CustomTable<T>> {
             child: Card(
               margin: const EdgeInsets.all(16.0),
               child: DataTable(
-                headingRowColor: WidgetStateProperty.all(Colors.grey[300]),
+                headingRowColor: WidgetStateProperty.all(Color.fromARGB(255, 205, 231, 236)),
                 dataRowColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
                   if (states.contains(WidgetState.selected)) {
                     return Theme.of(context).colorScheme.primary.withOpacity(0.08);
